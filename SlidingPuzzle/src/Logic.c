@@ -1,0 +1,522 @@
+// Copyright Tomas Zeman 2019.
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
+#include "Logic.h"
+
+#include <stdbool.h>  // bool, false, true
+#include <stdlib.h>   // free, malloc, srand, rand
+#include <time.h>     // time
+
+#include <GL/freeglut.h>
+
+#include "GameState.h"
+#include "Sound.h"
+
+#define MOVE_STEP 0.1f
+
+static void Restart();
+static void MovePieceLeft();
+static void MovePieceRight();
+static void MovePieceUp();
+static void MovePieceDown();
+static void MovePiecesLeft(size_t count);
+static void MovePiecesRight(size_t count);
+static void MovePiecesUp(size_t count);
+static void MovePiecesDown(size_t count);
+static bool MovePieces();
+static bool IsResolved();
+
+static void SetupPieceValues();
+static void ShufflePieces();
+static void FindBlankPiece();
+static void SetupPiecePositions();
+static void SetPieceStates(enum State state);
+static void MakeResolvable();
+
+static void SwapPieces(size_t index1, size_t index2);
+static bool IsResolvable();
+static int CountInversions();
+
+void L_Start()
+{
+  srand((unsigned int) time(NULL));
+
+  g_game_state.piece_count = (size_t)(g_game_state.x_size * g_game_state.y_size);
+  g_game_state.pieces = malloc(g_game_state.piece_count * sizeof(struct Piece));
+
+  Restart();
+}
+
+void L_Update()
+{
+  if (g_game_state.reset_key)
+  {
+    Restart();
+    return;
+  }
+
+  if (g_game_state.state == State_Idle)
+  {
+    if (g_game_state.left_key)
+    {
+      if (g_game_state.blank % g_game_state.x_size != g_game_state.x_size - 1)
+      {
+        S_PlaySound(Sound_Move);
+
+        MovePieceLeft();
+        g_game_state.state = State_Moving;
+      }
+      else
+      {
+        S_PlaySound(Sound_CannotMove);
+      }
+    }
+    else if (g_game_state.right_key)
+    {
+      if (g_game_state.blank % g_game_state.x_size != 0)
+      {
+        S_PlaySound(Sound_Move);
+
+        MovePieceRight();
+        g_game_state.state = State_Moving;
+      }
+      else
+      {
+        S_PlaySound(Sound_CannotMove);
+      }
+    }
+    else if (g_game_state.up_key)
+    {
+      if (g_game_state.blank + g_game_state.x_size < g_game_state.x_size * g_game_state.y_size)
+      {
+        S_PlaySound(Sound_Move);
+
+        MovePieceUp();
+        g_game_state.state = State_Moving;
+      }
+      else
+      {
+        S_PlaySound(Sound_CannotMove);
+      }
+    }
+    else if (g_game_state.down_key)
+    {
+      if (g_game_state.blank >= g_game_state.x_size)
+      {
+        S_PlaySound(Sound_Move);
+
+        MovePieceDown();
+        g_game_state.state = State_Moving;
+      }
+      else
+      {
+        S_PlaySound(Sound_CannotMove);
+      }
+    }
+    else if (g_game_state.mouse_button)
+    {
+      size_t x = (size_t)((float) g_game_state.mouse_x / (float) glutGet(GLUT_WINDOW_WIDTH) *
+                          (float) g_game_state.x_size);
+      size_t y = (size_t)((float) g_game_state.mouse_y / (float) glutGet(GLUT_WINDOW_HEIGHT) *
+                          (float) g_game_state.y_size);
+
+      size_t blank_x = g_game_state.blank % g_game_state.x_size;
+      size_t blank_y = g_game_state.blank / g_game_state.x_size;
+
+      if (x == blank_x)
+      {
+        if (y < blank_y)
+        {
+          S_PlaySound(Sound_Move);
+
+          MovePiecesDown(blank_y - y);
+        }
+        else if (y > blank_y)
+        {
+          S_PlaySound(Sound_Move);
+
+          MovePiecesUp(y - blank_y);
+        }
+      }
+      else if (y == blank_y)
+      {
+        if (x < blank_x)
+        {
+          S_PlaySound(Sound_Move);
+
+          MovePiecesRight(blank_x - x);
+        }
+        else if (x > blank_x)
+        {
+          S_PlaySound(Sound_Move);
+
+          MovePiecesLeft(x - blank_x);
+        }
+      }
+      else
+      {
+        S_PlaySound(Sound_CannotMove);
+      }
+
+      g_game_state.state = State_Moving;
+    }
+  }
+  else if (g_game_state.state == State_Moving)
+  {
+    if (!MovePieces())
+    {
+      if (IsResolved())
+      {
+        S_PlaySound(Sound_Success);
+
+        SetPieceStates(State_Success);
+        g_game_state.state = State_Success;
+      }
+      else
+      {
+        g_game_state.state = State_Idle;
+      }
+    }
+  }
+  else if (g_game_state.state == State_Success)
+  {
+  }
+
+  g_game_state.left_key = false;
+  g_game_state.right_key = false;
+  g_game_state.up_key = false;
+  g_game_state.down_key = false;
+  g_game_state.mouse_button = false;
+}
+
+void L_Stop()
+{
+  free(g_game_state.pieces);
+}
+
+void Restart()
+{
+  SetupPieceValues();
+  ShufflePieces();
+  FindBlankPiece();
+  MakeResolvable();
+  SetupPiecePositions();
+  SetPieceStates(State_Idle);
+
+  g_game_state.state = State_Idle;
+
+  g_game_state.left_key = false;
+  g_game_state.right_key = false;
+  g_game_state.up_key = false;
+  g_game_state.down_key = false;
+  g_game_state.reset_key = false;
+  g_game_state.mouse_button = false;
+
+  g_game_state.single_moves = 0;
+  g_game_state.moves = 0;
+}
+
+void MovePieceLeft()
+{
+  size_t index = g_game_state.blank + 1;
+
+  g_game_state.pieces[index].pos_w.x -= 1.0f;
+
+  SwapPieces(index, g_game_state.blank);
+
+  g_game_state.blank = index;
+
+  ++g_game_state.single_moves;
+  ++g_game_state.moves;
+}
+
+void MovePieceRight()
+{
+  size_t index = g_game_state.blank - 1;
+
+  g_game_state.pieces[index].pos_w.x += 1.0f;
+
+  SwapPieces(index, g_game_state.blank);
+
+  g_game_state.blank = index;
+
+  ++g_game_state.single_moves;
+  ++g_game_state.moves;
+}
+
+void MovePieceUp()
+{
+  size_t index = g_game_state.blank + g_game_state.x_size;
+
+  g_game_state.pieces[index].pos_w.y += 1.0f;
+
+  SwapPieces(index, g_game_state.blank);
+
+  g_game_state.blank = index;
+
+  ++g_game_state.single_moves;
+  ++g_game_state.moves;
+}
+
+void MovePieceDown()
+{
+  size_t index = g_game_state.blank - g_game_state.x_size;
+
+  g_game_state.pieces[index].pos_w.y -= 1.0f;
+
+  SwapPieces(index, g_game_state.blank);
+
+  g_game_state.blank = index;
+
+  ++g_game_state.single_moves;
+  ++g_game_state.moves;
+}
+
+void MovePiecesLeft(size_t count)
+{
+  int temp = g_game_state.moves;
+
+  for (size_t i = 0; i < count; ++i)
+  {
+    MovePieceLeft();
+  }
+
+  g_game_state.moves = temp;
+  ++g_game_state.moves;
+}
+
+void MovePiecesRight(size_t count)
+{
+  int temp = g_game_state.moves;
+
+  for (size_t i = 0; i < count; ++i)
+  {
+    MovePieceRight();
+  }
+
+  g_game_state.moves = temp;
+  ++g_game_state.moves;
+}
+
+void MovePiecesUp(size_t count)
+{
+  int temp = g_game_state.moves;
+
+  for (size_t i = 0; i < count; ++i)
+  {
+    MovePieceUp();
+  }
+
+  g_game_state.moves = temp;
+  ++g_game_state.moves;
+}
+
+void MovePiecesDown(size_t count)
+{
+  int temp = g_game_state.moves;
+
+  for (size_t i = 0; i < count; ++i)
+  {
+    MovePieceDown();
+  }
+
+  g_game_state.moves = temp;
+  ++g_game_state.moves;
+}
+
+bool MovePieces()
+{
+  bool moving = false;
+
+  for (size_t i = 0; i < g_game_state.piece_count; ++i)
+  {
+    g_game_state.pieces[i].state = State_Idle;
+
+    if (g_game_state.pieces[i].pos_w.x > g_game_state.pieces[i].pos.x)
+    {
+      g_game_state.pieces[i].pos.x += MOVE_STEP;
+
+      if (g_game_state.pieces[i].pos.x > g_game_state.pieces[i].pos_w.x)
+      {
+        g_game_state.pieces[i].pos.x = g_game_state.pieces[i].pos_w.x;
+      }
+
+      g_game_state.pieces[i].state = State_Moving;
+      moving = true;
+    }
+    else if (g_game_state.pieces[i].pos_w.x < g_game_state.pieces[i].pos.x)
+    {
+      g_game_state.pieces[i].pos.x -= MOVE_STEP;
+
+      if (g_game_state.pieces[i].pos.x < g_game_state.pieces[i].pos_w.x)
+      {
+        g_game_state.pieces[i].pos.x = g_game_state.pieces[i].pos_w.x;
+      }
+
+      g_game_state.pieces[i].state = State_Moving;
+      moving = true;
+    }
+
+    if (g_game_state.pieces[i].pos_w.y > g_game_state.pieces[i].pos.y)
+    {
+      g_game_state.pieces[i].pos.y += MOVE_STEP;
+
+      if (g_game_state.pieces[i].pos.y > g_game_state.pieces[i].pos_w.y)
+      {
+        g_game_state.pieces[i].pos.y = g_game_state.pieces[i].pos_w.y;
+      }
+
+      g_game_state.pieces[i].state = State_Moving;
+      moving = true;
+    }
+    else if (g_game_state.pieces[i].pos_w.y < g_game_state.pieces[i].pos.y)
+    {
+      g_game_state.pieces[i].pos.y -= MOVE_STEP;
+
+      if (g_game_state.pieces[i].pos.y < g_game_state.pieces[i].pos_w.y)
+      {
+        g_game_state.pieces[i].pos.y = g_game_state.pieces[i].pos_w.y;
+      }
+
+      g_game_state.pieces[i].state = State_Moving;
+      moving = true;
+    }
+  }
+
+  return moving;
+}
+
+bool IsResolved()
+{
+  int value = 1;
+  for (size_t i = 0; i < g_game_state.piece_count - 1; ++i)
+  {
+    if (g_game_state.pieces[i].value != value)
+    {
+      return false;
+    }
+
+    ++value;
+  }
+
+  return true;
+}
+
+void SetupPieceValues()
+{
+  int value = 1;
+  for (size_t i = 0; i < g_game_state.piece_count; ++i)
+  {
+    g_game_state.pieces[i].value = value++;
+  }
+
+  g_game_state.pieces[g_game_state.piece_count - 1].value = 0;
+}
+
+void ShufflePieces()
+{
+  for (size_t i = 0; i < g_game_state.piece_count; ++i)
+  {
+    SwapPieces(i, (size_t) rand() % g_game_state.piece_count);
+  }
+}
+
+void FindBlankPiece()
+{
+  for (size_t i = 0; i < g_game_state.piece_count; ++i)
+  {
+    if (g_game_state.pieces[i].value == 0)
+    {
+      g_game_state.blank = i;
+      break;
+    }
+  }
+}
+
+void SetupPiecePositions()
+{
+  size_t i = 0;
+  for (size_t y = 0; y < g_game_state.y_size; ++y)
+  {
+    for (size_t x = 0; x < g_game_state.x_size; ++x)
+    {
+      g_game_state.pieces[i].pos.x = (float) x;
+      g_game_state.pieces[i].pos.y = (float) (g_game_state.y_size - y - 1);
+      g_game_state.pieces[i].pos_w.x = g_game_state.pieces[i].pos.x;
+      g_game_state.pieces[i].pos_w.y = g_game_state.pieces[i].pos.y;
+      ++i;
+    }
+  }
+}
+
+void SetPieceStates(enum State state)
+{
+  for (size_t i = 0; i < g_game_state.piece_count; ++i)
+  {
+    g_game_state.pieces[i].state = state;
+  }
+}
+
+void MakeResolvable()
+{
+  size_t i = 0;
+  while (!IsResolvable())
+  {
+    if (g_game_state.pieces[i].value > g_game_state.pieces[i + 1].value &&
+        g_game_state.pieces[i + 1].value != 0)
+    {
+      SwapPieces(i, i + 1);
+    }
+    else if (g_game_state.pieces[i].value == 0)
+    {
+      SwapPieces(i, i + 1);
+      g_game_state.blank = i + 1;
+    }
+
+    i = (i + 1) % (g_game_state.piece_count - 1);
+  }
+}
+
+void SwapPieces(size_t index1, size_t index2)
+{
+  struct Piece temp;
+  temp = g_game_state.pieces[index1];
+  g_game_state.pieces[index1] = g_game_state.pieces[index2];
+  g_game_state.pieces[index2] = temp;
+}
+
+bool IsResolvable()
+{
+  if (g_game_state.x_size % 2 == 1)
+  {
+    return CountInversions() % 2 == 0;
+  }
+
+  if ((g_game_state.y_size - (g_game_state.blank / g_game_state.x_size)) % 2 == 1)
+  {
+    return CountInversions() % 2 == 0;
+  }
+
+  return CountInversions() % 2 == 1;
+}
+
+int CountInversions()
+{
+  int invs = 0;
+
+  for (size_t i = 0; i < g_game_state.piece_count - 1; ++i)
+  {
+    for (size_t j = i + 1; j < g_game_state.piece_count; ++j)
+    {
+      if (g_game_state.pieces[i].value > g_game_state.pieces[j].value &&
+          g_game_state.pieces[j].value != 0)
+      {
+        ++invs;
+      }
+    }
+  }
+
+  return invs;
+}
