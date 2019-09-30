@@ -1,0 +1,32 @@
+os: linux
+dist: xenial
+sudo: false
+
+language: c
+
+compiler:
+  - clang
+  - gcc
+
+env:
+  - BUILD_TYPE=Debug
+  - BUILD_TYPE=Release
+
+addons:
+  apt:
+    packages:
+      - freeglut3-dev
+
+install:
+  - JOBS=2
+
+  - cd ${TRAVIS_BUILD_DIR}
+  - git clone --depth=1 https://github.com/vancegroup/freealut
+  - cd freealut
+  - cmake . -Bbuild -DCMAKE_BUILD_TYPE=Release
+  - cmake --build build -- -j${JOBS}
+
+script:
+  - cd ${TRAVIS_BUILD_DIR}
+  - cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+  - cmake --build build -- -j${JOBS}
