@@ -1,5 +1,5 @@
 os: linux
-dist: xenial
+dist: bionic
 sudo: false
 
 language: c
@@ -16,6 +16,7 @@ addons:
   apt:
     packages:
       - freeglut3-dev
+      - libopenal-dev
 
 install:
   - JOBS=2
