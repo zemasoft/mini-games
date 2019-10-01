@@ -30,6 +30,8 @@ set_target_compile_options(SlidingPuzzle
 
 target_include_directories(SlidingPuzzle
   PRIVATE
+    ${OPENGL_INCLUDE_DIR}
+    ${GLUT_INCLUDE_DIR}
     ${ALUT_INCLUDE_DIRS}
     src
 )
@@ -37,7 +39,7 @@ target_include_directories(SlidingPuzzle
 target_link_libraries(SlidingPuzzle
   PRIVATE
     OpenGL::OpenGL
-    ${GLUT_LIBRARY}
+    GLUT::GLUT
     ${ALUT_LIBRARIES}
 )
 
