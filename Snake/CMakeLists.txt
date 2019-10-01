@@ -30,6 +30,8 @@ set_target_compile_options(Snake
 
 target_include_directories(Snake
   PRIVATE
+    ${OPENGL_INCLUDE_DIR}
+    ${GLFW3_INCLUDE_DIR}
     ${ALUT_INCLUDE_DIRS}
     src
 )
