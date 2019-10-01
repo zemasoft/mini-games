@@ -7,11 +7,7 @@ include(Utils)
 
 find_package(OpenGL REQUIRED MODULE)
 find_package(GLUT REQUIRED MODULE)  # FreeGLUT
-find_package(OpenAL REQUIRED MODULE)
-
-link_directories(
-  ../freealut/build/src
-)
+find_package(ALUT REQUIRED MODULE)  # FreeALUT
 
 add_executable(Videostop
   src/GameState.c
@@ -34,7 +30,7 @@ set_target_compile_options(Videostop
 
 target_include_directories(Videostop
   PRIVATE
-    ../freealut/include
+    ${ALUT_INCLUDE_DIRS}
     src
 )
 
@@ -42,8 +38,7 @@ target_link_libraries(Videostop
   PRIVATE
     OpenGL::OpenGL
     ${GLUT_LIBRARY}
-    ${OPENAL_LIBRARY}
-    alut
+    ${ALUT_LIBRARIES}
     m
 )
 

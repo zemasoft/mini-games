@@ -24,10 +24,11 @@ install:
   - cd ${TRAVIS_BUILD_DIR}
   - git clone --depth=1 https://github.com/vancegroup/freealut
   - cd freealut
-  - cmake . -Bbuild -DCMAKE_BUILD_TYPE=Release
+  - cmake . -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.
   - cmake --build build -- -j${JOBS}
+  - cmake --build build --target install
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
-  - cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+  - cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DALUT_ROOT_DIR=freealut
   - cmake --build build -- -j${JOBS}
