@@ -8,7 +8,10 @@
 
 enum Sound
 {
-  Sound_Move = 0,
+  Sound_Food = 0,
+  Sound_Wall,
+  Sound_Body,
+  Sound_Success,
 
   Sound_Count
 };

@@ -41,7 +41,7 @@ target_link_libraries(Snake
     OpenGL::OpenGL
     ${GLFW3_LIBRARY}
     ${ALUT_LIBRARIES}
-    #m
+    m
 )
 
 set_target_properties(Snake

@@ -12,6 +12,10 @@ void I_Start();
 void I_Update();
 void I_Stop();
 
-bool I_IsKeyPressed(int key);
+void I_Restart();
+
+bool I_ResetKey();
+bool I_PauseKey();
+int I_PopControlKey();
 
 #endif  // INPUT_H
