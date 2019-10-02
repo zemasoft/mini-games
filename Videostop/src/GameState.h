@@ -15,7 +15,7 @@
 
 enum State
 {
-  State_Shuffle = 0,
+  State_Shuffle,
   State_Success,
   State_Fail
 };

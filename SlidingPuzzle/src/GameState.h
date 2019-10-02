@@ -15,7 +15,7 @@
 
 enum State
 {
-  State_Idle = 0,
+  State_Idle,
   State_Moving,
   State_Success
 };
@@ -45,8 +45,11 @@ struct Piece
 
 struct GameState
 {
-  size_t y_size;
-  size_t x_size;
+  struct
+  {
+    size_t x;
+    size_t y;
+  } size;
 
   struct Piece* pieces;
   size_t piece_count;

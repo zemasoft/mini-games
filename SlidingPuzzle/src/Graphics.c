@@ -5,7 +5,8 @@
 
 #include "Graphics.h"
 
-#include <stdio.h>  // snprintf
+#include <stddef.h>  // size_t
+#include <stdio.h>   // snprintf
 
 #include <GL/freeglut.h>
 
@@ -55,9 +56,9 @@ void G_Start()
 {
   struct Projection projection;
   projection.left = -MARGIN / 2.0f;
-  projection.right = (float) g_game_state.x_size * PIECE_SIZE + MARGIN / 2.0f;
+  projection.right = (float) g_game_state.size.x * PIECE_SIZE + MARGIN / 2.0f;
   projection.bottom = -MARGIN / 2.0f - STATUSBAR_SIZE;
-  projection.top = (float) g_game_state.y_size * PIECE_SIZE + MARGIN / 2.0f;
+  projection.top = (float) g_game_state.size.y * PIECE_SIZE + MARGIN / 2.0f;
 
   InitPieceStrings(&projection);
 

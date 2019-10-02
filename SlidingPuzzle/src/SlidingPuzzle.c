@@ -3,6 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+#include <stddef.h>  // size_t
 #include <stdlib.h>  // EXIT_SUCCESS, strtol
 
 #include <AL/alut.h>
@@ -33,8 +34,8 @@ void Start(int argc, char** argv)
   glutInit(&argc, argv);
   alutInit(&argc, argv);
 
-  g_game_state.x_size = DEFAULT_SIZE;
-  g_game_state.y_size = DEFAULT_SIZE;
+  g_game_state.size.x = DEFAULT_SIZE;
+  g_game_state.size.y = DEFAULT_SIZE;
 
   if (argc > 1)
   {
@@ -52,8 +53,8 @@ void Start(int argc, char** argv)
         y_size = MAX_SIZE;
       }
 
-      g_game_state.x_size = (size_t) y_size;
-      g_game_state.y_size = (size_t) y_size;
+      g_game_state.size.x = (size_t) y_size;
+      g_game_state.size.y = (size_t) y_size;
     }
   }
 
@@ -73,13 +74,13 @@ void Start(int argc, char** argv)
         x_size = MAX_SIZE;
       }
 
-      g_game_state.x_size = (size_t) x_size;
+      g_game_state.size.x = (size_t) x_size;
     }
   }
 
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_MULTISAMPLE);
-  glutInitWindowSize((int) g_game_state.x_size * PIECE_SIZE_PIXELS,
-                     (int) g_game_state.y_size * PIECE_SIZE_PIXELS);
+  glutInitWindowSize((int) g_game_state.size.x * PIECE_SIZE_PIXELS,
+                     (int) g_game_state.size.y * PIECE_SIZE_PIXELS);
   glutCreateWindow("Sliding Puzzle");
 
   I_Start();

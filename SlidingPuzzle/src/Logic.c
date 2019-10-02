@@ -6,6 +6,7 @@
 #include "Logic.h"
 
 #include <stdbool.h>  // bool, false, true
+#include <stddef.h>   // size_t
 #include <stdlib.h>   // free, malloc, srand, rand
 #include <time.h>     // time
 
@@ -43,7 +44,7 @@ void L_Start()
 {
   srand((unsigned int) time(NULL));
 
-  g_game_state.piece_count = (size_t)(g_game_state.x_size * g_game_state.y_size);
+  g_game_state.piece_count = (size_t)(g_game_state.size.x * g_game_state.size.y);
   g_game_state.pieces = malloc(g_game_state.piece_count * sizeof(struct Piece));
 
   Restart();
@@ -61,7 +62,7 @@ void L_Update()
   {
     if (g_game_state.left_key)
     {
-      if (g_game_state.blank % g_game_state.x_size != g_game_state.x_size - 1)
+      if (g_game_state.blank % g_game_state.size.x != g_game_state.size.x - 1)
       {
         S_PlaySound(Sound_Move);
 
@@ -75,7 +76,7 @@ void L_Update()
     }
     else if (g_game_state.right_key)
     {
-      if (g_game_state.blank % g_game_state.x_size != 0)
+      if (g_game_state.blank % g_game_state.size.x != 0)
       {
         S_PlaySound(Sound_Move);
 
@@ -89,7 +90,7 @@ void L_Update()
     }
     else if (g_game_state.up_key)
     {
-      if (g_game_state.blank + g_game_state.x_size < g_game_state.x_size * g_game_state.y_size)
+      if (g_game_state.blank + g_game_state.size.x < g_game_state.size.x * g_game_state.size.y)
       {
         S_PlaySound(Sound_Move);
 
@@ -103,7 +104,7 @@ void L_Update()
     }
     else if (g_game_state.down_key)
     {
-      if (g_game_state.blank >= g_game_state.x_size)
+      if (g_game_state.blank >= g_game_state.size.x)
       {
         S_PlaySound(Sound_Move);
 
@@ -118,12 +119,12 @@ void L_Update()
     else if (g_game_state.mouse_button)
     {
       size_t x = (size_t)((float) g_game_state.mouse_x / (float) glutGet(GLUT_WINDOW_WIDTH) *
-                          (float) g_game_state.x_size);
+                          (float) g_game_state.size.x);
       size_t y = (size_t)((float) g_game_state.mouse_y / (float) glutGet(GLUT_WINDOW_HEIGHT) *
-                          (float) g_game_state.y_size);
+                          (float) g_game_state.size.y);
 
-      size_t blank_x = g_game_state.blank % g_game_state.x_size;
-      size_t blank_y = g_game_state.blank / g_game_state.x_size;
+      size_t blank_x = g_game_state.blank % g_game_state.size.x;
+      size_t blank_y = g_game_state.blank / g_game_state.size.x;
 
       if (x == blank_x)
       {
@@ -248,7 +249,7 @@ void MovePieceRight()
 
 void MovePieceUp()
 {
-  size_t index = g_game_state.blank + g_game_state.x_size;
+  size_t index = g_game_state.blank + g_game_state.size.x;
 
   g_game_state.pieces[index].pos_w.y += 1.0f;
 
@@ -262,7 +263,7 @@ void MovePieceUp()
 
 void MovePieceDown()
 {
-  size_t index = g_game_state.blank - g_game_state.x_size;
+  size_t index = g_game_state.blank - g_game_state.size.x;
 
   g_game_state.pieces[index].pos_w.y -= 1.0f;
 
@@ -438,12 +439,12 @@ void FindBlankPiece()
 void SetupPiecePositions()
 {
   size_t i = 0;
-  for (size_t y = 0; y < g_game_state.y_size; ++y)
+  for (size_t y = 0; y < g_game_state.size.y; ++y)
   {
-    for (size_t x = 0; x < g_game_state.x_size; ++x)
+    for (size_t x = 0; x < g_game_state.size.x; ++x)
     {
       g_game_state.pieces[i].pos.x = (float) x;
-      g_game_state.pieces[i].pos.y = (float) (g_game_state.y_size - y - 1);
+      g_game_state.pieces[i].pos.y = (float) (g_game_state.size.y - y - 1);
       g_game_state.pieces[i].pos_w.x = g_game_state.pieces[i].pos.x;
       g_game_state.pieces[i].pos_w.y = g_game_state.pieces[i].pos.y;
       ++i;
@@ -489,12 +490,12 @@ void SwapPieces(size_t index1, size_t index2)
 
 bool IsResolvable()
 {
-  if (g_game_state.x_size % 2 == 1)
+  if (g_game_state.size.x % 2 == 1)
   {
     return CountInversions() % 2 == 0;
   }
 
-  if ((g_game_state.y_size - (g_game_state.blank / g_game_state.x_size)) % 2 == 1)
+  if ((g_game_state.size.y - (g_game_state.blank / g_game_state.size.x)) % 2 == 1)
   {
     return CountInversions() % 2 == 0;
   }
