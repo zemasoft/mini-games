@@ -115,7 +115,7 @@ void DrawDice(int i)
   float right = DICE_SIZE;
   float bottom = 0.0f;
 
-  switch (g_game_state.dice_states[i])
+  switch (g_game_state.dices[i].state)
   {
     case State_Shuffle:
       glColor3f(BORDER_DEFAULT_COLOR);
@@ -142,7 +142,7 @@ void DrawDice(int i)
   glEnd();
   // clang-format on
 
-  switch (g_game_state.dice_states[i])
+  switch (g_game_state.dices[i].state)
   {
     case State_Shuffle:
       glColor3f(DICE_DEFAULT_COLOR);
@@ -169,7 +169,7 @@ void DrawDice(int i)
   glEnd();
   // clang-format on
 
-  switch (g_game_state.dice_states[i])
+  switch (g_game_state.dices[i].state)
   {
     case State_Shuffle:
       glColor3f(DOT_DEFAULT_COLOR);
@@ -182,7 +182,7 @@ void DrawDice(int i)
       break;
   }
 
-  DrawDots(g_game_state.dice_values[i]);
+  DrawDots(g_game_state.dices[i].value);
 }
 
 void DrawDots(int value)

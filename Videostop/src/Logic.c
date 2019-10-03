@@ -112,8 +112,11 @@ void Restart()
 
   g_game_state.successful_attempts = 0;
   g_game_state.failed_attempts = 0;
+
   g_game_state.score = 0;
+
   g_game_state.state = State_Shuffle;
+
   g_game_state.control_key = false;
   g_game_state.mouse_button = false;
   g_game_state.reset_key = false;
@@ -123,8 +126,8 @@ void ShuffleDices()
 {
   for (int i = 0; i < g_game_state.dice_count; ++i)
   {
-    g_game_state.dice_values[i] = rand() % 6 + 1;
-    g_game_state.dice_states[i] = State_Shuffle;
+    g_game_state.dices[i].value = rand() % 6 + 1;
+    g_game_state.dices[i].state = State_Shuffle;
   }
 }
 
@@ -138,7 +141,7 @@ bool CountScore()
 
     for (int i = 0; i < g_game_state.dice_count; ++i)
     {
-      if (g_game_state.dice_values[i] == value)
+      if (g_game_state.dices[i].value == value)
       {
         ++count;
       }
@@ -148,9 +151,9 @@ bool CountScore()
     {
       for (int i = 0; i < g_game_state.dice_count; ++i)
       {
-        if (g_game_state.dice_values[i] == value)
+        if (g_game_state.dices[i].value == value)
         {
-          g_game_state.dice_states[i] = State_Success;
+          g_game_state.dices[i].state = State_Success;
         }
       }
 
@@ -167,7 +170,7 @@ bool CountScore()
   {
     for (int i = 0; i < g_game_state.dice_count; ++i)
     {
-      g_game_state.dice_states[i] = State_Fail;
+      g_game_state.dices[i].state = State_Fail;
     }
 
     ++g_game_state.failed_attempts;
