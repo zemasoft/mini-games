@@ -43,6 +43,7 @@ void L_Update()
     Restart();
     shuffle_time = 0;
     stop_time = 0;
+    block_inputs = false;
     return;
   }
 
