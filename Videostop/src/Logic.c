@@ -12,6 +12,7 @@
 #include <GL/freeglut.h>
 
 #include "GameState.h"
+#include "Input.h"
 #include "Sound.h"
 
 #define MAX_STOP_TIME_MS 1000
@@ -38,14 +39,19 @@ void L_Update()
   int elapsed = now - before;
   before = now;
 
-  if (g_game_state.reset_key)
+  if (I_ResetKey())
   {
+    I_Restart();
     Restart();
+
     shuffle_time = 0;
     stop_time = 0;
     block_inputs = false;
     return;
   }
+
+  bool control_key = I_ControlKey();
+  bool control_button = I_ControlButton();
 
   switch (g_game_state.state)
   {
@@ -54,7 +60,7 @@ void L_Update()
 
       if (!block_inputs)
       {
-        if (g_game_state.control_key || g_game_state.mouse_button)
+        if (control_key || control_button)
         {
           if (CountScore())
           {
@@ -97,9 +103,6 @@ void L_Update()
       }
       break;
   }
-
-  g_game_state.control_key = false;
-  g_game_state.mouse_button = false;
 }
 
 void L_Stop()
@@ -116,10 +119,6 @@ void Restart()
   g_game_state.score = 0;
 
   g_game_state.state = State_Shuffle;
-
-  g_game_state.control_key = false;
-  g_game_state.mouse_button = false;
-  g_game_state.reset_key = false;
 }
 
 void ShuffleDices()

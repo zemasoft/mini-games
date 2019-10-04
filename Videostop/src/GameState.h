@@ -6,8 +6,6 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 
-#include <stdbool.h>  // bool
-
 #define MIN_DICE_COUNT 2
 #define MAX_DICE_COUNT 5
 #define DEFAULT_DICE_COUNT 3
@@ -40,10 +38,6 @@ struct GameState
   int score;
 
   enum State state;
-
-  bool control_key;
-  bool reset_key;
-  bool mouse_button;
 };
 
 extern struct GameState g_game_state;

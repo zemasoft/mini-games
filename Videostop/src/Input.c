@@ -5,17 +5,19 @@
 
 #include "Input.h"
 
-#include <stdbool.h>  // true
-
 #include <GL/freeglut.h>
 
-#include "GameState.h"
+static bool s_reset_key;
+static bool s_control_key;
+static bool s_control_button;
 
 static void Keyboard(unsigned char key, int x, int y);
 static void Mouse(int button, int state, int x, int y);
 
 void I_Start()
 {
+  I_Restart();
+
   glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
   glutKeyboardFunc(&Keyboard);
   glutMouseFunc(&Mouse);
@@ -31,6 +33,40 @@ void I_Stop()
   glutMouseFunc(NULL);
 }
 
+void I_Restart()
+{
+  s_reset_key = false;
+  s_control_key = false;
+  s_control_button = false;
+}
+
+bool I_ResetKey()
+{
+  bool res = s_reset_key;
+
+  s_reset_key = false;
+
+  return res;
+}
+
+bool I_ControlKey()
+{
+  bool res = s_control_key;
+
+  s_control_key = false;
+
+  return res;
+}
+
+bool I_ControlButton()
+{
+  bool res = s_control_button;
+
+  s_control_button = false;
+
+  return res;
+}
+
 void Keyboard(unsigned char key, int x, int y)
 {
   (void) x;
@@ -43,17 +79,17 @@ void Keyboard(unsigned char key, int x, int y)
     return;
   }
 
-  // Space
-  if (key == 32)
-  {
-    g_game_state.control_key = true;
-    return;
-  }
-
   // r
   if (key == 114)
   {
-    g_game_state.reset_key = true;
+    s_reset_key = true;
+    return;
+  }
+
+  // Space
+  if (key == 32)
+  {
+    s_control_key = true;
     return;
   }
 }
@@ -65,6 +101,6 @@ void Mouse(int button, int state, int x, int y)
 
   if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
   {
-    g_game_state.mouse_button = true;
+    s_control_button = true;
   }
 }
