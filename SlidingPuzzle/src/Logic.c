@@ -73,8 +73,8 @@ void L_Update()
           if (g_game_state.blank % g_game_state.size.x != g_game_state.size.x - 1)
           {
             S_PlaySound(Sound_Move);
-
             MovePieceLeft();
+
             g_game_state.state = State_Moving;
           }
           else
@@ -87,8 +87,8 @@ void L_Update()
           if (g_game_state.blank % g_game_state.size.x != 0)
           {
             S_PlaySound(Sound_Move);
-
             MovePieceRight();
+
             g_game_state.state = State_Moving;
           }
           else
@@ -101,8 +101,8 @@ void L_Update()
           if (g_game_state.blank >= g_game_state.size.x)
           {
             S_PlaySound(Sound_Move);
-
             MovePieceDown();
+
             g_game_state.state = State_Moving;
           }
           else
@@ -115,8 +115,8 @@ void L_Update()
           if (g_game_state.blank + g_game_state.size.x < g_game_state.size.x * g_game_state.size.y)
           {
             S_PlaySound(Sound_Move);
-
             MovePieceUp();
+
             g_game_state.state = State_Moving;
           }
           else
@@ -141,13 +141,11 @@ void L_Update()
               if (y < blank_y)
               {
                 S_PlaySound(Sound_Move);
-
                 MovePiecesDown(blank_y - y);
               }
               else if (y > blank_y)
               {
                 S_PlaySound(Sound_Move);
-
                 MovePiecesUp(y - blank_y);
               }
             }
@@ -156,13 +154,11 @@ void L_Update()
               if (x < blank_x)
               {
                 S_PlaySound(Sound_Move);
-
                 MovePiecesRight(blank_x - x);
               }
               else if (x > blank_x)
               {
                 S_PlaySound(Sound_Move);
-
                 MovePiecesLeft(x - blank_x);
               }
             }
@@ -182,8 +178,8 @@ void L_Update()
         if (IsResolved())
         {
           S_PlaySound(Sound_Success);
-
           SetPieceStates(State_Success);
+
           g_game_state.state = State_Success;
         }
         else

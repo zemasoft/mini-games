@@ -5,8 +5,10 @@
 
 #include "Graphics.h"
 
-#include <math.h>   // M_PI, cos, sin
-#include <stdio.h>  // snprintf
+#include <assert.h>   // assert
+#include <math.h>     // M_PI, cos, sin
+#include <stdbool.h>  // false
+#include <stdio.h>    // snprintf
 
 #include <GL/freeglut.h>
 
@@ -192,21 +194,25 @@ void DrawDots(int value)
     case 1:
       DrawDot4();
       break;
+
     case 2:
       DrawDot3();
       DrawDot5();
       break;
+
     case 3:
       DrawDot3();
       DrawDot4();
       DrawDot5();
       break;
+
     case 4:
       DrawDot1();
       DrawDot3();
       DrawDot5();
       DrawDot7();
       break;
+
     case 5:
       DrawDot1();
       DrawDot3();
@@ -214,6 +220,7 @@ void DrawDots(int value)
       DrawDot5();
       DrawDot7();
       break;
+
     case 6:
       DrawDot1();
       DrawDot2();
@@ -222,6 +229,9 @@ void DrawDots(int value)
       DrawDot6();
       DrawDot7();
       break;
+
+    default:
+      assert(false);
   }
 }
 

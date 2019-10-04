@@ -39,7 +39,7 @@ struct Piece
 
   struct
   {
-    char value[4];  // SIZE = floor(log10(MAX_SIZE^2)) + 1 + 1
+    char value[3];  // SIZE = floor(log10(MAX_SIZE^2 - 1)) + 1 + 1
     float width;
     float height;
   } string;
