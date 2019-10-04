@@ -310,28 +310,27 @@ void DrawDot()
 
 void DrawAttempts()
 {
-  char successful_attempts_buf[10];
-  snprintf(successful_attempts_buf, sizeof(successful_attempts_buf), "%d",
-           g_game_state.successful_attempts);
+  char buf1[10];
+  snprintf(buf1, sizeof(buf1), "%d", g_game_state.successful_attempts);
 
-  char failed_attempts_buf[10];
-  snprintf(failed_attempts_buf, sizeof(failed_attempts_buf), "%d", g_game_state.failed_attempts);
+  char buf2[10];
+  snprintf(buf2, sizeof(buf2), "%d", g_game_state.failed_attempts);
 
   glColor3f(STATUSBAR_DEFAULT_COLOR);
   glutStrokeString(GLUT_STROKE_MONO_ROMAN, (unsigned char*) "Attempts: ");
   glColor3f(STATUSBAR_SUCCESS_COLOR);
-  glutStrokeString(GLUT_STROKE_MONO_ROMAN, (unsigned char*) &successful_attempts_buf[0]);
+  glutStrokeString(GLUT_STROKE_MONO_ROMAN, (unsigned char*) &buf1[0]);
   glColor3f(STATUSBAR_DEFAULT_COLOR);
   glutStrokeString(GLUT_STROKE_MONO_ROMAN, (unsigned char*) " / ");
   glColor3f(STATUSBAR_FAIL_COLOR);
-  glutStrokeString(GLUT_STROKE_MONO_ROMAN, (unsigned char*) &failed_attempts_buf[0]);
+  glutStrokeString(GLUT_STROKE_MONO_ROMAN, (unsigned char*) &buf2[0]);
 }
 
 void DrawScore()
 {
-  char score_buf[20];
-  snprintf(score_buf, sizeof(score_buf), " Score: %d", g_game_state.score);
+  char buf[20];
+  snprintf(buf, sizeof(buf), " Score: %d", g_game_state.score);
 
   glColor3f(STATUSBAR_DEFAULT_COLOR);
-  glutStrokeString(GLUT_STROKE_MONO_ROMAN, (unsigned char*) &score_buf[0]);
+  glutStrokeString(GLUT_STROKE_MONO_ROMAN, (unsigned char*) &buf[0]);
 }

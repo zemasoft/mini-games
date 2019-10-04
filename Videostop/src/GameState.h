@@ -32,12 +32,12 @@ struct GameState
 
   int max_shuffle_time;
 
+  enum State state;
+
   int successful_attempts;
   int failed_attempts;
 
   int score;
-
-  enum State state;
 };
 
 extern struct GameState g_game_state;

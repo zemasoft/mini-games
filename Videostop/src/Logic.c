@@ -113,12 +113,12 @@ void Restart()
 {
   ShuffleDices();
 
+  g_game_state.state = State_Shuffle;
+
   g_game_state.successful_attempts = 0;
   g_game_state.failed_attempts = 0;
 
   g_game_state.score = 0;
-
-  g_game_state.state = State_Shuffle;
 }
 
 void ShuffleDices()
