@@ -38,9 +38,12 @@ struct Piece
 
   enum State state;
 
-  char string[5];
-  float string_width;
-  float string_height;
+  struct
+  {
+    char value[4];  // SIZE = floor(log10(MAX_SIZE^2)) + 1 + 1
+    float width;
+    float height;
+  } string;
 };
 
 struct GameState

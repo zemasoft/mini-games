@@ -118,13 +118,13 @@ void DrawStatusBar()
 
 void InitPieceString(struct Piece* piece, const struct Projection* projection)
 {
-  snprintf(piece->string, sizeof(piece->string), "%d", piece->value);
+  snprintf(piece->string.value, sizeof(piece->string.value), "%d", piece->value);
 
-  piece->string_width =
-      (float) glutStrokeLength(GLUT_STROKE_MONO_ROMAN, (unsigned char*) &piece->string[0]) /
+  piece->string.width =
+      (float) glutStrokeLength(GLUT_STROKE_MONO_ROMAN, (unsigned char*) &piece->string.value[0]) /
       (float) glutGet(GLUT_WINDOW_WIDTH) * (projection->right - projection->left) * VALUE_SIZE;
 
-  piece->string_height = (float) glutStrokeHeight(GLUT_STROKE_MONO_ROMAN) /
+  piece->string.height = (float) glutStrokeHeight(GLUT_STROKE_MONO_ROMAN) /
                          (float) glutGet(GLUT_WINDOW_HEIGHT) *
                          (projection->top - projection->bottom) * VALUE_SIZE;
 }
@@ -218,19 +218,18 @@ void DrawValue(const struct Piece* piece)
       break;
   }
 
-  glTranslatef((PIECE_SIZE - piece->string_width) / 2.0f,
-               (PIECE_SIZE - piece->string_height * 0.75f) / 2.0f, 0.0f);
+  glTranslatef((PIECE_SIZE - piece->string.width) / 2.0f,
+               (PIECE_SIZE - piece->string.height * 0.75f) / 2.0f, 0.0f);
   glScalef(VALUE_SIZE / 100.0f, VALUE_SIZE / 100.0f, 1.0f);
   glLineWidth(1.5f);
-  glutStrokeString(GLUT_STROKE_MONO_ROMAN, (unsigned char*) &piece->string[0]);
+  glutStrokeString(GLUT_STROKE_MONO_ROMAN, (unsigned char*) &piece->string.value[0]);
 }
 
 void DrawMoves()
 {
-  char moves_buf[30];
-  snprintf(moves_buf, sizeof(moves_buf), "Moves: %d / %d", g_game_state.moves,
-           g_game_state.single_moves);
+  char buf[30];
+  snprintf(buf, sizeof(buf), "Moves: %d / %d", g_game_state.moves, g_game_state.single_moves);
 
   glColor3f(STATUSBAR_COLOR);
-  glutStrokeString(GLUT_STROKE_MONO_ROMAN, (unsigned char*) &moves_buf[0]);
+  glutStrokeString(GLUT_STROKE_MONO_ROMAN, (unsigned char*) &buf[0]);
 }
