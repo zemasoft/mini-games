@@ -33,7 +33,7 @@ void L_Update()
   static int before;
   static int shuffle_time;
   static int stop_time;
-  static bool block_inputs;
+  static bool controls_blocked;
 
   int now = glutGet(GLUT_ELAPSED_TIME);
   int elapsed = now - before;
@@ -46,7 +46,7 @@ void L_Update()
 
     shuffle_time = 0;
     stop_time = 0;
-    block_inputs = false;
+    controls_blocked = false;
     return;
   }
 
@@ -58,7 +58,7 @@ void L_Update()
     case State_Shuffle:
       shuffle_time += elapsed;
 
-      if (!block_inputs)
+      if (!controls_blocked)
       {
         if (control_key || control_button)
         {
@@ -68,7 +68,7 @@ void L_Update()
 
             g_game_state.state = State_Success;
             stop_time = 0;
-            block_inputs = true;
+            controls_blocked = true;
           }
           else
           {
@@ -76,7 +76,7 @@ void L_Update()
 
             g_game_state.state = State_Fail;
             stop_time = 0;
-            block_inputs = true;
+            controls_blocked = true;
           }
           break;
         }
@@ -88,7 +88,7 @@ void L_Update()
 
         ShuffleDices();
         shuffle_time = 0;
-        block_inputs = false;
+        controls_blocked = false;
       }
       break;
 
