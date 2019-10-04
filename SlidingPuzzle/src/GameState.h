@@ -6,8 +6,7 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 
-#include <stdbool.h>  // bool
-#include <stddef.h>   // size_t
+#include <stddef.h>  // size_t
 
 #define MIN_SIZE 2
 #define MAX_SIZE 10
@@ -59,15 +58,6 @@ struct GameState
   size_t blank;
 
   enum State state;
-
-  bool left_key;
-  bool right_key;
-  bool up_key;
-  bool down_key;
-  bool reset_key;
-  bool mouse_button;
-  int mouse_x;
-  int mouse_y;
 
   int single_moves;
   int moves;

@@ -13,6 +13,7 @@
 #include <GL/freeglut.h>
 
 #include "GameState.h"
+#include "Input.h"
 #include "Sound.h"
 
 #define MOVE_STEP 0.1f
@@ -52,144 +53,149 @@ void L_Start()
 
 void L_Update()
 {
-  if (g_game_state.reset_key)
+  if (I_ResetKey())
   {
+    I_Restart();
     Restart();
     return;
   }
 
-  if (g_game_state.state == State_Idle)
+  int control_x = 0;
+  int control_y = 0;
+  bool control_button = I_ControlButton(&control_x, &control_y);
+
+  switch (g_game_state.state)
   {
-    if (g_game_state.left_key)
-    {
-      if (g_game_state.blank % g_game_state.size.x != g_game_state.size.x - 1)
+    case State_Idle:
+      switch (I_PopControlKey())
       {
-        S_PlaySound(Sound_Move);
+        case GLUT_KEY_LEFT:
+          if (g_game_state.blank % g_game_state.size.x != g_game_state.size.x - 1)
+          {
+            S_PlaySound(Sound_Move);
 
-        MovePieceLeft();
-        g_game_state.state = State_Moving;
-      }
-      else
-      {
-        S_PlaySound(Sound_CannotMove);
-      }
-    }
-    else if (g_game_state.right_key)
-    {
-      if (g_game_state.blank % g_game_state.size.x != 0)
-      {
-        S_PlaySound(Sound_Move);
+            MovePieceLeft();
+            g_game_state.state = State_Moving;
+          }
+          else
+          {
+            S_PlaySound(Sound_CannotMove);
+          }
+          break;
 
-        MovePieceRight();
-        g_game_state.state = State_Moving;
-      }
-      else
-      {
-        S_PlaySound(Sound_CannotMove);
-      }
-    }
-    else if (g_game_state.up_key)
-    {
-      if (g_game_state.blank + g_game_state.size.x < g_game_state.size.x * g_game_state.size.y)
-      {
-        S_PlaySound(Sound_Move);
+        case GLUT_KEY_RIGHT:
+          if (g_game_state.blank % g_game_state.size.x != 0)
+          {
+            S_PlaySound(Sound_Move);
 
-        MovePieceUp();
-        g_game_state.state = State_Moving;
-      }
-      else
-      {
-        S_PlaySound(Sound_CannotMove);
-      }
-    }
-    else if (g_game_state.down_key)
-    {
-      if (g_game_state.blank >= g_game_state.size.x)
-      {
-        S_PlaySound(Sound_Move);
+            MovePieceRight();
+            g_game_state.state = State_Moving;
+          }
+          else
+          {
+            S_PlaySound(Sound_CannotMove);
+          }
+          break;
 
-        MovePieceDown();
-        g_game_state.state = State_Moving;
-      }
-      else
-      {
-        S_PlaySound(Sound_CannotMove);
-      }
-    }
-    else if (g_game_state.mouse_button)
-    {
-      size_t x = (size_t)((float) g_game_state.mouse_x / (float) glutGet(GLUT_WINDOW_WIDTH) *
-                          (float) g_game_state.size.x);
-      size_t y = (size_t)((float) g_game_state.mouse_y / (float) glutGet(GLUT_WINDOW_HEIGHT) *
-                          (float) g_game_state.size.y);
+        case GLUT_KEY_DOWN:
+          if (g_game_state.blank >= g_game_state.size.x)
+          {
+            S_PlaySound(Sound_Move);
 
-      size_t blank_x = g_game_state.blank % g_game_state.size.x;
-      size_t blank_y = g_game_state.blank / g_game_state.size.x;
+            MovePieceDown();
+            g_game_state.state = State_Moving;
+          }
+          else
+          {
+            S_PlaySound(Sound_CannotMove);
+          }
+          break;
 
-      if (x == blank_x)
+        case GLUT_KEY_UP:
+          if (g_game_state.blank + g_game_state.size.x < g_game_state.size.x * g_game_state.size.y)
+          {
+            S_PlaySound(Sound_Move);
+
+            MovePieceUp();
+            g_game_state.state = State_Moving;
+          }
+          else
+          {
+            S_PlaySound(Sound_CannotMove);
+          }
+          break;
+
+        default:
+          if (control_button)
+          {
+            size_t x = (size_t)((float) control_x / (float) glutGet(GLUT_WINDOW_WIDTH) *
+                                (float) g_game_state.size.x);
+            size_t y = (size_t)((float) control_y / (float) glutGet(GLUT_WINDOW_HEIGHT) *
+                                (float) g_game_state.size.y);
+
+            size_t blank_x = g_game_state.blank % g_game_state.size.x;
+            size_t blank_y = g_game_state.blank / g_game_state.size.x;
+
+            if (x == blank_x)
+            {
+              if (y < blank_y)
+              {
+                S_PlaySound(Sound_Move);
+
+                MovePiecesDown(blank_y - y);
+              }
+              else if (y > blank_y)
+              {
+                S_PlaySound(Sound_Move);
+
+                MovePiecesUp(y - blank_y);
+              }
+            }
+            else if (y == blank_y)
+            {
+              if (x < blank_x)
+              {
+                S_PlaySound(Sound_Move);
+
+                MovePiecesRight(blank_x - x);
+              }
+              else if (x > blank_x)
+              {
+                S_PlaySound(Sound_Move);
+
+                MovePiecesLeft(x - blank_x);
+              }
+            }
+            else
+            {
+              S_PlaySound(Sound_CannotMove);
+            }
+
+            g_game_state.state = State_Moving;
+          }
+      }
+      break;
+
+    case State_Moving:
+      if (!MovePieces())
       {
-        if (y < blank_y)
+        if (IsResolved())
         {
-          S_PlaySound(Sound_Move);
+          S_PlaySound(Sound_Success);
 
-          MovePiecesDown(blank_y - y);
+          SetPieceStates(State_Success);
+          g_game_state.state = State_Success;
         }
-        else if (y > blank_y)
+        else
         {
-          S_PlaySound(Sound_Move);
-
-          MovePiecesUp(y - blank_y);
+          g_game_state.state = State_Idle;
         }
       }
-      else if (y == blank_y)
-      {
-        if (x < blank_x)
-        {
-          S_PlaySound(Sound_Move);
+      break;
 
-          MovePiecesRight(blank_x - x);
-        }
-        else if (x > blank_x)
-        {
-          S_PlaySound(Sound_Move);
-
-          MovePiecesLeft(x - blank_x);
-        }
-      }
-      else
-      {
-        S_PlaySound(Sound_CannotMove);
-      }
-
-      g_game_state.state = State_Moving;
-    }
+    case State_Success:
+      break;
   }
-  else if (g_game_state.state == State_Moving)
-  {
-    if (!MovePieces())
-    {
-      if (IsResolved())
-      {
-        S_PlaySound(Sound_Success);
-
-        SetPieceStates(State_Success);
-        g_game_state.state = State_Success;
-      }
-      else
-      {
-        g_game_state.state = State_Idle;
-      }
-    }
-  }
-  else if (g_game_state.state == State_Success)
-  {
-  }
-
-  g_game_state.left_key = false;
-  g_game_state.right_key = false;
-  g_game_state.up_key = false;
-  g_game_state.down_key = false;
-  g_game_state.mouse_button = false;
 }
 
 void L_Stop()
@@ -207,13 +213,6 @@ void Restart()
   SetPieceStates(State_Idle);
 
   g_game_state.state = State_Idle;
-
-  g_game_state.left_key = false;
-  g_game_state.right_key = false;
-  g_game_state.up_key = false;
-  g_game_state.down_key = false;
-  g_game_state.reset_key = false;
-  g_game_state.mouse_button = false;
 
   g_game_state.single_moves = 0;
   g_game_state.moves = 0;

@@ -6,8 +6,16 @@
 #ifndef INPUT_H
 #define INPUT_H
 
+#include <stdbool.h>  // bool
+
 void I_Start();
 void I_Update();
 void I_Stop();
+
+void I_Restart();
+
+bool I_ResetKey();
+int I_PopControlKey();
+bool I_ControlButton(int* x, int* y);
 
 #endif  // INPUT_H
