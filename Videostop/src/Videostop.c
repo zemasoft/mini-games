@@ -55,16 +55,16 @@ void Start(int argc, char** argv)
     }
   }
 
-  g_game_state.max_shuffle_time = DEFAULT_MAX_SHUFFLE_TIME_MS;
+  g_game_state.max_idle_time = DEFAULT_MAX_IDLE_TIME_MS;
 
   if (argc > 2)
   {
     char* end;
-    long max_shuffle_time = strtol(argv[2], &end, 10);
+    long max_idle_time = strtol(argv[2], &end, 10);
 
-    if (max_shuffle_time != 0 && *end == '\0')
+    if (max_idle_time != 0 && *end == '\0')
     {
-      g_game_state.max_shuffle_time = (int) max_shuffle_time;
+      g_game_state.max_idle_time = (int) max_idle_time;
     }
   }
 

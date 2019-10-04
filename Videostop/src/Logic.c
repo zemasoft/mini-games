@@ -31,9 +31,8 @@ void L_Start()
 void L_Update()
 {
   static int before;
-  static int shuffle_time;
+  static int idle_time;
   static int stop_time;
-  static bool controls_blocked;
 
   int now = glutGet(GLUT_ELAPSED_TIME);
   int elapsed = now - before;
@@ -44,9 +43,8 @@ void L_Update()
     I_Restart();
     Restart();
 
-    shuffle_time = 0;
+    idle_time = 0;
     stop_time = 0;
-    controls_blocked = false;
     return;
   }
 
@@ -55,40 +53,34 @@ void L_Update()
 
   switch (g_game_state.state)
   {
-    case State_Shuffle:
-      shuffle_time += elapsed;
+    case State_Idle:
+      idle_time += elapsed;
 
-      if (!controls_blocked)
+      if (control_key || control_button)
       {
-        if (control_key || control_button)
+        if (CountScore())
         {
-          if (CountScore())
-          {
-            S_PlaySound(Sound_Success);
+          S_PlaySound(Sound_Success);
 
-            g_game_state.state = State_Success;
-            stop_time = 0;
-            controls_blocked = true;
-          }
-          else
-          {
-            S_PlaySound(Sound_Fail);
-
-            g_game_state.state = State_Fail;
-            stop_time = 0;
-            controls_blocked = true;
-          }
-          break;
+          g_game_state.state = State_Success;
+          stop_time = 0;
         }
+        else
+        {
+          S_PlaySound(Sound_Fail);
+
+          g_game_state.state = State_Fail;
+          stop_time = 0;
+        }
+        break;
       }
 
-      if (shuffle_time >= g_game_state.max_shuffle_time)
+      if (idle_time >= g_game_state.max_idle_time)
       {
         S_PlaySound(Sound_Shuffle);
-
         ShuffleDices();
-        shuffle_time = 0;
-        controls_blocked = false;
+
+        idle_time = 0;
       }
       break;
 
@@ -98,8 +90,11 @@ void L_Update()
 
       if (stop_time >= MAX_STOP_TIME_MS)
       {
-        g_game_state.state = State_Shuffle;
-        shuffle_time = 0;
+        S_PlaySound(Sound_Shuffle);
+        ShuffleDices();
+
+        g_game_state.state = State_Idle;
+        idle_time = 0;
       }
       break;
   }
@@ -113,7 +108,7 @@ void Restart()
 {
   ShuffleDices();
 
-  g_game_state.state = State_Shuffle;
+  g_game_state.state = State_Idle;
 
   g_game_state.successful_attempts = 0;
   g_game_state.failed_attempts = 0;
@@ -126,7 +121,7 @@ void ShuffleDices()
   for (int i = 0; i < g_game_state.dice_count; ++i)
   {
     g_game_state.dices[i].value = rand() % 6 + 1;
-    g_game_state.dices[i].state = State_Shuffle;
+    g_game_state.dices[i].state = State_Idle;
   }
 }
 

@@ -18,7 +18,6 @@ void I_Start()
 {
   I_Restart();
 
-  glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
   glutKeyboardFunc(&Keyboard);
   glutMouseFunc(&Mouse);
 }

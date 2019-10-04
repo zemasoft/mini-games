@@ -117,7 +117,7 @@ void DrawDice(int i)
 
   switch (g_game_state.dices[i].state)
   {
-    case State_Shuffle:
+    case State_Idle:
       glColor3f(BORDER_DEFAULT_COLOR);
       break;
     case State_Success:
@@ -144,7 +144,7 @@ void DrawDice(int i)
 
   switch (g_game_state.dices[i].state)
   {
-    case State_Shuffle:
+    case State_Idle:
       glColor3f(DICE_DEFAULT_COLOR);
       break;
     case State_Success:
@@ -171,7 +171,7 @@ void DrawDice(int i)
 
   switch (g_game_state.dices[i].state)
   {
-    case State_Shuffle:
+    case State_Idle:
       glColor3f(DOT_DEFAULT_COLOR);
       break;
     case State_Success:
