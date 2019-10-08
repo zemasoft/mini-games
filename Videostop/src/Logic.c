@@ -103,10 +103,10 @@ void L_Update()
 
       if (speed_up_key)
       {
-        g_game_config.idle_time -= IDLE_TIME_STEP_MS;
-        if (g_game_config.idle_time < MIN_IDLE_TIME_MS)
+        g_game_config.shuffle_frequency += SHUFFLE_FREQUENCY_STEP_HZ;
+        if (g_game_config.shuffle_frequency > MAX_SHUFFLE_FREQUENCY_HZ)
         {
-          g_game_config.idle_time = MIN_IDLE_TIME_MS;
+          g_game_config.shuffle_frequency = MAX_SHUFFLE_FREQUENCY_HZ;
         }
 
         UpdateWindowTitle();
@@ -114,16 +114,16 @@ void L_Update()
 
       if (speed_down_key)
       {
-        g_game_config.idle_time += IDLE_TIME_STEP_MS;
-        if (g_game_config.idle_time > MAX_IDLE_TIME_MS)
+        g_game_config.shuffle_frequency -= SHUFFLE_FREQUENCY_STEP_HZ;
+        if (g_game_config.shuffle_frequency < MIN_SHUFFLE_FREQUENCY_HZ)
         {
-          g_game_config.idle_time = MAX_IDLE_TIME_MS;
+          g_game_config.shuffle_frequency = MIN_SHUFFLE_FREQUENCY_HZ;
         }
 
         UpdateWindowTitle();
       }
 
-      if (idle_time >= g_game_config.idle_time)
+      if (idle_time >= 1000.0f / g_game_config.shuffle_frequency)
       {
         S_PlaySound(Sound_Shuffle);
         ShuffleDices(State_Setup);
@@ -154,7 +154,7 @@ void L_Update()
         break;
       }
 
-      if (idle_time >= g_game_config.idle_time)
+      if (idle_time >= 1000.0f / g_game_config.shuffle_frequency)
       {
         S_PlaySound(Sound_Shuffle);
         ShuffleDices(State_Idle);
@@ -200,7 +200,7 @@ void L_Restart()
 void UpdateWindowTitle()
 {
   char buf[30];
-  snprintf(buf, sizeof(buf), "Videostop @ %.2f Hz", 1000.0f / (float) g_game_config.idle_time);
+  snprintf(buf, sizeof(buf), "Videostop @ %.2f Hz", g_game_config.shuffle_frequency);
 
   glutSetWindowTitle(buf);
 }

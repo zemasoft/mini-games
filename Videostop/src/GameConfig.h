@@ -10,11 +10,11 @@
 #define MAX_DICE_COUNT 5
 #define DEFAULT_DICE_COUNT 3
 
-#define MIN_IDLE_TIME_MS 200
-#define MAX_IDLE_TIME_MS 2000
-#define DEFAULT_IDLE_TIME_MS 1000
+#define MIN_SHUFFLE_FREQUENCY_HZ 0.5f
+#define MAX_SHUFFLE_FREQUENCY_HZ 5.0f
+#define DEFAULT_SHUFFLE_FREQUENCY_HZ 2.0f
 
-#define IDLE_TIME_STEP_MS 50
+#define SHUFFLE_FREQUENCY_STEP_HZ 0.5f
 #define STOP_TIME_MS 1000
 
 #define DICE_SIZE_PIXELS 200
@@ -48,7 +48,7 @@
 struct GameConfig
 {
   int dice_count;
-  int idle_time;
+  float shuffle_frequency;
 };
 
 extern struct GameConfig g_game_config;

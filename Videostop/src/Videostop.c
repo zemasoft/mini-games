@@ -32,6 +32,7 @@ void Start(int argc, char** argv)
   alutInit(&argc, argv);
 
   g_game_config.dice_count = DEFAULT_DICE_COUNT;
+  g_game_config.shuffle_frequency = DEFAULT_SHUFFLE_FREQUENCY_HZ;
 
   if (argc > 1)
   {
@@ -50,28 +51,6 @@ void Start(int argc, char** argv)
       }
 
       g_game_config.dice_count = (int) dice_count;
-    }
-  }
-
-  g_game_config.idle_time = DEFAULT_IDLE_TIME_MS;
-
-  if (argc > 2)
-  {
-    char* end;
-    long idle_time = strtol(argv[2], &end, 10);
-
-    if (idle_time != 0 && *end == '\0')
-    {
-      if (idle_time < MIN_IDLE_TIME_MS)
-      {
-        idle_time = MIN_IDLE_TIME_MS;
-      }
-      else if (idle_time > MAX_IDLE_TIME_MS)
-      {
-        idle_time = MAX_IDLE_TIME_MS;
-      }
-
-      g_game_config.idle_time = (int) idle_time;
     }
   }
 
