@@ -12,33 +12,8 @@
 
 #include <GL/freeglut.h>
 
+#include "GameConfig.h"
 #include "GameState.h"
-
-#define DICE_SIZE 1.0f
-#define MARGIN 0.025f * DICE_SIZE
-#define BORDER 0.05f * DICE_SIZE
-#define DOT_RADIUS 0.06f * DICE_SIZE
-#define STATUSBAR_SIZE 0.12f * DICE_SIZE
-#define TEXT_SIZE 0.07f * DICE_SIZE
-
-#define BORDER_SETUP_COLOR 0.0f, 1.0f, 1.0f
-#define BORDER_IDLE_COLOR 1.0f, 1.0f, 1.0f
-#define BORDER_SUCCESS_COLOR 0.0f, 0.5f, 0.0f
-#define BORDER_FAIL_COLOR 0.5f, 0.0f, 0.0f
-
-#define DICE_SETUP_COLOR 0.0f, 0.0f, 0.5f
-#define DICE_IDLE_COLOR 0.0f, 0.0f, 0.5f
-#define DICE_SUCCESS_COLOR 0.0f, 0.0f, 0.5f
-#define DICE_FAIL_COLOR 0.0f, 0.0f, 0.5f
-
-#define DOT_SETUP_COLOR 1.0f, 1.0f, 1.0f
-#define DOT_IDLE_COLOR 1.0f, 1.0f, 1.0f
-#define DOT_SUCCESS_COLOR 1.0f, 1.0f, 1.0f
-#define DOT_FAIL_COLOR 1.0f, 1.0f, 1.0f
-
-#define STATUSBAR_DEFAULT_COLOR 1.0f, 1.0f, 1.0f
-#define STATUSBAR_SUCCESS_COLOR 0.0f, 0.5f, 0.0f
-#define STATUSBAR_FAIL_COLOR 0.5f, 0.0f, 0.0f
 
 static void DrawDices();
 static void DrawStatusBar();

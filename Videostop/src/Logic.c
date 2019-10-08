@@ -11,14 +11,11 @@
 
 #include <GL/freeglut.h>
 
+#include "GameConfig.h"
 #include "GameState.h"
 #include "Graphics.h"
 #include "Input.h"
 #include "Sound.h"
-
-#define IDLE_TIME_STEP_MS 100
-
-#define MAX_STOP_TIME_MS 1000
 
 static void ShuffleDices(enum State state);
 static bool CountScore();
@@ -40,7 +37,7 @@ void L_Update()
   int elapsed = now - before;
   before = now;
 
-  if (g_game_state.dice_count != g_game_state.dice_count_sp)
+  if (g_game_state.dice_count != g_game_config.dice_count)
   {
     I_Restart();
     L_Restart();
@@ -76,35 +73,35 @@ void L_Update()
     case State_Setup:
       if (size_up_key)
       {
-        if (g_game_state.dice_count_sp < MAX_DICE_COUNT)
+        if (g_game_config.dice_count < MAX_DICE_COUNT)
         {
-          ++g_game_state.dice_count_sp;
+          ++g_game_config.dice_count;
         }
       }
 
       if (size_down_key)
       {
-        if (g_game_state.dice_count_sp > MIN_DICE_COUNT)
+        if (g_game_config.dice_count > MIN_DICE_COUNT)
         {
-          --g_game_state.dice_count_sp;
+          --g_game_config.dice_count;
         }
       }
 
       if (speed_up_key)
       {
-        g_game_state.idle_time -= IDLE_TIME_STEP_MS;
-        if (g_game_state.idle_time < MIN_IDLE_TIME_MS)
+        g_game_config.idle_time -= IDLE_TIME_STEP_MS;
+        if (g_game_config.idle_time < MIN_IDLE_TIME_MS)
         {
-          g_game_state.idle_time = MIN_IDLE_TIME_MS;
+          g_game_config.idle_time = MIN_IDLE_TIME_MS;
         }
       }
 
       if (speed_down_key)
       {
-        g_game_state.idle_time += IDLE_TIME_STEP_MS;
-        if (g_game_state.idle_time > MAX_IDLE_TIME_MS)
+        g_game_config.idle_time += IDLE_TIME_STEP_MS;
+        if (g_game_config.idle_time > MAX_IDLE_TIME_MS)
         {
-          g_game_state.idle_time = MAX_IDLE_TIME_MS;
+          g_game_config.idle_time = MAX_IDLE_TIME_MS;
         }
       }
 
@@ -130,7 +127,7 @@ void L_Update()
         break;
       }
 
-      if (idle_time >= g_game_state.idle_time)
+      if (idle_time >= g_game_config.idle_time)
       {
         S_PlaySound(Sound_Shuffle);
         ShuffleDices(g_game_state.state);
@@ -143,7 +140,7 @@ void L_Update()
     case State_Fail:
       stop_time += elapsed;
 
-      if (stop_time >= MAX_STOP_TIME_MS)
+      if (stop_time >= STOP_TIME_MS)
       {
         S_PlaySound(Sound_Shuffle);
         ShuffleDices(State_Idle);
@@ -161,7 +158,7 @@ void L_Stop()
 
 void L_Restart()
 {
-  g_game_state.dice_count = g_game_state.dice_count_sp;
+  g_game_state.dice_count = g_game_config.dice_count;
 
   ShuffleDices(State_Setup);
 

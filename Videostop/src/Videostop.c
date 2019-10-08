@@ -8,13 +8,11 @@
 #include <AL/alut.h>
 #include <GL/freeglut.h>
 
-#include "GameState.h"
+#include "GameConfig.h"
 #include "Graphics.h"
 #include "Input.h"
 #include "Logic.h"
 #include "Sound.h"
-
-#define DICE_SIZE_PIXELS 200
 
 static void Start(int argc, char** argv);
 static void Update();
@@ -33,7 +31,7 @@ void Start(int argc, char** argv)
   glutInit(&argc, argv);
   alutInit(&argc, argv);
 
-  g_game_state.dice_count_sp = DEFAULT_DICE_COUNT;
+  g_game_config.dice_count = DEFAULT_DICE_COUNT;
 
   if (argc > 1)
   {
@@ -51,11 +49,11 @@ void Start(int argc, char** argv)
         dice_count = MAX_DICE_COUNT;
       }
 
-      g_game_state.dice_count_sp = (int) dice_count;
+      g_game_config.dice_count = (int) dice_count;
     }
   }
 
-  g_game_state.idle_time = DEFAULT_IDLE_TIME_MS;
+  g_game_config.idle_time = DEFAULT_IDLE_TIME_MS;
 
   if (argc > 2)
   {
@@ -73,12 +71,12 @@ void Start(int argc, char** argv)
         idle_time = MAX_IDLE_TIME_MS;
       }
 
-      g_game_state.idle_time = (int) idle_time;
+      g_game_config.idle_time = (int) idle_time;
     }
   }
 
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_MULTISAMPLE);
-  glutInitWindowSize(g_game_state.dice_count_sp * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS);
+  glutInitWindowSize(g_game_config.dice_count * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS);
   glutCreateWindow("Videostop");
 
   I_Start();

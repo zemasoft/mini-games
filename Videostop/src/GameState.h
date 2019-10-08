@@ -6,13 +6,7 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 
-#define MIN_DICE_COUNT 2
-#define MAX_DICE_COUNT 5
-#define DEFAULT_DICE_COUNT 3
-
-#define MIN_IDLE_TIME_MS 100
-#define MAX_IDLE_TIME_MS 5000
-#define DEFAULT_IDLE_TIME_MS 1000
+#include "GameConfig.h"
 
 enum State
 {
@@ -30,12 +24,8 @@ struct Dice
 
 struct GameState
 {
-  int dice_count_sp;
-
   struct Dice dices[MAX_DICE_COUNT];
   int dice_count;
-
-  int idle_time;
 
   enum State state;
 
