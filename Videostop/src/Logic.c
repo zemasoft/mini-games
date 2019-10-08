@@ -6,6 +6,7 @@
 #include "Logic.h"
 
 #include <stdbool.h>  // bool, false, true
+#include <stdio.h>    // snprintf
 #include <stdlib.h>   // srand, rand
 #include <time.h>     // time
 
@@ -17,6 +18,7 @@
 #include "Input.h"
 #include "Sound.h"
 
+static void UpdateWindowTitle();
 static void ShuffleDices(enum State state);
 static bool CountScore();
 
@@ -24,6 +26,7 @@ void L_Start()
 {
   srand((unsigned int) time(NULL));
 
+  UpdateWindowTitle();
   L_Restart();
 }
 
@@ -105,6 +108,8 @@ void L_Update()
         {
           g_game_config.idle_time = MIN_IDLE_TIME_MS;
         }
+
+        UpdateWindowTitle();
       }
 
       if (speed_down_key)
@@ -114,6 +119,8 @@ void L_Update()
         {
           g_game_config.idle_time = MAX_IDLE_TIME_MS;
         }
+
+        UpdateWindowTitle();
       }
 
       if (idle_time >= g_game_config.idle_time)
@@ -188,6 +195,14 @@ void L_Restart()
   g_game_state.failed_attempts = 0;
 
   g_game_state.score = 0;
+}
+
+void UpdateWindowTitle()
+{
+  char buf[30];
+  snprintf(buf, sizeof(buf), "Videostop @ %.2f Hz", 1000.0f / (float) g_game_config.idle_time);
+
+  glutSetWindowTitle(buf);
 }
 
 void ShuffleDices(enum State state)
