@@ -10,10 +10,13 @@
 #define MAX_DICE_COUNT 5
 #define DEFAULT_DICE_COUNT 3
 
-#define DEFAULT_MAX_IDLE_TIME_MS 1000
+#define MIN_IDLE_TIME_MS 100
+#define MAX_IDLE_TIME_MS 5000
+#define DEFAULT_IDLE_TIME_MS 1000
 
 enum State
 {
+  State_Setup,
   State_Idle,
   State_Success,
   State_Fail
@@ -27,10 +30,12 @@ struct Dice
 
 struct GameState
 {
+  int dice_count_sp;
+
   struct Dice dices[MAX_DICE_COUNT];
   int dice_count;
 
-  int max_idle_time;
+  int idle_time;
 
   enum State state;
 

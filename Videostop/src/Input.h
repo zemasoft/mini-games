@@ -18,4 +18,9 @@ bool I_ResetKey();
 bool I_ControlKey();
 bool I_ControlButton();
 
+bool I_SizeUpKey();
+bool I_SizeDownKey();
+bool I_SpeedUpKey();
+bool I_SpeedDownKey();
+
 #endif  // INPUT_H

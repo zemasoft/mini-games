@@ -21,15 +21,18 @@
 #define STATUSBAR_SIZE 0.12f * DICE_SIZE
 #define TEXT_SIZE 0.07f * DICE_SIZE
 
-#define BORDER_DEFAULT_COLOR 1.0f, 1.0f, 1.0f
+#define BORDER_SETUP_COLOR 0.0f, 1.0f, 1.0f
+#define BORDER_IDLE_COLOR 1.0f, 1.0f, 1.0f
 #define BORDER_SUCCESS_COLOR 0.0f, 0.5f, 0.0f
 #define BORDER_FAIL_COLOR 0.5f, 0.0f, 0.0f
 
-#define DICE_DEFAULT_COLOR 0.0f, 0.0f, 0.5f
+#define DICE_SETUP_COLOR 0.0f, 0.0f, 0.5f
+#define DICE_IDLE_COLOR 0.0f, 0.0f, 0.5f
 #define DICE_SUCCESS_COLOR 0.0f, 0.0f, 0.5f
 #define DICE_FAIL_COLOR 0.0f, 0.0f, 0.5f
 
-#define DOT_DEFAULT_COLOR 1.0f, 1.0f, 1.0f
+#define DOT_SETUP_COLOR 1.0f, 1.0f, 1.0f
+#define DOT_IDLE_COLOR 1.0f, 1.0f, 1.0f
 #define DOT_SUCCESS_COLOR 1.0f, 1.0f, 1.0f
 #define DOT_FAIL_COLOR 1.0f, 1.0f, 1.0f
 
@@ -57,14 +60,9 @@ static void DrawScore();
 void G_Start()
 {
   glEnable(GL_MULTISAMPLE);
-
   glDisable(GL_DEPTH_TEST);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(-MARGIN / 2.0f, (float) g_game_state.dice_count * DICE_SIZE + MARGIN / 2.0f,
-          -MARGIN / 2.0f - STATUSBAR_SIZE, DICE_SIZE + MARGIN / 2.0f, -1.0f, 1.0f);
 
-  glMatrixMode(GL_MODELVIEW);
+  G_Restart();
 }
 
 void G_Update()
@@ -80,6 +78,16 @@ void G_Update()
 
 void G_Stop()
 {
+}
+
+void G_Restart()
+{
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(-MARGIN / 2.0f, (float) g_game_state.dice_count * DICE_SIZE + MARGIN / 2.0f,
+          -MARGIN / 2.0f - STATUSBAR_SIZE, DICE_SIZE + MARGIN / 2.0f, -1.0f, 1.0f);
+
+  glMatrixMode(GL_MODELVIEW);
 }
 
 void DrawDices()
@@ -119,8 +127,11 @@ void DrawDice(int i)
 
   switch (g_game_state.dices[i].state)
   {
+    case State_Setup:
+      glColor3f(BORDER_SETUP_COLOR);
+      break;
     case State_Idle:
-      glColor3f(BORDER_DEFAULT_COLOR);
+      glColor3f(BORDER_IDLE_COLOR);
       break;
     case State_Success:
       glColor3f(BORDER_SUCCESS_COLOR);
@@ -146,8 +157,11 @@ void DrawDice(int i)
 
   switch (g_game_state.dices[i].state)
   {
+    case State_Setup:
+      glColor3f(DICE_SETUP_COLOR);
+      break;
     case State_Idle:
-      glColor3f(DICE_DEFAULT_COLOR);
+      glColor3f(DICE_IDLE_COLOR);
       break;
     case State_Success:
       glColor3f(DICE_SUCCESS_COLOR);
@@ -173,8 +187,11 @@ void DrawDice(int i)
 
   switch (g_game_state.dices[i].state)
   {
+    case State_Setup:
+      glColor3f(DOT_SETUP_COLOR);
+      break;
     case State_Idle:
-      glColor3f(DOT_DEFAULT_COLOR);
+      glColor3f(DOT_IDLE_COLOR);
       break;
     case State_Success:
       glColor3f(DOT_SUCCESS_COLOR);

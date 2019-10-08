@@ -12,20 +12,22 @@
 #include <GL/freeglut.h>
 
 #include "GameState.h"
+#include "Graphics.h"
 #include "Input.h"
 #include "Sound.h"
 
+#define IDLE_TIME_STEP_MS 100
+
 #define MAX_STOP_TIME_MS 1000
 
-static void Restart();
-static void ShuffleDices();
+static void ShuffleDices(enum State state);
 static bool CountScore();
 
 void L_Start()
 {
   srand((unsigned int) time(NULL));
 
-  Restart();
+  L_Restart();
 }
 
 void L_Update()
@@ -38,10 +40,23 @@ void L_Update()
   int elapsed = now - before;
   before = now;
 
+  if (g_game_state.dice_count != g_game_state.dice_count_sp)
+  {
+    I_Restart();
+    L_Restart();
+    S_Restart();
+    G_Restart();
+
+    idle_time = 0;
+    stop_time = 0;
+    return;
+  }
+
   if (I_ResetKey())
   {
     I_Restart();
-    Restart();
+    L_Restart();
+    S_Restart();
 
     idle_time = 0;
     stop_time = 0;
@@ -51,8 +66,48 @@ void L_Update()
   bool control_key = I_ControlKey();
   bool control_button = I_ControlButton();
 
+  bool size_up_key = I_SizeUpKey();
+  bool size_down_key = I_SizeDownKey();
+  bool speed_up_key = I_SpeedUpKey();
+  bool speed_down_key = I_SpeedDownKey();
+
   switch (g_game_state.state)
   {
+    case State_Setup:
+      if (size_up_key)
+      {
+        if (g_game_state.dice_count_sp < MAX_DICE_COUNT)
+        {
+          ++g_game_state.dice_count_sp;
+        }
+      }
+
+      if (size_down_key)
+      {
+        if (g_game_state.dice_count_sp > MIN_DICE_COUNT)
+        {
+          --g_game_state.dice_count_sp;
+        }
+      }
+
+      if (speed_up_key)
+      {
+        g_game_state.idle_time -= IDLE_TIME_STEP_MS;
+        if (g_game_state.idle_time < MIN_IDLE_TIME_MS)
+        {
+          g_game_state.idle_time = MIN_IDLE_TIME_MS;
+        }
+      }
+
+      if (speed_down_key)
+      {
+        g_game_state.idle_time += IDLE_TIME_STEP_MS;
+        if (g_game_state.idle_time > MAX_IDLE_TIME_MS)
+        {
+          g_game_state.idle_time = MAX_IDLE_TIME_MS;
+        }
+      }
+
     case State_Idle:
       idle_time += elapsed;
 
@@ -75,10 +130,10 @@ void L_Update()
         break;
       }
 
-      if (idle_time >= g_game_state.max_idle_time)
+      if (idle_time >= g_game_state.idle_time)
       {
         S_PlaySound(Sound_Shuffle);
-        ShuffleDices();
+        ShuffleDices(g_game_state.state);
 
         idle_time = 0;
       }
@@ -91,7 +146,7 @@ void L_Update()
       if (stop_time >= MAX_STOP_TIME_MS)
       {
         S_PlaySound(Sound_Shuffle);
-        ShuffleDices();
+        ShuffleDices(State_Idle);
 
         g_game_state.state = State_Idle;
         idle_time = 0;
@@ -104,11 +159,13 @@ void L_Stop()
 {
 }
 
-void Restart()
+void L_Restart()
 {
-  ShuffleDices();
+  g_game_state.dice_count = g_game_state.dice_count_sp;
 
-  g_game_state.state = State_Idle;
+  ShuffleDices(State_Setup);
+
+  g_game_state.state = State_Setup;
 
   g_game_state.successful_attempts = 0;
   g_game_state.failed_attempts = 0;
@@ -116,12 +173,12 @@ void Restart()
   g_game_state.score = 0;
 }
 
-void ShuffleDices()
+void ShuffleDices(enum State state)
 {
   for (int i = 0; i < g_game_state.dice_count; ++i)
   {
     g_game_state.dices[i].value = rand() % 6 + 1;
-    g_game_state.dices[i].state = State_Idle;
+    g_game_state.dices[i].state = state;
   }
 }
 
@@ -158,6 +215,14 @@ bool CountScore()
 
   if (match)
   {
+    for (int i = 0; i < g_game_state.dice_count; ++i)
+    {
+      if (g_game_state.dices[i].state != State_Success)
+      {
+        g_game_state.dices[i].state = State_Idle;
+      }
+    }
+
     ++g_game_state.successful_attempts;
   }
   else

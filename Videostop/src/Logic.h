@@ -10,4 +10,6 @@ void L_Start();
 void L_Update();
 void L_Stop();
 
+void L_Restart();
+
 #endif  // LOGIC_H

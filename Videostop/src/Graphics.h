@@ -10,4 +10,6 @@ void G_Start();
 void G_Update();
 void G_Stop();
 
+void G_Restart();
+
 #endif  // GRAPHICS_H

@@ -33,7 +33,7 @@ void Start(int argc, char** argv)
   glutInit(&argc, argv);
   alutInit(&argc, argv);
 
-  g_game_state.dice_count = DEFAULT_DICE_COUNT;
+  g_game_state.dice_count_sp = DEFAULT_DICE_COUNT;
 
   if (argc > 1)
   {
@@ -51,25 +51,34 @@ void Start(int argc, char** argv)
         dice_count = MAX_DICE_COUNT;
       }
 
-      g_game_state.dice_count = (int) dice_count;
+      g_game_state.dice_count_sp = (int) dice_count;
     }
   }
 
-  g_game_state.max_idle_time = DEFAULT_MAX_IDLE_TIME_MS;
+  g_game_state.idle_time = DEFAULT_IDLE_TIME_MS;
 
   if (argc > 2)
   {
     char* end;
-    long max_idle_time = strtol(argv[2], &end, 10);
+    long idle_time = strtol(argv[2], &end, 10);
 
-    if (max_idle_time != 0 && *end == '\0')
+    if (idle_time != 0 && *end == '\0')
     {
-      g_game_state.max_idle_time = (int) max_idle_time;
+      if (idle_time < MIN_IDLE_TIME_MS)
+      {
+        idle_time = MIN_IDLE_TIME_MS;
+      }
+      else if (idle_time > MAX_IDLE_TIME_MS)
+      {
+        idle_time = MAX_IDLE_TIME_MS;
+      }
+
+      g_game_state.idle_time = (int) idle_time;
     }
   }
 
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_MULTISAMPLE);
-  glutInitWindowSize(g_game_state.dice_count * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS);
+  glutInitWindowSize(g_game_state.dice_count_sp * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS);
   glutCreateWindow("Videostop");
 
   I_Start();

@@ -28,6 +28,10 @@ void S_Stop()
 {
 }
 
+void S_Restart()
+{
+}
+
 void S_PlaySound(enum Sound sound)
 {
   alSourcePlay(s_sound_sources[sound]);

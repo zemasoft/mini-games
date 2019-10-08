@@ -11,15 +11,22 @@ static bool s_reset_key;
 static bool s_control_key;
 static bool s_control_button;
 
+static bool s_size_up_key;
+static bool s_size_down_key;
+static bool s_speed_up_key;
+static bool s_speed_down_key;
+
 static void Keyboard(unsigned char key, int x, int y);
+static void Special(int key, int x, int y);
 static void Mouse(int button, int state, int x, int y);
 
 void I_Start()
 {
-  I_Restart();
-
   glutKeyboardFunc(&Keyboard);
+  glutSpecialFunc(&Special);
   glutMouseFunc(&Mouse);
+
+  I_Restart();
 }
 
 void I_Update()
@@ -29,6 +36,7 @@ void I_Update()
 void I_Stop()
 {
   glutKeyboardFunc(NULL);
+  glutSpecialFunc(NULL);
   glutMouseFunc(NULL);
 }
 
@@ -66,6 +74,42 @@ bool I_ControlButton()
   return res;
 }
 
+bool I_SizeUpKey()
+{
+  bool res = s_size_up_key;
+
+  s_size_up_key = false;
+
+  return res;
+}
+
+bool I_SizeDownKey()
+{
+  bool res = s_size_down_key;
+
+  s_size_down_key = false;
+
+  return res;
+}
+
+bool I_SpeedUpKey()
+{
+  bool res = s_speed_up_key;
+
+  s_speed_up_key = false;
+
+  return res;
+}
+
+bool I_SpeedDownKey()
+{
+  bool res = s_speed_down_key;
+
+  s_speed_down_key = false;
+
+  return res;
+}
+
 void Keyboard(unsigned char key, int x, int y)
 {
   (void) x;
@@ -90,6 +134,28 @@ void Keyboard(unsigned char key, int x, int y)
   {
     s_control_key = true;
     return;
+  }
+}
+
+void Special(int key, int x, int y)
+{
+  (void) x;
+  (void) y;
+
+  switch (key)
+  {
+    case GLUT_KEY_RIGHT:
+      s_size_up_key = true;
+      break;
+    case GLUT_KEY_LEFT:
+      s_size_down_key = true;
+      break;
+    case GLUT_KEY_UP:
+      s_speed_up_key = true;
+      break;
+    case GLUT_KEY_DOWN:
+      s_speed_down_key = true;
+      break;
   }
 }
 
