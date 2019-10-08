@@ -9,10 +9,9 @@
 #include <stdbool.h>  // bool
 
 void I_Start();
+void I_Restart();
 void I_Update();
 void I_Stop();
-
-void I_Restart();
 
 bool I_ResetKey();
 bool I_ControlKey();

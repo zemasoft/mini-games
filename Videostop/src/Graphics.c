@@ -40,6 +40,16 @@ void G_Start()
   G_Restart();
 }
 
+void G_Restart()
+{
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(-MARGIN / 2.0f, (float) g_game_state.dice_count * DICE_SIZE + MARGIN / 2.0f,
+          -MARGIN / 2.0f - STATUSBAR_SIZE, DICE_SIZE + MARGIN / 2.0f, -1.0f, 1.0f);
+
+  glMatrixMode(GL_MODELVIEW);
+}
+
 void G_Update()
 {
   glClear(GL_COLOR_BUFFER_BIT);
@@ -53,16 +63,6 @@ void G_Update()
 
 void G_Stop()
 {
-}
-
-void G_Restart()
-{
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(-MARGIN / 2.0f, (float) g_game_state.dice_count * DICE_SIZE + MARGIN / 2.0f,
-          -MARGIN / 2.0f - STATUSBAR_SIZE, DICE_SIZE + MARGIN / 2.0f, -1.0f, 1.0f);
-
-  glMatrixMode(GL_MODELVIEW);
 }
 
 void DrawDices()

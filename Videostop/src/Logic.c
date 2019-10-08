@@ -24,10 +24,25 @@ static bool CountScore();
 
 void L_Start()
 {
+  UpdateWindowTitle();
+
   srand((unsigned int) time(NULL));
 
-  UpdateWindowTitle();
   L_Restart();
+}
+
+void L_Restart()
+{
+  g_game_state.dice_count = g_game_config.dice_count;
+
+  ShuffleDices(State_Setup);
+
+  g_game_state.state = State_Setup;
+
+  g_game_state.successful_attempts = 0;
+  g_game_state.failed_attempts = 0;
+
+  g_game_state.score = 0;
 }
 
 void L_Update()
@@ -181,20 +196,6 @@ void L_Update()
 
 void L_Stop()
 {
-}
-
-void L_Restart()
-{
-  g_game_state.dice_count = g_game_config.dice_count;
-
-  ShuffleDices(State_Setup);
-
-  g_game_state.state = State_Setup;
-
-  g_game_state.successful_attempts = 0;
-  g_game_state.failed_attempts = 0;
-
-  g_game_state.score = 0;
 }
 
 void UpdateWindowTitle()

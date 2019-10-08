@@ -28,17 +28,6 @@ void I_Start()
   I_Restart();
 }
 
-void I_Update()
-{
-}
-
-void I_Stop()
-{
-  glutKeyboardFunc(NULL);
-  glutSpecialFunc(NULL);
-  glutMouseFunc(NULL);
-}
-
 void I_Restart()
 {
   s_reset_key = false;
@@ -48,6 +37,17 @@ void I_Restart()
   s_size_down_key = false;
   s_speed_up_key = false;
   s_speed_down_key = false;
+}
+
+void I_Update()
+{
+}
+
+void I_Stop()
+{
+  glutKeyboardFunc(NULL);
+  glutSpecialFunc(NULL);
+  glutMouseFunc(NULL);
 }
 
 bool I_ResetKey()

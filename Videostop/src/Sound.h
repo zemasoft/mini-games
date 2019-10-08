@@ -16,9 +16,8 @@ enum Sound
 };
 
 void S_Start();
-void S_Stop();
-
 void S_Restart();
+void S_Stop();
 
 void S_PlaySound(enum Sound sound);
 
