@@ -17,7 +17,6 @@ void I_Restart();
 bool I_ResetKey();
 bool I_ControlKey();
 bool I_ControlButton();
-
 bool I_SizeUpKey();
 bool I_SizeDownKey();
 bool I_SpeedUpKey();

@@ -10,7 +10,6 @@
 static bool s_reset_key;
 static bool s_control_key;
 static bool s_control_button;
-
 static bool s_size_up_key;
 static bool s_size_down_key;
 static bool s_speed_up_key;
@@ -45,6 +44,10 @@ void I_Restart()
   s_reset_key = false;
   s_control_key = false;
   s_control_button = false;
+  s_size_up_key = false;
+  s_size_down_key = false;
+  s_speed_up_key = false;
+  s_speed_down_key = false;
 }
 
 bool I_ResetKey()
@@ -115,25 +118,20 @@ void Keyboard(unsigned char key, int x, int y)
   (void) x;
   (void) y;
 
-  // Escape
-  if (key == 27)
+  switch (key)
   {
-    glutLeaveMainLoop();
-    return;
-  }
-
-  // r
-  if (key == 114)
-  {
-    s_reset_key = true;
-    return;
-  }
-
-  // Space
-  if (key == 32)
-  {
-    s_control_key = true;
-    return;
+    case 13:  // Enter
+      s_control_key = true;
+      break;
+    case 27:  // Escape
+      glutLeaveMainLoop();
+      break;
+    case 32:  // Space
+      s_control_key = true;
+      break;
+    case 114:  // r
+      s_reset_key = true;
+      break;
   }
 }
 

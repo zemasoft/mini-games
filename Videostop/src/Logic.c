@@ -62,7 +62,6 @@ void L_Update()
 
   bool control_key = I_ControlKey();
   bool control_button = I_ControlButton();
-
   bool size_up_key = I_SizeUpKey();
   bool size_down_key = I_SizeDownKey();
   bool speed_up_key = I_SpeedUpKey();
@@ -71,6 +70,18 @@ void L_Update()
   switch (g_game_state.state)
   {
     case State_Setup:
+      idle_time += elapsed;
+
+      if (control_key || control_button)
+      {
+        S_PlaySound(Sound_Shuffle);
+        ShuffleDices(State_Idle);
+
+        g_game_state.state = State_Idle;
+        idle_time = 0;
+        break;
+      }
+
       if (size_up_key)
       {
         if (g_game_config.dice_count < MAX_DICE_COUNT)
@@ -105,6 +116,15 @@ void L_Update()
         }
       }
 
+      if (idle_time >= g_game_config.idle_time)
+      {
+        S_PlaySound(Sound_Shuffle);
+        ShuffleDices(State_Setup);
+
+        idle_time = 0;
+      }
+      break;
+
     case State_Idle:
       idle_time += elapsed;
 
@@ -130,7 +150,7 @@ void L_Update()
       if (idle_time >= g_game_config.idle_time)
       {
         S_PlaySound(Sound_Shuffle);
-        ShuffleDices(g_game_state.state);
+        ShuffleDices(State_Idle);
 
         idle_time = 0;
       }
