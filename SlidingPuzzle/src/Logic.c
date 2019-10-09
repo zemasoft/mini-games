@@ -7,6 +7,7 @@
 
 #include <stdbool.h>  // bool, false, true
 #include <stddef.h>   // size_t
+#include <stdio.h>    // snprintf
 #include <stdlib.h>   // free, malloc, srand, rand
 #include <time.h>     // time
 
@@ -16,6 +17,8 @@
 #include "GameState.h"
 #include "Input.h"
 #include "Sound.h"
+
+static void UpdateWindowTitle();
 
 static void MovePieceLeft();
 static void MovePieceRight();
@@ -41,6 +44,8 @@ static int CountInversions();
 
 void L_Start()
 {
+  UpdateWindowTitle();
+
   srand((unsigned int) time(NULL));
 
   L_Restart();
@@ -220,6 +225,14 @@ void L_Update()
 void L_Stop()
 {
   free(g_game_state.pieces);
+}
+
+void UpdateWindowTitle()
+{
+  char buf[30];
+  snprintf(buf, sizeof(buf), "Sliding Puzzle %ldx%ld", g_game_config.size.y, g_game_config.size.x);
+
+  glutSetWindowTitle(buf);
 }
 
 void MovePieceLeft()
