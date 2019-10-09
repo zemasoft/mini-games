@@ -54,6 +54,14 @@ static void DrawMoves();
 
 void G_Start()
 {
+  glEnable(GL_MULTISAMPLE);
+  glDisable(GL_DEPTH_TEST);
+
+  G_Restart();
+}
+
+void G_Restart()
+{
   struct Projection projection;
   projection.left = -MARGIN / 2.0f;
   projection.right = (float) g_game_state.size.x * PIECE_SIZE + MARGIN / 2.0f;
@@ -62,9 +70,6 @@ void G_Start()
 
   InitPieceStrings(&projection);
 
-  glEnable(GL_MULTISAMPLE);
-
-  glDisable(GL_DEPTH_TEST);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(projection.left, projection.right, projection.bottom, projection.top, -1.0f, 1.0f);

@@ -7,6 +7,7 @@
 #define GRAPHICS_H
 
 void G_Start();
+void G_Restart();
 void G_Update();
 void G_Stop();
 

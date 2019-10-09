@@ -27,11 +27,21 @@ static void Mouse(int button, int state, int x, int y);
 
 void I_Start()
 {
-  I_Restart();
-
   glutKeyboardFunc(&Keyboard);
   glutSpecialFunc(&Special);
   glutMouseFunc(&Mouse);
+
+  I_Restart();
+}
+
+void I_Restart()
+{
+  s_reset_key = false;
+
+  s_top = 0;
+  s_bot = 0;
+
+  s_control_button = false;
 }
 
 void I_Update()
@@ -43,16 +53,6 @@ void I_Stop()
   glutKeyboardFunc(NULL);
   glutSpecialFunc(NULL);
   glutMouseFunc(NULL);
-}
-
-void I_Restart()
-{
-  s_reset_key = false;
-
-  s_top = 0;
-  s_bot = 0;
-
-  s_control_button = false;
 }
 
 bool I_ResetKey()
@@ -101,18 +101,14 @@ void Keyboard(unsigned char key, int x, int y)
   (void) x;
   (void) y;
 
-  // Escape
-  if (key == 27)
+  switch (key)
   {
-    glutLeaveMainLoop();
-    return;
-  }
-
-  // r
-  if (key == 114)
-  {
-    s_reset_key = true;
-    return;
+    case 27:  // Escape
+      glutLeaveMainLoop();
+      break;
+    case 114:  // r
+      s_reset_key = true;
+      break;
   }
 }
 

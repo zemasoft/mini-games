@@ -18,7 +18,6 @@
 
 #define MOVE_STEP 0.1f
 
-static void Restart();
 static void MovePieceLeft();
 static void MovePieceRight();
 static void MovePieceUp();
@@ -45,10 +44,30 @@ void L_Start()
 {
   srand((unsigned int) time(NULL));
 
+  L_Restart();
+}
+
+void L_Restart()
+{
+  if (g_game_state.pieces != NULL)
+  {
+    free(g_game_state.pieces);
+  }
+
   g_game_state.piece_count = (size_t)(g_game_state.size.x * g_game_state.size.y);
   g_game_state.pieces = malloc(g_game_state.piece_count * sizeof(struct Piece));
 
-  Restart();
+  SetupPieceValues();
+  ShufflePieces();
+  FindBlankPiece();
+  MakeResolvable();
+  SetupPiecePositions();
+  SetPieceStates(State_Idle);
+
+  g_game_state.state = State_Idle;
+
+  g_game_state.single_moves = 0;
+  g_game_state.moves = 0;
 }
 
 void L_Update()
@@ -56,7 +75,8 @@ void L_Update()
   if (I_ResetKey())
   {
     I_Restart();
-    Restart();
+    L_Restart();
+    S_Restart();
     return;
   }
 
@@ -197,21 +217,6 @@ void L_Update()
 void L_Stop()
 {
   free(g_game_state.pieces);
-}
-
-void Restart()
-{
-  SetupPieceValues();
-  ShufflePieces();
-  FindBlankPiece();
-  MakeResolvable();
-  SetupPiecePositions();
-  SetPieceStates(State_Idle);
-
-  g_game_state.state = State_Idle;
-
-  g_game_state.single_moves = 0;
-  g_game_state.moves = 0;
 }
 
 void MovePieceLeft()
