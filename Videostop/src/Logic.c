@@ -19,6 +19,7 @@
 #include "Sound.h"
 
 static void UpdateWindowTitle();
+
 static void ShuffleDices(enum State state);
 static bool CountScore();
 
