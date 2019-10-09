@@ -10,6 +10,7 @@ find_package(GLUT REQUIRED MODULE)  # FreeGLUT
 find_package(ALUT REQUIRED MODULE)  # FreeALUT
 
 add_executable(SlidingPuzzle
+  src/GameConfig.c
   src/GameState.c
   src/Graphics.c
   src/Input.c
@@ -17,6 +18,7 @@ add_executable(SlidingPuzzle
   src/SlidingPuzzle.c
   src/Sound.c
 
+  src/GameConfig.h
   src/GameState.h
   src/Graphics.h
   src/Input.h

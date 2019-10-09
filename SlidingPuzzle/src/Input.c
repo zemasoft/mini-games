@@ -9,7 +9,7 @@
 
 #include <GL/freeglut.h>
 
-#define CONTROL_KEYS_SIZE 4
+#include "GameConfig.h"
 
 static bool s_reset_key;
 

@@ -8,9 +8,7 @@
 
 #include <stddef.h>  // size_t
 
-#define MIN_SIZE 2
-#define MAX_SIZE 10
-#define DEFAULT_SIZE 3
+#include "GameConfig.h"
 
 enum State
 {
@@ -39,7 +37,7 @@ struct Piece
 
   struct
   {
-    char value[3];  // SIZE = floor(log10(MAX_SIZE^2 - 1)) + 1 + 1
+    char value[STRING_SIZE];
     float width;
     float height;
   } string;

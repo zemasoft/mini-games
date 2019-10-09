@@ -1,0 +1,55 @@
+// Copyright Tomas Zeman 2019.
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
+#ifndef GAME_CONFIG_H
+#define GAME_CONFIG_H
+
+#include <stddef.h>  // size_t
+
+#define MIN_SIZE 2
+#define MAX_SIZE 10
+#define DEFAULT_SIZE 3
+
+#define STRING_SIZE 3  // floor(log10(MAX_SIZE^2 - 1)) + 1 + 1
+
+#define CONTROL_KEYS_SIZE 4
+
+#define MOVE_STEP 0.1f
+
+#define PIECE_SIZE_PIXELS 100
+
+#define PIECE_SIZE 1.0f
+#define MARGIN 0.02f * PIECE_SIZE
+#define BORDER 0.05f * PIECE_SIZE
+#define VALUE_SIZE 0.30f * PIECE_SIZE
+#define STATUSBAR_SIZE 0.24f * PIECE_SIZE
+#define TEXT_SIZE 0.14f * PIECE_SIZE
+
+#define BORDER_IDLE_COLOR 1.0f, 1.0f, 1.0f
+#define BORDER_MOVING_COLOR 1.0f, 1.0f, 1.0f
+#define BORDER_SUCCESS_COLOR 0.0f, 0.5f, 0.0f
+
+#define PIECE_IDLE_COLOR 0.0f, 0.0f, 0.5f
+#define PIECE_MOVING_COLOR 0.0f, 0.0f, 0.5f
+#define PIECE_SUCCESS_COLOR 0.0f, 0.0f, 0.5f
+
+#define VALUE_IDLE_COLOR 1.0f, 1.0f, 1.0f
+#define VALUE_MOVING_COLOR 1.0f, 1.0f, 1.0f
+#define VALUE_SUCCESS_COLOR 1.0f, 1.0f, 1.0f
+
+#define STATUSBAR_COLOR 1.0f, 1.0f, 1.0f
+
+struct GameConfig
+{
+  struct
+  {
+    size_t x;
+    size_t y;
+  } size;
+};
+
+extern struct GameConfig g_game_config;
+
+#endif  // GAME_CONFIG_H

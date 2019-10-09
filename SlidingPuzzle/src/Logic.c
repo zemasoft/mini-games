@@ -12,11 +12,10 @@
 
 #include <GL/freeglut.h>
 
+#include "GameConfig.h"
 #include "GameState.h"
 #include "Input.h"
 #include "Sound.h"
-
-#define MOVE_STEP 0.1f
 
 static void MovePieceLeft();
 static void MovePieceRight();
@@ -49,12 +48,16 @@ void L_Start()
 
 void L_Restart()
 {
+  g_game_state.size.x = g_game_config.size.x;
+  g_game_state.size.y = g_game_config.size.y;
+
+  g_game_state.piece_count = (size_t)(g_game_state.size.x * g_game_state.size.y);
+
   if (g_game_state.pieces != NULL)
   {
     free(g_game_state.pieces);
   }
 
-  g_game_state.piece_count = (size_t)(g_game_state.size.x * g_game_state.size.y);
   g_game_state.pieces = malloc(g_game_state.piece_count * sizeof(struct Piece));
 
   SetupPieceValues();

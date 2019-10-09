@@ -9,13 +9,11 @@
 #include <AL/alut.h>
 #include <GL/freeglut.h>
 
-#include "GameState.h"
+#include "GameConfig.h"
 #include "Graphics.h"
 #include "Input.h"
 #include "Logic.h"
 #include "Sound.h"
-
-#define PIECE_SIZE_PIXELS 100
 
 static void Start(int argc, char** argv);
 static void Update();
@@ -34,8 +32,8 @@ void Start(int argc, char** argv)
   glutInit(&argc, argv);
   alutInit(&argc, argv);
 
-  g_game_state.size.x = DEFAULT_SIZE;
-  g_game_state.size.y = DEFAULT_SIZE;
+  g_game_config.size.x = DEFAULT_SIZE;
+  g_game_config.size.y = DEFAULT_SIZE;
 
   if (argc > 1)
   {
@@ -53,8 +51,8 @@ void Start(int argc, char** argv)
         y_size = MAX_SIZE;
       }
 
-      g_game_state.size.x = (size_t) y_size;
-      g_game_state.size.y = (size_t) y_size;
+      g_game_config.size.x = (size_t) y_size;
+      g_game_config.size.y = (size_t) y_size;
     }
   }
 
@@ -74,13 +72,13 @@ void Start(int argc, char** argv)
         x_size = MAX_SIZE;
       }
 
-      g_game_state.size.x = (size_t) x_size;
+      g_game_config.size.x = (size_t) x_size;
     }
   }
 
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_MULTISAMPLE);
-  glutInitWindowSize((int) g_game_state.size.x * PIECE_SIZE_PIXELS,
-                     (int) g_game_state.size.y * PIECE_SIZE_PIXELS);
+  glutInitWindowSize((int) g_game_config.size.x * PIECE_SIZE_PIXELS,
+                     (int) g_game_config.size.y * PIECE_SIZE_PIXELS);
   glutCreateWindow("Sliding Puzzle");
 
   I_Start();
