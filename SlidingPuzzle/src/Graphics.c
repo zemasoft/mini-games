@@ -131,6 +131,9 @@ void DrawPiece(const struct Piece* piece)
 
   switch (piece->state)
   {
+    case State_Setup:
+      glColor3f(BORDER_SETUP_COLOR);
+      break;
     case State_Idle:
       glColor3f(BORDER_IDLE_COLOR);
       break;
@@ -158,6 +161,9 @@ void DrawPiece(const struct Piece* piece)
 
   switch (piece->state)
   {
+    case State_Setup:
+      glColor3f(PIECE_SETUP_COLOR);
+      break;
     case State_Idle:
       glColor3f(PIECE_IDLE_COLOR);
       break;
@@ -192,6 +198,9 @@ void DrawValue(const struct Piece* piece)
 {
   switch (piece->state)
   {
+    case State_Setup:
+      glColor3f(VALUE_SETUP_COLOR);
+      break;
     case State_Idle:
       glColor3f(VALUE_IDLE_COLOR);
       break;

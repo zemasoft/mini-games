@@ -15,6 +15,7 @@
 
 #include "GameConfig.h"
 #include "GameState.h"
+#include "Graphics.h"
 #include "Input.h"
 #include "Sound.h"
 
@@ -70,9 +71,9 @@ void L_Restart()
   FindBlankPiece();
   MakeResolvable();
   SetupPiecePositions();
-  SetPieceStates(State_Idle);
+  SetPieceStates(State_Setup);
 
-  g_game_state.state = State_Idle;
+  g_game_state.state = State_Setup;
 
   g_game_state.single_moves = 0;
   g_game_state.moves = 0;
@@ -80,6 +81,15 @@ void L_Restart()
 
 void L_Update()
 {
+  if (g_game_state.size.x != g_game_config.size.x || g_game_state.size.y != g_game_config.size.y)
+  {
+    I_Restart();
+    L_Restart();
+    S_Restart();
+    G_Restart();
+    return;
+  }
+
   if (I_ResetKey())
   {
     I_Restart();
@@ -94,6 +104,7 @@ void L_Update()
 
   switch (g_game_state.state)
   {
+    case State_Setup:
     case State_Idle:
       switch (I_PopControlKey())
       {

@@ -27,14 +27,17 @@
 #define STATUSBAR_SIZE 0.24f * PIECE_SIZE
 #define TEXT_SIZE 0.14f * PIECE_SIZE
 
+#define BORDER_SETUP_COLOR 0.0f, 0.5f, 0.5f
 #define BORDER_IDLE_COLOR 1.0f, 1.0f, 1.0f
 #define BORDER_MOVING_COLOR 1.0f, 1.0f, 1.0f
 #define BORDER_SUCCESS_COLOR 0.0f, 0.5f, 0.0f
 
+#define PIECE_SETUP_COLOR 0.0f, 0.0f, 0.5f
 #define PIECE_IDLE_COLOR 0.0f, 0.0f, 0.5f
 #define PIECE_MOVING_COLOR 0.0f, 0.0f, 0.5f
 #define PIECE_SUCCESS_COLOR 0.0f, 0.0f, 0.5f
 
+#define VALUE_SETUP_COLOR 1.0f, 1.0f, 1.0f
 #define VALUE_IDLE_COLOR 1.0f, 1.0f, 1.0f
 #define VALUE_MOVING_COLOR 1.0f, 1.0f, 1.0f
 #define VALUE_SUCCESS_COLOR 1.0f, 1.0f, 1.0f

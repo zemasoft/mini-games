@@ -12,6 +12,7 @@
 
 enum State
 {
+  State_Setup,
   State_Idle,
   State_Moving,
   State_Success
