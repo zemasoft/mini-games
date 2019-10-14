@@ -12,14 +12,14 @@
 #include "GameConfig.h"
 
 static bool s_reset_key;
-
-static int s_control_keys[CONTROL_KEYS_SIZE];
-static size_t s_top;
-static size_t s_bot;
-
+static bool s_control_key;
 static bool s_control_button;
 static int s_control_x;
 static int s_control_y;
+
+static int s_direction_keys[DIRECTION_KEYS_SIZE];
+static size_t s_top;
+static size_t s_bot;
 
 static void Keyboard(unsigned char key, int x, int y);
 static void Special(int key, int x, int y);
@@ -37,11 +37,11 @@ void I_Start()
 void I_Restart()
 {
   s_reset_key = false;
+  s_control_key = false;
+  s_control_button = false;
 
   s_top = 0;
   s_bot = 0;
-
-  s_control_button = false;
 }
 
 void I_Update()
@@ -64,21 +64,13 @@ bool I_ResetKey()
   return res;
 }
 
-int I_PopControlKey()
+bool I_ControlKey()
 {
-  if (s_bot == s_top)
-  {
-    return -1;
-  }
+  bool res = s_control_key;
 
-  int key = s_control_keys[s_bot++];
+  s_control_key = false;
 
-  if (s_bot > CONTROL_KEYS_SIZE - 1)
-  {
-    s_bot = 0;
-  }
-
-  return key;
+  return res;
 }
 
 bool I_ControlButton(int* x, int* y)
@@ -96,6 +88,23 @@ bool I_ControlButton(int* x, int* y)
   return res;
 }
 
+int I_PopDirectionKey()
+{
+  if (s_bot == s_top)
+  {
+    return -1;
+  }
+
+  int key = s_direction_keys[s_bot++];
+
+  if (s_bot > DIRECTION_KEYS_SIZE - 1)
+  {
+    s_bot = 0;
+  }
+
+  return key;
+}
+
 void Keyboard(unsigned char key, int x, int y)
 {
   (void) x;
@@ -103,8 +112,14 @@ void Keyboard(unsigned char key, int x, int y)
 
   switch (key)
   {
+    case 13:  // Enter
+      s_control_key = true;
+      break;
     case 27:  // Escape
       glutLeaveMainLoop();
+      break;
+    case 32:  // Space
+      s_control_key = true;
       break;
     case 114:  // r
       s_reset_key = true;
@@ -123,9 +138,9 @@ void Special(int key, int x, int y)
     case GLUT_KEY_RIGHT:
     case GLUT_KEY_DOWN:
     case GLUT_KEY_UP:
-      s_control_keys[s_top++] = key;
+      s_direction_keys[s_top++] = key;
 
-      if (s_top > CONTROL_KEYS_SIZE - 1)
+      if (s_top > DIRECTION_KEYS_SIZE - 1)
       {
         s_top = 0;
       }

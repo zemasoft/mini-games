@@ -14,7 +14,8 @@ void I_Update();
 void I_Stop();
 
 bool I_ResetKey();
-int I_PopControlKey();
+bool I_ControlKey();
 bool I_ControlButton(int* x, int* y);
+int I_PopDirectionKey();
 
 #endif  // INPUT_H

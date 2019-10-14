@@ -98,6 +98,7 @@ void L_Update()
     return;
   }
 
+  bool control_key = I_ControlKey();
   int control_x = 0;
   int control_y = 0;
   bool control_button = I_ControlButton(&control_x, &control_y);
@@ -105,8 +106,16 @@ void L_Update()
   switch (g_game_state.state)
   {
     case State_Setup:
+      if (control_key || control_button)
+      {
+        SetPieceStates(State_Idle);
+
+        g_game_state.state = State_Idle;
+      }
+      break;
+
     case State_Idle:
-      switch (I_PopControlKey())
+      switch (I_PopDirectionKey())
       {
         case GLUT_KEY_LEFT:
           if (g_game_state.blank % g_game_state.size.x != g_game_state.size.x - 1)

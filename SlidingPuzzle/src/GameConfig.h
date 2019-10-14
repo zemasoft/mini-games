@@ -14,7 +14,7 @@
 
 #define STRING_SIZE 3  // floor(log10(MAX_SIZE^2 - 1)) + 1 + 1
 
-#define CONTROL_KEYS_SIZE 4
+#define DIRECTION_KEYS_SIZE 4
 
 #define MOVE_STEP 0.1f
 
