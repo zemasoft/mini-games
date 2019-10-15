@@ -73,6 +73,7 @@ void L_Update()
     I_Restart();
     L_Restart();
     S_Restart();
+    // G_Restart();
 
     idle_time = 0;
     stop_time = 0;
