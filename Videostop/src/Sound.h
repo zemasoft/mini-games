@@ -8,7 +8,8 @@
 
 enum Sound
 {
-  Sound_Shuffle = 0,
+  Sound_Start = 0,
+  Sound_Shuffle,
   Sound_Success,
   Sound_Fail,
 

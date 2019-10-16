@@ -27,7 +27,7 @@
 #define TEXT_SIZE 0.07f * DICE_SIZE
 #define TEXT_FONT GLUT_STROKE_MONO_ROMAN
 
-#define BORDER_SETUP_COLOR 0.0f, 1.0f, 1.0f
+#define BORDER_SETUP_COLOR 1.0f, 1.0f, 1.0f
 #define BORDER_IDLE_COLOR 1.0f, 1.0f, 1.0f
 #define BORDER_SUCCESS_COLOR 0.0f, 0.5f, 0.0f
 #define BORDER_FAIL_COLOR 0.5f, 0.0f, 0.0f

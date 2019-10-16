@@ -94,7 +94,7 @@ void L_Update()
 
       if (control_key || control_button)
       {
-        S_PlaySound(Sound_Shuffle);
+        S_PlaySound(Sound_Start);
         ShuffleDices(State_Idle);
 
         g_game_state.state = State_Idle;

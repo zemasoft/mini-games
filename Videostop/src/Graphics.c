@@ -87,8 +87,16 @@ void DrawStatusBar()
   glScalef(TEXT_SIZE / 100.0f, TEXT_SIZE / 100.0f, 1.0f);
   glLineWidth(1.2f);
 
-  DrawAttempts();
-  DrawScore();
+  if (g_game_state.state == State_Setup)
+  {
+    glColor3f(STATUSBAR_DEFAULT_COLOR);
+    glutStrokeString(TEXT_FONT, (unsigned char*) "Press CONTROL to start!");
+  }
+  else
+  {
+    DrawAttempts();
+    DrawScore();
+  }
 
   glPopMatrix();
 }

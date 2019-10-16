@@ -7,7 +7,8 @@
 
 #include <AL/alut.h>
 
-static const char* s_sound_file_names[Sound_Count] = {"shuffle.wav", "success.wav", "fail.wav"};
+static const char* s_sound_file_names[Sound_Count] = {"start.wav", "shuffle.wav", "success.wav",
+                                                      "fail.wav"};
 
 static ALuint s_sound_sources[Sound_Count];
 
