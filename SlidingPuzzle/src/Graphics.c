@@ -96,7 +96,15 @@ void DrawStatusBar()
   glScalef(TEXT_SIZE / 100.0f, TEXT_SIZE / 100.0f, 1.0f);
   glLineWidth(1.2f);
 
-  DrawMoves();
+  if (g_game_state.state == State_Setup)
+  {
+    glColor3f(STATUSBAR_COLOR);
+    glutStrokeString(TEXT_FONT, (unsigned char*) "Press CONTROL to start!");
+  }
+  else
+  {
+    DrawMoves();
+  }
 
   glPopMatrix();
 }
@@ -106,11 +114,10 @@ void InitPieceString(struct Piece* piece, const struct Projection* projection)
   snprintf(piece->string.value, sizeof(piece->string.value), "%d", piece->value);
 
   piece->string.width =
-      (float) glutStrokeLength(GLUT_STROKE_MONO_ROMAN, (unsigned char*) &piece->string.value[0]) /
+      (float) glutStrokeLength(TEXT_FONT, (unsigned char*) &piece->string.value[0]) /
       (float) glutGet(GLUT_WINDOW_WIDTH) * (projection->right - projection->left) * VALUE_SIZE;
 
-  piece->string.height = (float) glutStrokeHeight(GLUT_STROKE_MONO_ROMAN) /
-                         (float) glutGet(GLUT_WINDOW_HEIGHT) *
+  piece->string.height = (float) glutStrokeHeight(TEXT_FONT) / (float) glutGet(GLUT_WINDOW_HEIGHT) *
                          (projection->top - projection->bottom) * VALUE_SIZE;
 }
 
@@ -216,7 +223,7 @@ void DrawValue(const struct Piece* piece)
                (PIECE_SIZE - piece->string.height * 0.75f) / 2.0f, 0.0f);
   glScalef(VALUE_SIZE / 100.0f, VALUE_SIZE / 100.0f, 1.0f);
   glLineWidth(1.5f);
-  glutStrokeString(GLUT_STROKE_MONO_ROMAN, (unsigned char*) &piece->string.value[0]);
+  glutStrokeString(TEXT_FONT, (unsigned char*) &piece->string.value[0]);
 }
 
 void DrawMoves()
@@ -225,5 +232,5 @@ void DrawMoves()
   snprintf(buf, sizeof(buf), "Moves: %d / %d", g_game_state.moves, g_game_state.single_moves);
 
   glColor3f(STATUSBAR_COLOR);
-  glutStrokeString(GLUT_STROKE_MONO_ROMAN, (unsigned char*) &buf[0]);
+  glutStrokeString(TEXT_FONT, (unsigned char*) &buf[0]);
 }

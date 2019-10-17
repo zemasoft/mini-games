@@ -95,6 +95,7 @@ void L_Update()
     I_Restart();
     L_Restart();
     S_Restart();
+    // G_Restart();
     return;
   }
 
@@ -108,6 +109,7 @@ void L_Update()
     case State_Setup:
       if (control_key || control_button)
       {
+        S_PlaySound(Sound_Start);
         SetPieceStates(State_Idle);
 
         g_game_state.state = State_Idle;

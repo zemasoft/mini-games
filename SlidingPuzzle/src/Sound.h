@@ -8,7 +8,8 @@
 
 enum Sound
 {
-  Sound_Move = 0,
+  Sound_Start = 0,
+  Sound_Move,
   Sound_CannotMove,
   Sound_Success,
 
