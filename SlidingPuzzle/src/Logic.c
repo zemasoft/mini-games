@@ -77,16 +77,27 @@ void L_Restart()
 
   g_game_state.single_moves = 0;
   g_game_state.moves = 0;
+
+  g_game_state.statusbar_state = StatusBar_State_Show;
 }
 
 void L_Update()
 {
+  static int before;
+  static int statusbar_time;
+
+  int now = glutGet(GLUT_ELAPSED_TIME);
+  int elapsed = now - before;
+  before = now;
+
   if (g_game_state.size.x != g_game_config.size.x || g_game_state.size.y != g_game_config.size.y)
   {
     I_Restart();
     L_Restart();
     S_Restart();
     G_Restart();
+
+    statusbar_time = 0;
     return;
   }
 
@@ -96,6 +107,8 @@ void L_Update()
     L_Restart();
     S_Restart();
     // G_Restart();
+
+    statusbar_time = 0;
     return;
   }
 
@@ -107,12 +120,25 @@ void L_Update()
   switch (g_game_state.state)
   {
     case State_Setup:
+      statusbar_time += elapsed;
+
       if (control_key || control_button)
       {
         S_PlaySound(Sound_Start);
         SetPieceStates(State_Idle);
 
         g_game_state.state = State_Idle;
+      }
+
+      if (statusbar_time >= 1000.0f / STATUSBAR_FREQUENCY_HZ)
+      {
+        g_game_state.statusbar_state += 1;
+        if (g_game_state.statusbar_state >= StatusBar_State_Count)
+        {
+          g_game_state.statusbar_state = 0;
+        }
+
+        statusbar_time = 0;
       }
       break;
 
