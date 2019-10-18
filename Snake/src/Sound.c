@@ -25,6 +25,10 @@ void S_Start()
   }
 }
 
+void S_Restart()
+{
+}
+
 void S_Stop()
 {
 }

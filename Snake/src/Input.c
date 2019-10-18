@@ -27,6 +27,15 @@ void I_Start()
   glfwSetKeyCallback(g_window, KeyCallback);
 }
 
+void I_Restart()
+{
+  s_reset_key = false;
+  s_pause_key = false;
+
+  s_top = 0;
+  s_bot = 0;
+}
+
 void I_Update()
 {
   glfwPollEvents();
@@ -35,15 +44,6 @@ void I_Update()
 void I_Stop()
 {
   glfwSetKeyCallback(g_window, NULL);
-}
-
-void I_Restart()
-{
-  s_reset_key = false;
-  s_pause_key = false;
-
-  s_top = 0;
-  s_bot = 0;
 }
 
 bool I_ResetKey()

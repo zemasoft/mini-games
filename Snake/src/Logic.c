@@ -27,7 +27,6 @@ enum MoveSnake
 
 extern GLFWwindow* g_window;
 
-static void Restart();
 static enum MoveSnake MoveSnake();
 static void PlaceFood();
 
@@ -41,7 +40,44 @@ void L_Start()
   g_game_state.fields = malloc(g_game_state.field_count * sizeof(struct Field));
   g_game_state.snake = malloc(g_game_state.field_count * sizeof(struct Field*));
 
-  Restart();
+  L_Restart();
+}
+
+void L_Restart()
+{
+  g_game_state.field_count = (size_t)(g_game_state.size.x * g_game_state.size.y);
+
+  for (int y = 0; y < g_game_state.size.y; ++y)
+  {
+    for (int x = 0; x < g_game_state.size.x; ++x)
+    {
+      struct Field* field = GetField(x, y);
+
+      field->pos.x = x;
+      field->pos.y = y;
+      field->val = Value_Empty;
+    }
+  }
+
+  struct Field* head = GetField(g_game_state.size.x / 2, g_game_state.size.y / 2);
+
+  assert(head->val == Value_Empty);
+
+  head->val = Value_Snake;
+
+  g_game_state.head = 0;
+  g_game_state.tail = 0;
+  g_game_state.snake[g_game_state.head++] = head;
+
+  g_game_state.heading = Heading_Up;
+
+  g_game_state.state = State_Play;
+
+  g_game_state.max_move_time = 0.25;
+
+  g_game_state.score = 0;
+
+  PlaceFood();
 }
 
 void L_Update()
@@ -56,7 +92,10 @@ void L_Update()
   if (I_ResetKey())
   {
     I_Restart();
-    Restart();
+    L_Restart();
+    S_Restart();
+    // G_Restart();
+
     move_time = 0.0;
     return;
   }
@@ -158,43 +197,6 @@ void L_Stop()
 {
   free(g_game_state.fields);
   free(g_game_state.snake);
-}
-
-void Restart()
-{
-  g_game_state.field_count = (size_t)(g_game_state.size.x * g_game_state.size.y);
-
-  for (int y = 0; y < g_game_state.size.y; ++y)
-  {
-    for (int x = 0; x < g_game_state.size.x; ++x)
-    {
-      struct Field* field = GetField(x, y);
-
-      field->pos.x = x;
-      field->pos.y = y;
-      field->val = Value_Empty;
-    }
-  }
-
-  struct Field* head = GetField(g_game_state.size.x / 2, g_game_state.size.y / 2);
-
-  assert(head->val == Value_Empty);
-
-  head->val = Value_Snake;
-
-  g_game_state.head = 0;
-  g_game_state.tail = 0;
-  g_game_state.snake[g_game_state.head++] = head;
-
-  g_game_state.heading = Heading_Up;
-
-  g_game_state.state = State_Play;
-
-  g_game_state.max_move_time = 0.25;
-
-  g_game_state.score = 0;
-
-  PlaceFood();
 }
 
 enum MoveSnake MoveSnake()

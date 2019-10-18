@@ -37,6 +37,11 @@ static void DrawTail();
 
 void G_Start()
 {
+  G_Restart();
+}
+
+void G_Restart()
+{
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(0.0f, (float) g_game_state.size.x * FIELD_SIZE, 0.0f,
