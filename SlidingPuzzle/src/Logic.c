@@ -128,6 +128,46 @@ void L_Update()
         SetPieceStates(State_Idle);
 
         g_game_state.state = State_Idle;
+        break;
+      }
+
+      switch (I_PopDirectionKey())
+      {
+        case GLUT_KEY_LEFT:
+          if (g_game_config.size.x > MIN_SIZE)
+          {
+            --g_game_config.size.x;
+
+            UpdateWindowTitle();
+          }
+          break;
+
+        case GLUT_KEY_RIGHT:
+          if (g_game_config.size.x < MAX_SIZE)
+          {
+            ++g_game_config.size.x;
+
+            UpdateWindowTitle();
+          }
+          break;
+
+        case GLUT_KEY_DOWN:
+          if (g_game_config.size.y > MIN_SIZE)
+          {
+            --g_game_config.size.y;
+
+            UpdateWindowTitle();
+          }
+          break;
+
+        case GLUT_KEY_UP:
+          if (g_game_config.size.y < MAX_SIZE)
+          {
+            ++g_game_config.size.y;
+
+            UpdateWindowTitle();
+          }
+          break;
       }
 
       if (statusbar_time >= 1000.0f / STATUSBAR_FREQUENCY_HZ)
