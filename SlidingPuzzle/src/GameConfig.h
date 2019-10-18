@@ -10,7 +10,7 @@
 
 #define MIN_SIZE 2
 #define MAX_SIZE 10
-#define DEFAULT_SIZE 3
+#define DEFAULT_SIZE 4
 
 #define STRING_SIZE 3  // floor(log10(MAX_SIZE^2 - 1)) + 1 + 1
 
