@@ -33,6 +33,14 @@ struct GameState
   int failed_attempts;
 
   int score;
+
+  enum
+  {
+    StatusBar_State_Show = 0,
+    StatusBar_State_Hide,
+
+    StatusBar_State_Count
+  } statusbar_state;
 };
 
 extern struct GameState g_game_state;

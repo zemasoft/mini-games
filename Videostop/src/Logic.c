@@ -44,6 +44,8 @@ void L_Restart()
   g_game_state.failed_attempts = 0;
 
   g_game_state.score = 0;
+
+  g_game_state.statusbar_state = StatusBar_State_Show;
 }
 
 void L_Update()
@@ -51,6 +53,7 @@ void L_Update()
   static int before;
   static int idle_time;
   static int stop_time;
+  static int statusbar_time;
 
   int now = glutGet(GLUT_ELAPSED_TIME);
   int elapsed = now - before;
@@ -65,6 +68,7 @@ void L_Update()
 
     idle_time = 0;
     stop_time = 0;
+    statusbar_time = 0;
     return;
   }
 
@@ -77,6 +81,7 @@ void L_Update()
 
     idle_time = 0;
     stop_time = 0;
+    statusbar_time = 0;
     return;
   }
 
@@ -91,6 +96,7 @@ void L_Update()
   {
     case State_Setup:
       idle_time += elapsed;
+      statusbar_time += elapsed;
 
       if (control_key || control_button)
       {
@@ -146,6 +152,17 @@ void L_Update()
         ShuffleDices(State_Setup);
 
         idle_time = 0;
+      }
+
+      if (statusbar_time >= 1000.0f / STATUSBAR_FREQUENCY_HZ)
+      {
+        g_game_state.statusbar_state += 1;
+        if (g_game_state.statusbar_state >= StatusBar_State_Count)
+        {
+          g_game_state.statusbar_state = 0;
+        }
+
+        statusbar_time = 0;
       }
       break;
 

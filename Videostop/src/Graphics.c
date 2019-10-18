@@ -90,7 +90,17 @@ void DrawStatusBar()
   if (g_game_state.state == State_Setup)
   {
     glColor3f(STATUSBAR_DEFAULT_COLOR);
-    glutStrokeString(TEXT_FONT, (unsigned char*) "Press CONTROL to start!");
+
+    switch (g_game_state.statusbar_state)
+    {
+      case StatusBar_State_Show:
+        glutStrokeString(TEXT_FONT, (unsigned char*) "Press CONTROL to start!");
+        break;
+      case StatusBar_State_Hide:
+        break;
+      case StatusBar_State_Count:
+        break;
+    }
   }
   else
   {
