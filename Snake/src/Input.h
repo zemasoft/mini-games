@@ -15,6 +15,6 @@ void I_Stop();
 
 bool I_ResetKey();
 bool I_PauseKey();
-int I_PopControlKey();
+int I_PopDirectionKey();
 
 #endif  // INPUT_H

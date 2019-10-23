@@ -114,7 +114,7 @@ void L_Update()
       {
         move_time = 0.0;
 
-        switch (I_PopControlKey())
+        switch (I_PopDirectionKey())
         {
           case GLFW_KEY_LEFT:
             if (g_game_state.heading != Heading_Right)

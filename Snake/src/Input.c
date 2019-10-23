@@ -7,14 +7,14 @@
 
 #include <GLFW/glfw3.h>
 
-#define CONTROL_KEYS_SIZE 4
+#define DIRECTION_KEYS_SIZE 4
 
 extern GLFWwindow* g_window;
 
 static bool s_reset_key;
 static bool s_pause_key;
 
-static int s_control_keys[CONTROL_KEYS_SIZE];
+static int s_direction_keys[DIRECTION_KEYS_SIZE];
 static size_t s_top;
 static size_t s_bot;
 
@@ -64,16 +64,16 @@ bool I_PauseKey()
   return res;
 }
 
-int I_PopControlKey()
+int I_PopDirectionKey()
 {
   if (s_bot == s_top)
   {
     return -1;
   }
 
-  int key = s_control_keys[s_bot++];
+  int key = s_direction_keys[s_bot++];
 
-  if (s_bot > CONTROL_KEYS_SIZE - 1)
+  if (s_bot > DIRECTION_KEYS_SIZE - 1)
   {
     s_bot = 0;
   }
@@ -112,9 +112,9 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
       case GLFW_KEY_RIGHT:
       case GLFW_KEY_DOWN:
       case GLFW_KEY_UP:
-        s_control_keys[s_top++] = key;
+        s_direction_keys[s_top++] = key;
 
-        if (s_top > CONTROL_KEYS_SIZE - 1)
+        if (s_top > DIRECTION_KEYS_SIZE - 1)
         {
           s_top = 0;
         }
