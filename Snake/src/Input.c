@@ -7,7 +7,7 @@
 
 #include <GLFW/glfw3.h>
 
-#define DIRECTION_KEYS_SIZE 4
+#include "GameConfig.h"
 
 extern GLFWwindow* g_window;
 

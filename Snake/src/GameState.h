@@ -8,14 +8,6 @@
 
 #include <stddef.h>  // size_t
 
-#define MIN_X_SIZE 8
-#define MAX_X_SIZE 32
-#define DEFAULT_X_SIZE 16
-
-#define MIN_Y_SIZE 8
-#define MAX_Y_SIZE 32
-#define DEFAULT_Y_SIZE 16
-
 enum Value
 {
   Value_Empty,

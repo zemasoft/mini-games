@@ -11,17 +11,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include "GameConfig.h"
 #include "GameState.h"
-
-#define FIELD_SIZE 1.0f
-#define FOOD_RADIUS 0.3f * FIELD_SIZE
-
-#define LIGHT_FIELD_COLOR 0.5f, 0.5f, 0.5f
-#define DARK_FIELD_COLOR 0.25f, 0.25f, 0.25f
-
-#define FOOD_COLOR 0.5f, 0.0f, 0.0f
-
-#define SNAKE_COLOR 0.0f, 0.5f, 0.0f
 
 extern GLFWwindow* g_window;
 

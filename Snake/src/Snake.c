@@ -8,13 +8,11 @@
 #include <AL/alut.h>
 #include <GLFW/glfw3.h>
 
-#include "GameState.h"
+#include "GameConfig.h"
 #include "Graphics.h"
 #include "Input.h"
 #include "Logic.h"
 #include "Sound.h"
-
-#define FIELD_SIZE_PIXELS 25
 
 GLFWwindow* g_window;
 
@@ -27,8 +25,8 @@ int main(int argc, char** argv)
 
   alutInit(&argc, argv);
 
-  g_game_state.size.x = DEFAULT_X_SIZE;
-  g_game_state.size.y = DEFAULT_Y_SIZE;
+  g_game_config.size.x = DEFAULT_X_SIZE;
+  g_game_config.size.y = DEFAULT_Y_SIZE;
 
   if (argc > 1)
   {
@@ -46,8 +44,8 @@ int main(int argc, char** argv)
         y_size = MAX_Y_SIZE;
       }
 
-      g_game_state.size.x = (int) y_size;
-      g_game_state.size.y = (int) y_size;
+      g_game_config.size.x = (int) y_size;
+      g_game_config.size.y = (int) y_size;
     }
   }
 
@@ -67,14 +65,14 @@ int main(int argc, char** argv)
         x_size = MAX_X_SIZE;
       }
 
-      g_game_state.size.x = (int) x_size;
+      g_game_config.size.x = (int) x_size;
     }
   }
 
   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-  g_window = glfwCreateWindow((int) g_game_state.size.x * FIELD_SIZE_PIXELS,
-                              (int) g_game_state.size.y * FIELD_SIZE_PIXELS, "Snake", NULL, NULL);
+  g_window = glfwCreateWindow((int) g_game_config.size.x * FIELD_SIZE_PIXELS,
+                              (int) g_game_config.size.y * FIELD_SIZE_PIXELS, "Snake", NULL, NULL);
   if (!g_window)
   {
     alutExit();

@@ -10,6 +10,7 @@ find_package(GLFW3 REQUIRED MODULE)
 find_package(ALUT REQUIRED MODULE)  # FreeALUT
 
 add_executable(Snake
+  src/GameConfig.c
   src/GameState.c
   src/Graphics.c
   src/Input.c
@@ -17,6 +18,7 @@ add_executable(Snake
   src/Snake.c
   src/Sound.c
 
+  src/GameConfig.h
   src/GameState.h
   src/Graphics.h
   src/Input.h

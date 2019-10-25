@@ -12,6 +12,7 @@
 
 #include <GLFW/glfw3.h>
 
+#include "GameConfig.h"
 #include "GameState.h"
 #include "Input.h"
 #include "Sound.h"
@@ -41,6 +42,9 @@ void L_Start()
 
 void L_Restart()
 {
+  g_game_state.size.x = g_game_config.size.x;
+  g_game_state.size.y = g_game_config.size.y;
+
   g_game_state.field_count = (size_t)(g_game_state.size.x * g_game_state.size.y);
 
   if (g_game_state.fields != NULL)
