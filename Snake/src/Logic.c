@@ -36,16 +36,26 @@ void L_Start()
 {
   srand((unsigned int) time(NULL));
 
-  g_game_state.field_count = (size_t)(g_game_state.size.x * g_game_state.size.y);
-  g_game_state.fields = malloc(g_game_state.field_count * sizeof(struct Field));
-  g_game_state.snake = malloc(g_game_state.field_count * sizeof(struct Field*));
-
   L_Restart();
 }
 
 void L_Restart()
 {
   g_game_state.field_count = (size_t)(g_game_state.size.x * g_game_state.size.y);
+
+  if (g_game_state.fields != NULL)
+  {
+    free(g_game_state.fields);
+  }
+
+  g_game_state.fields = malloc(g_game_state.field_count * sizeof(struct Field));
+
+  if (g_game_state.snake != NULL)
+  {
+    free(g_game_state.snake);
+  }
+
+  g_game_state.snake = malloc(g_game_state.field_count * sizeof(struct Field*));
 
   for (int y = 0; y < g_game_state.size.y; ++y)
   {
