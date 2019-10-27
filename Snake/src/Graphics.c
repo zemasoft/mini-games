@@ -23,9 +23,9 @@ static void DrawSnake();
 static void DrawField(const struct Field* field);
 static void DrawFood();
 
-static void DrawHead();
-static void DrawBody();
-static void DrawTail();
+static void DrawSnakeHead();
+static void DrawSnakeBody();
+static void DrawSnakeTail();
 
 void G_Start()
 {
@@ -71,9 +71,9 @@ void DrawSnake()
   {
     assert(GetSnakeLength() >= 2);
 
-    DrawHead();
-    DrawBody();
-    DrawTail();
+    DrawSnakeHead();
+    DrawSnakeBody();
+    DrawSnakeTail();
   }
 }
 
@@ -148,7 +148,7 @@ void DrawFood()
   glEnd();
 }
 
-void DrawHead()
+void DrawSnakeHead()
 {
   const struct Field* head = GetSnakeHead();
 
@@ -169,7 +169,7 @@ void DrawHead()
   glPopMatrix();
 }
 
-void DrawBody()
+void DrawSnakeBody()
 {
   assert(GetSnakeLength() >= 2);
 
@@ -201,7 +201,7 @@ void DrawBody()
   }
 }
 
-void DrawTail()
+void DrawSnakeTail()
 {
   const struct Field* tail = GetSnakeTail();
 
