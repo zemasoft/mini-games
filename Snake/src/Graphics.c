@@ -144,19 +144,69 @@ void DrawFood()
 
 void DrawHead()
 {
+  struct Field* head;
+
+  if (g_game_state.head > 0)
+  {
+    head = g_game_state.snake[g_game_state.head - 1];
+  }
+  else
+  {
+    head = g_game_state.snake[g_game_state.snake_count - 1];
+  }
+
+  assert(head->val == Value_Snake);
+
+  glPushMatrix();
+  glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
+
+  glColor3f(HEAD_COLOR);
+
+  // clang-format off
+  glBegin(GL_POLYGON);
+    glVertex2f(0.0f, 1.0f);
+    glVertex2f(0.0f, 0.0f);
+    glVertex2f(1.0f, 0.0f);
+    glVertex2f(1.0f, 1.0f);
+  glEnd();
+  // clang-format on
+
+  glPopMatrix();
 }
 
 void DrawBody()
 {
-  size_t index = g_game_state.tail;
+  size_t body_index;
 
-  while (index != g_game_state.head)
+  if (g_game_state.tail < g_game_state.snake_count - 1)
   {
-    const struct Field* body = g_game_state.snake[index++];
+    body_index = g_game_state.tail + 1;
+  }
+  else
+  {
+    body_index = 0;
+  }
 
-    if (index >= g_game_state.field_count)
+  assert(body_index != g_game_state.head);
+
+  size_t head_index;
+
+  if (g_game_state.head > 0)
+  {
+    head_index = g_game_state.head - 1;
+  }
+  else
+  {
+    head_index = g_game_state.snake_count - 1;
+  }
+
+  while (body_index != head_index)
+  {
+    const struct Field* body = g_game_state.snake[body_index++];
+
+    if (body_index > g_game_state.snake_count - 1)
     {
-      index = 0;
+      body_index = 0;
     }
 
     assert(body->val == Value_Snake);
@@ -164,14 +214,14 @@ void DrawBody()
     glPushMatrix();
     glTranslatef((float) body->pos.x * FIELD_SIZE, (float) body->pos.y * FIELD_SIZE, 0.0f);
 
-    glColor3f(SNAKE_COLOR);
+    glColor3f(BODY_COLOR);
 
     // clang-format off
     glBegin(GL_POLYGON);
-      glVertex2f(0.2f, 0.8f);
-      glVertex2f(0.2f, 0.2f);
-      glVertex2f(0.8f, 0.2f);
-      glVertex2f(0.8f, 0.8f);
+      glVertex2f(0.0f, 1.0f);
+      glVertex2f(0.0f, 0.0f);
+      glVertex2f(1.0f, 0.0f);
+      glVertex2f(1.0f, 1.0f);
     glEnd();
     // clang-format on
 
@@ -181,4 +231,23 @@ void DrawBody()
 
 void DrawTail()
 {
+  const struct Field* tail = g_game_state.snake[g_game_state.tail];
+
+  assert(tail->val == Value_Snake);
+
+  glPushMatrix();
+  glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
+
+  glColor3f(TAIL_COLOR);
+
+  // clang-format off
+  glBegin(GL_POLYGON);
+    glVertex2f(0.0f, 1.0f);
+    glVertex2f(0.0f, 0.0f);
+    glVertex2f(1.0f, 0.0f);
+    glVertex2f(1.0f, 1.0f);
+  glEnd();
+  // clang-format on
+
+  glPopMatrix();
 }

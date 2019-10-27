@@ -59,7 +59,9 @@ void L_Restart()
     free(g_game_state.snake);
   }
 
-  g_game_state.snake = malloc(g_game_state.field_count * sizeof(struct Field*));
+  g_game_state.snake_count = g_game_state.field_count;
+
+  g_game_state.snake = malloc(g_game_state.snake_count * sizeof(struct Field*));
 
   for (int y = 0; y < g_game_state.size.y; ++y)
   {
@@ -74,14 +76,24 @@ void L_Restart()
   }
 
   struct Field* head = GetField(g_game_state.size.x / 2, g_game_state.size.y / 2);
+  struct Field* body = GetField(g_game_state.size.x / 2, g_game_state.size.y / 2 - 1);
+  struct Field* tail = GetField(g_game_state.size.x / 2, g_game_state.size.y / 2 - 2);
 
   assert(head->val == Value_Empty);
+  assert(body->val == Value_Empty);
+  assert(tail->val == Value_Empty);
 
   head->val = Value_Snake;
+  body->val = Value_Snake;
+  tail->val = Value_Snake;
 
   g_game_state.head = 0;
   g_game_state.tail = 0;
+  g_game_state.snake[g_game_state.head++] = tail;
+  g_game_state.snake[g_game_state.head++] = body;
   g_game_state.snake[g_game_state.head++] = head;
+
+  g_game_state.offset = 0.0f;
 
   g_game_state.heading = Heading_Up;
 
@@ -127,6 +139,8 @@ void L_Update()
       if (move_time >= g_game_state.max_move_time)
       {
         move_time = 0.0;
+
+        g_game_state.offset = 0.0f;
 
         switch (I_PopDirectionKey())
         {
@@ -190,6 +204,8 @@ void L_Update()
             break;
         }
       }
+
+      g_game_state.offset = (float) (move_time / g_game_state.max_move_time);
     }
   }
   else if (g_game_state.state == State_Success)
@@ -225,7 +241,7 @@ enum MoveSnake MoveSnake()
   }
   else
   {
-    head = g_game_state.snake[g_game_state.field_count - 1];
+    head = g_game_state.snake[g_game_state.snake_count - 1];
   }
 
   int new_x_pos = head->pos.x;
@@ -294,7 +310,7 @@ enum MoveSnake MoveSnake()
 
   g_game_state.snake[g_game_state.head++] = new_head;
 
-  if (g_game_state.head >= g_game_state.field_count)
+  if (g_game_state.head > g_game_state.snake_count - 1)
   {
     g_game_state.head = 0;
   }
@@ -310,7 +326,7 @@ enum MoveSnake MoveSnake()
   {
     struct Field* tail = g_game_state.snake[g_game_state.tail++];
 
-    if (g_game_state.tail >= g_game_state.field_count)
+    if (g_game_state.tail > g_game_state.snake_count - 1)
     {
       g_game_state.tail = 0;
     }

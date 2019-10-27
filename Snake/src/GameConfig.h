@@ -26,7 +26,9 @@
 
 #define FOOD_COLOR 0.5f, 0.0f, 0.0f
 
-#define SNAKE_COLOR 0.0f, 0.5f, 0.0f
+#define HEAD_COLOR 0.5f, 0.0f, 0.0f
+#define BODY_COLOR 0.0f, 0.5f, 0.0f
+#define TAIL_COLOR 0.0f, 0.0f, 0.5f
 
 struct GameConfig
 {

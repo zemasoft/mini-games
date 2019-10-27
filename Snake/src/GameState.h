@@ -55,8 +55,11 @@ struct GameState
   size_t field_count;
 
   struct Field** snake;
+  size_t snake_count;
   size_t head;
   size_t tail;
+
+  float offset;
 
   enum Heading heading;
 
