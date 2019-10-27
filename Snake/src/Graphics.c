@@ -13,6 +13,7 @@
 
 #include "GameConfig.h"
 #include "GameState.h"
+#include "Tools.h"
 
 extern GLFWwindow* g_window;
 
@@ -66,9 +67,14 @@ void DrawFields()
 
 void DrawSnake()
 {
-  DrawHead();
-  DrawBody();
-  DrawTail();
+  if (GetSnakeLength() != 0)
+  {
+    assert(GetSnakeLength() >= 2);
+
+    DrawHead();
+    DrawBody();
+    DrawTail();
+  }
 }
 
 void DrawField(const struct Field* field)
@@ -144,18 +150,7 @@ void DrawFood()
 
 void DrawHead()
 {
-  struct Field* head;
-
-  if (g_game_state.head > 0)
-  {
-    head = g_game_state.snake[g_game_state.head - 1];
-  }
-  else
-  {
-    head = g_game_state.snake[g_game_state.snake_count - 1];
-  }
-
-  assert(head->val == Value_Snake);
+  const struct Field* head = GetSnakeHead();
 
   glPushMatrix();
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
@@ -176,40 +171,15 @@ void DrawHead()
 
 void DrawBody()
 {
-  size_t body_index;
+  assert(GetSnakeLength() >= 2);
 
-  if (g_game_state.tail < g_game_state.snake_count - 1)
-  {
-    body_index = g_game_state.tail + 1;
-  }
-  else
-  {
-    body_index = 0;
-  }
+  size_t body_index = GetNextSnakeIndex(GetSnakeTailIndex());
 
-  assert(body_index != g_game_state.head);
-
-  size_t head_index;
-
-  if (g_game_state.head > 0)
-  {
-    head_index = g_game_state.head - 1;
-  }
-  else
-  {
-    head_index = g_game_state.snake_count - 1;
-  }
+  size_t head_index = GetSnakeHeadIndex();
 
   while (body_index != head_index)
   {
-    const struct Field* body = g_game_state.snake[body_index++];
-
-    if (body_index > g_game_state.snake_count - 1)
-    {
-      body_index = 0;
-    }
-
-    assert(body->val == Value_Snake);
+    const struct Field* body = GetSnakeElement(body_index);
 
     glPushMatrix();
     glTranslatef((float) body->pos.x * FIELD_SIZE, (float) body->pos.y * FIELD_SIZE, 0.0f);
@@ -226,14 +196,14 @@ void DrawBody()
     // clang-format on
 
     glPopMatrix();
+
+    body_index = GetNextSnakeIndex(body_index);
   }
 }
 
 void DrawTail()
 {
-  const struct Field* tail = g_game_state.snake[g_game_state.tail];
-
-  assert(tail->val == Value_Snake);
+  const struct Field* tail = GetSnakeTail();
 
   glPushMatrix();
   glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);

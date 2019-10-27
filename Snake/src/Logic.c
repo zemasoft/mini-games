@@ -16,6 +16,7 @@
 #include "GameState.h"
 #include "Input.h"
 #include "Sound.h"
+#include "Tools.h"
 
 enum MoveSnake
 {
@@ -78,10 +79,6 @@ void L_Restart()
   struct Field* head = GetField(g_game_state.size.x / 2, g_game_state.size.y / 2);
   struct Field* body = GetField(g_game_state.size.x / 2, g_game_state.size.y / 2 - 1);
   struct Field* tail = GetField(g_game_state.size.x / 2, g_game_state.size.y / 2 - 2);
-
-  assert(head->val == Value_Empty);
-  assert(body->val == Value_Empty);
-  assert(tail->val == Value_Empty);
 
   head->val = Value_Snake;
   body->val = Value_Snake;
@@ -231,18 +228,7 @@ void L_Stop()
 
 enum MoveSnake MoveSnake()
 {
-  assert(g_game_state.head != g_game_state.tail);
-
-  struct Field* head;
-
-  if (g_game_state.head > 0)
-  {
-    head = g_game_state.snake[g_game_state.head - 1];
-  }
-  else
-  {
-    head = g_game_state.snake[g_game_state.snake_count - 1];
-  }
+  const struct Field* head = GetSnakeHead();
 
   int new_x_pos = head->pos.x;
   int new_y_pos = head->pos.y;
@@ -308,30 +294,18 @@ enum MoveSnake MoveSnake()
 
   new_head->val = Value_Snake;
 
-  g_game_state.snake[g_game_state.head++] = new_head;
-
-  if (g_game_state.head > g_game_state.snake_count - 1)
-  {
-    g_game_state.head = 0;
-  }
+  SetNewSnakeHead(new_head);
 
   if (res == MoveSnake_Food)
   {
-    if (g_game_state.head == g_game_state.tail)
+    if (GetSnakeLength() == 0)
     {
       return MoveSnake_NoSpace;
     }
   }
   else
   {
-    struct Field* tail = g_game_state.snake[g_game_state.tail++];
-
-    if (g_game_state.tail > g_game_state.snake_count - 1)
-    {
-      g_game_state.tail = 0;
-    }
-
-    tail->val = Value_Empty;
+    RemoveSnakeTail();
   }
 
   return res;

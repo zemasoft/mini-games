@@ -17,6 +17,7 @@ add_executable(Snake
   src/Logic.c
   src/Snake.c
   src/Sound.c
+  src/Tools.c
 
   src/GameConfig.h
   src/GameState.h
@@ -24,6 +25,7 @@ add_executable(Snake
   src/Input.h
   src/Logic.h
   src/Sound.h
+  src/Tools.h
 )
 
 set_target_compile_options(Snake
