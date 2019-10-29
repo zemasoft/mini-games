@@ -29,6 +29,8 @@ enum MoveSnake
 
 extern GLFWwindow* g_window;
 
+static struct Field** s_empty_fields;
+
 static enum MoveSnake MoveSnake();
 static void PlaceFood();
 
@@ -99,6 +101,13 @@ void L_Restart()
   g_game_state.max_move_time = 0.25;
 
   g_game_state.score = 0;
+
+  if (s_empty_fields != NULL)
+  {
+    free(s_empty_fields);
+  }
+
+  s_empty_fields = malloc(g_game_state.field_count * sizeof(struct Field*));
 
   PlaceFood();
 }
@@ -232,6 +241,7 @@ void L_Stop()
 {
   free(g_game_state.fields);
   free(g_game_state.snake);
+  free(s_empty_fields);
 }
 
 enum MoveSnake MoveSnake()
@@ -321,14 +331,16 @@ enum MoveSnake MoveSnake()
 
 void PlaceFood()
 {
-  struct Field* field;
-
-  do
+  size_t count = 0;
+  for (size_t i = 0; i < g_game_state.field_count; ++i)
   {
-    field = GetField(rand() % g_game_state.size.x, rand() % g_game_state.size.y);
-  } while (field->val != Value_Empty);
+    if (g_game_state.fields[i].val == Value_Empty)
+    {
+      s_empty_fields[count++] = &g_game_state.fields[i];
+    }
+  }
 
-  field->val = Value_Food;
+  s_empty_fields[(size_t) rand() % count]->val = Value_Food;
 }
 
 struct Field* GetField(int x, int y)
