@@ -144,6 +144,8 @@ void L_Update()
           case GLFW_KEY_LEFT:
             if (g_game_state.heading != Heading_Right)
             {
+              S_PlaySound(Sound_Turn);
+
               g_game_state.heading = Heading_Left;
             }
             break;
@@ -151,6 +153,8 @@ void L_Update()
           case GLFW_KEY_RIGHT:
             if (g_game_state.heading != Heading_Left)
             {
+              S_PlaySound(Sound_Turn);
+
               g_game_state.heading = Heading_Right;
             }
             break;
@@ -158,6 +162,8 @@ void L_Update()
           case GLFW_KEY_DOWN:
             if (g_game_state.heading != Heading_Up)
             {
+              S_PlaySound(Sound_Turn);
+
               g_game_state.heading = Heading_Down;
             }
             break;
@@ -165,6 +171,8 @@ void L_Update()
           case GLFW_KEY_UP:
             if (g_game_state.heading != Heading_Down)
             {
+              S_PlaySound(Sound_Turn);
+
               g_game_state.heading = Heading_Up;
             }
             break;
