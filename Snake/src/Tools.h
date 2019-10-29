@@ -6,10 +6,12 @@
 #ifndef TOOLS_H
 #define TOOLS_H
 
-#include <stddef.h>  // size_t
+#include <stdbool.h>  // bool
+#include <stddef.h>   // size_t
 
 struct Field;
 
+bool IsSnakeEmpty();
 size_t GetSnakeLength();
 
 void SetNewSnakeHead(struct Field* new_head);

@@ -306,7 +306,7 @@ enum MoveSnake MoveSnake()
 
   if (res == MoveSnake_Food)
   {
-    if (GetSnakeLength() == 0)
+    if (IsSnakeEmpty())
     {
       return MoveSnake_NoSpace;
     }

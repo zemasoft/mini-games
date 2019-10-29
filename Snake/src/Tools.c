@@ -9,6 +9,11 @@
 
 #include "GameState.h"
 
+bool IsSnakeEmpty()
+{
+  return g_game_state.head == g_game_state.tail;
+}
+
 size_t GetSnakeLength()
 {
   return (g_game_state.head - g_game_state.tail + g_game_state.snake_count) %
@@ -49,7 +54,7 @@ struct Field* GetSnakeTail()
 
 struct Field* GetSnakeElement(size_t index)
 {
-  assert(GetSnakeLength() > 0);
+  assert(!IsSnakeEmpty());
 
   if (g_game_state.head > g_game_state.tail)
   {
@@ -85,14 +90,14 @@ struct Field* GetPrevSnakeElement(size_t index)
 
 size_t GetSnakeHeadIndex()
 {
-  assert(GetSnakeLength() > 0);
+  assert(!IsSnakeEmpty());
 
   return GetPrevSnakeIndex(g_game_state.head);
 }
 
 size_t GetSnakeTailIndex()
 {
-  assert(GetSnakeLength() > 0);
+  assert(!IsSnakeEmpty());
 
   return g_game_state.tail;
 }
