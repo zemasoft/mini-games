@@ -82,13 +82,17 @@ void L_Restart()
     }
   }
 
-  struct Field* head = GetField(g_game_state.size.x / 2, g_game_state.size.y / 2);
-  struct Field* body = GetField(g_game_state.size.x / 2, g_game_state.size.y / 2 - 1);
-  struct Field* tail = GetField(g_game_state.size.x / 2, g_game_state.size.y / 2 - 2);
+  int init_y_pos = g_game_state.size.y / 2;
+
+  struct Field* head = GetField(4, init_y_pos);
+  struct Field* body = GetField(3, init_y_pos);
+  struct Field* tail = GetField(2, init_y_pos);
 
   head->val = Value_Snake;
   body->val = Value_Snake;
   tail->val = Value_Snake;
+
+  GetField(g_game_state.size.x - 4, init_y_pos)->val = Value_Food;
 
   g_game_state.head = 0;
   g_game_state.tail = 0;
@@ -99,7 +103,7 @@ void L_Restart()
   g_game_state.head_offset = 0.0f;
   g_game_state.tail_offset = 0.0f;
 
-  g_game_state.heading = Heading_Up;
+  g_game_state.heading = Heading_Right;
 
   g_game_state.state = State_Play;
 
@@ -115,8 +119,6 @@ void L_Restart()
   s_empty_fields = malloc(g_game_state.field_count * sizeof(struct Field*));
 
   s_turn_sound_index = 0;
-
-  PlaceFood();
 }
 
 void L_Update()

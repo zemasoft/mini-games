@@ -6,12 +6,12 @@
 #ifndef GAME_CONFIG_H
 #define GAME_CONFIG_H
 
-#define MIN_X_SIZE 8
-#define MAX_X_SIZE 32
+#define MIN_X_SIZE 9
+#define MAX_X_SIZE 31
 #define DEFAULT_X_SIZE 17
 
-#define MIN_Y_SIZE 8
-#define MAX_Y_SIZE 32
+#define MIN_Y_SIZE 9
+#define MAX_Y_SIZE 31
 #define DEFAULT_Y_SIZE 15
 
 #define DIRECTION_KEYS_SIZE 4
@@ -21,7 +21,7 @@
 #define FIELD_SIZE 1.0f
 #define STATUSBAR_SIZE 2.0f * FIELD_SIZE
 #define MARGIN_SIZE 1.0f * FIELD_SIZE
-#define FOOD_RADIUS 0.3f * FIELD_SIZE
+#define FOOD_RADIUS 0.5f * FIELD_SIZE
 
 #define STATUSBAR_COLOR 74, 117, 44
 #define MARGIN_COLOR 87, 138, 52
