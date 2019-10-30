@@ -17,15 +17,27 @@
 
 extern GLFWwindow* g_window;
 
+static void DrawStatusBar();
+static void DrawMargin();
 static void DrawFields();
 static void DrawSnake();
 
 static void DrawField(const struct Field* field);
 static void DrawFood();
 
-static void DrawSnakeHead();
-static void DrawSnakeBody();
-static void DrawSnakeTail();
+static void DrawSnakeElement(size_t index);
+
+static void DrawSnakeHeadUp(const struct Field* head);
+static void DrawSnakeHeadDown(const struct Field* head);
+static void DrawSnakeHeadLeft(const struct Field* head);
+static void DrawSnakeHeadRight(const struct Field* head);
+
+static void DrawSnakeTailUp(const struct Field* tail);
+static void DrawSnakeTailDown(const struct Field* tail);
+static void DrawSnakeTailLeft(const struct Field* tail);
+static void DrawSnakeTailRight(const struct Field* tail);
+
+static void DrawSnakeBody(const struct Field* body);
 
 void G_Start()
 {
@@ -36,8 +48,8 @@ void G_Restart()
 {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(0.0f, (float) g_game_state.size.x * FIELD_SIZE, 0.0f,
-          (float) g_game_state.size.y * FIELD_SIZE, -1.0f, 1.0f);
+  glOrtho(-MARGIN_SIZE, (float) g_game_state.size.x * FIELD_SIZE + MARGIN_SIZE, -MARGIN_SIZE,
+          (float) g_game_state.size.y * FIELD_SIZE + MARGIN_SIZE + STATUSBAR_SIZE, -1.0f, 1.0f);
 
   glMatrixMode(GL_MODELVIEW);
 }
@@ -47,6 +59,8 @@ void G_Update()
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 
+  DrawStatusBar();
+  DrawMargin();
   DrawFields();
   DrawSnake();
 
@@ -55,6 +69,49 @@ void G_Update()
 
 void G_Stop()
 {
+}
+
+void DrawStatusBar()
+{
+  glPushMatrix();
+  glTranslatef(-MARGIN_SIZE, (float) g_game_state.size.y * FIELD_SIZE + MARGIN_SIZE, 0.0f);
+
+  float left = 0.0f;
+  float top = STATUSBAR_SIZE;
+  float right = MARGIN_SIZE + (float) g_game_state.size.x * FIELD_SIZE + MARGIN_SIZE;
+  float bottom = 0.0f;
+
+  glColor3ub(STATUSBAR_COLOR);
+
+  // clang-format off
+  glBegin(GL_POLYGON);
+    glVertex2f(left, top);
+    glVertex2f(left, bottom);
+    glVertex2f(right, bottom);
+    glVertex2f(right, top);
+  glEnd();
+  // clang-format on
+
+  glPopMatrix();
+}
+
+void DrawMargin()
+{
+  float left = -MARGIN_SIZE;
+  float top = (float) g_game_state.size.y * FIELD_SIZE + MARGIN_SIZE;
+  float right = (float) g_game_state.size.x * FIELD_SIZE + MARGIN_SIZE;
+  float bottom = -MARGIN_SIZE;
+
+  glColor3ub(MARGIN_COLOR);
+
+  // clang-format off
+  glBegin(GL_POLYGON);
+    glVertex2f(left, top);
+    glVertex2f(left, bottom);
+    glVertex2f(right, bottom);
+    glVertex2f(right, top);
+  glEnd();
+  // clang-format on
 }
 
 void DrawFields()
@@ -67,13 +124,11 @@ void DrawFields()
 
 void DrawSnake()
 {
-  if (GetSnakeLength() != 0)
+  for (size_t index = g_game_state.tail; index != g_game_state.head;)
   {
-    assert(GetSnakeLength() >= 2);
+    DrawSnakeElement(index);
 
-    DrawSnakeHead();
-    DrawSnakeBody();
-    DrawSnakeTail();
+    index = GetNextSnakeIndex(index);
   }
 }
 
@@ -91,22 +146,22 @@ void DrawField(const struct Field* field)
   {
     if (field->pos.y % 2 == 0)
     {
-      glColor3f(LIGHT_FIELD_COLOR);
+      glColor3ub(LIGHT_FIELD_COLOR);
     }
     else
     {
-      glColor3f(DARK_FIELD_COLOR);
+      glColor3ub(DARK_FIELD_COLOR);
     }
   }
   else
   {
     if (field->pos.y % 2 == 0)
     {
-      glColor3f(DARK_FIELD_COLOR);
+      glColor3ub(DARK_FIELD_COLOR);
     }
     else
     {
-      glColor3f(LIGHT_FIELD_COLOR);
+      glColor3ub(LIGHT_FIELD_COLOR);
     }
   }
 
@@ -135,7 +190,7 @@ void DrawFood()
 {
   glTranslatef(FIELD_SIZE / 2.0f, FIELD_SIZE / 2.0f, 0.0f);
 
-  glColor3f(FOOD_COLOR);
+  glColor3ub(FOOD_COLOR);
 
   glBegin(GL_POLYGON);
 
@@ -148,74 +203,295 @@ void DrawFood()
   glEnd();
 }
 
-void DrawSnakeHead()
+void DrawSnakeElement(size_t index)
 {
-  const struct Field* head = GetSnakeHead();
+  const struct Field* e = GetSnakeElement(index);
 
+  assert(e != NULL);
+
+  const struct Field* prev_e = GetPrevSnakeElement(index);
+  const struct Field* next_e = GetNextSnakeElement(index);
+
+  assert(prev_e != NULL || next_e != NULL);
+
+  if (prev_e == NULL)
+  {
+    assert((next_e->pos.x == e->pos.x && next_e->pos.y != e->pos.y) ||
+           (next_e->pos.x != e->pos.x && next_e->pos.y == e->pos.y));
+
+    if (next_e->pos.x == e->pos.x)
+    {
+      if (next_e->pos.y < e->pos.y)
+      {
+        DrawSnakeTailUp(e);
+      }
+      else
+      {
+        DrawSnakeTailDown(e);
+      }
+    }
+    else
+    {
+      if (next_e->pos.x > e->pos.x)
+      {
+        DrawSnakeTailLeft(e);
+      }
+      else
+      {
+        DrawSnakeTailRight(e);
+      }
+    }
+  }
+  else if (next_e == NULL)
+  {
+    assert((prev_e->pos.x == e->pos.x && prev_e->pos.y != e->pos.y) ||
+           (prev_e->pos.x != e->pos.x && prev_e->pos.y == e->pos.y));
+
+    if (prev_e->pos.x == e->pos.x)
+    {
+      if (prev_e->pos.y < e->pos.y)
+      {
+        DrawSnakeHeadUp(e);
+      }
+      else
+      {
+        DrawSnakeHeadDown(e);
+      }
+    }
+    else
+    {
+      if (prev_e->pos.x > e->pos.x)
+      {
+        DrawSnakeHeadLeft(e);
+      }
+      else
+      {
+        DrawSnakeHeadRight(e);
+      }
+    }
+  }
+  else
+  {
+    assert((prev_e->pos.x == e->pos.x && prev_e->pos.y != e->pos.y) ||
+           (prev_e->pos.x != e->pos.x && prev_e->pos.y == e->pos.y));
+    assert((next_e->pos.x == e->pos.x && next_e->pos.y != e->pos.y) ||
+           (next_e->pos.x != e->pos.x && next_e->pos.y == e->pos.y));
+    assert(prev_e->pos.x != next_e->pos.x || prev_e->pos.y != next_e->pos.y);
+
+    DrawSnakeBody(e);
+  }
+}
+
+void DrawSnakeHeadUp(const struct Field* head)
+{
   glPushMatrix();
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
 
-  glColor3f(HEAD_COLOR);
+  float left = 0.0f;
+  float top = FIELD_SIZE * g_game_state.offset;
+  float right = FIELD_SIZE;
+  float bottom = 0.0f;
+
+  glColor3ub(SNAKE_COLOR);
 
   // clang-format off
   glBegin(GL_POLYGON);
-    glVertex2f(0.0f, 1.0f);
-    glVertex2f(0.0f, 0.0f);
-    glVertex2f(1.0f, 0.0f);
-    glVertex2f(1.0f, 1.0f);
+    glVertex2f(left, top);
+    glVertex2f(left, bottom);
+    glVertex2f(right, bottom);
+    glVertex2f(right, top);
   glEnd();
   // clang-format on
 
   glPopMatrix();
 }
 
-void DrawSnakeBody()
+void DrawSnakeHeadDown(const struct Field* head)
 {
-  assert(GetSnakeLength() >= 2);
-
-  size_t body_index = GetNextSnakeIndex(GetSnakeTailIndex());
-
-  size_t head_index = GetSnakeHeadIndex();
-
-  while (body_index != head_index)
-  {
-    const struct Field* body = GetSnakeElement(body_index);
-
-    glPushMatrix();
-    glTranslatef((float) body->pos.x * FIELD_SIZE, (float) body->pos.y * FIELD_SIZE, 0.0f);
-
-    glColor3f(BODY_COLOR);
-
-    // clang-format off
-    glBegin(GL_POLYGON);
-      glVertex2f(0.0f, 1.0f);
-      glVertex2f(0.0f, 0.0f);
-      glVertex2f(1.0f, 0.0f);
-      glVertex2f(1.0f, 1.0f);
-    glEnd();
-    // clang-format on
-
-    glPopMatrix();
-
-    body_index = GetNextSnakeIndex(body_index);
-  }
-}
-
-void DrawSnakeTail()
-{
-  const struct Field* tail = GetSnakeTail();
-
   glPushMatrix();
-  glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
+  glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
 
-  glColor3f(TAIL_COLOR);
+  float left = 0.0f;
+  float top = FIELD_SIZE;
+  float right = FIELD_SIZE;
+  float bottom = FIELD_SIZE * (1.0f - g_game_state.offset);
+
+  glColor3ub(SNAKE_COLOR);
 
   // clang-format off
   glBegin(GL_POLYGON);
-    glVertex2f(0.0f, 1.0f);
-    glVertex2f(0.0f, 0.0f);
-    glVertex2f(1.0f, 0.0f);
-    glVertex2f(1.0f, 1.0f);
+    glVertex2f(left, top);
+    glVertex2f(left, bottom);
+    glVertex2f(right, bottom);
+    glVertex2f(right, top);
+  glEnd();
+  // clang-format on
+
+  glPopMatrix();
+}
+
+void DrawSnakeHeadLeft(const struct Field* head)
+{
+  glPushMatrix();
+  glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
+
+  float left = FIELD_SIZE * (1.0f - g_game_state.offset);
+  float top = FIELD_SIZE;
+  float right = FIELD_SIZE;
+  float bottom = 0.0f;
+
+  glColor3ub(SNAKE_COLOR);
+
+  // clang-format off
+  glBegin(GL_POLYGON);
+    glVertex2f(left, top);
+    glVertex2f(left, bottom);
+    glVertex2f(right, bottom);
+    glVertex2f(right, top);
+  glEnd();
+  // clang-format on
+
+  glPopMatrix();
+}
+
+void DrawSnakeHeadRight(const struct Field* head)
+{
+  glPushMatrix();
+  glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
+
+  float left = 0.0f;
+  float top = FIELD_SIZE;
+  float right = FIELD_SIZE * g_game_state.offset;
+  float bottom = 0.0f;
+
+  glColor3ub(SNAKE_COLOR);
+
+  // clang-format off
+  glBegin(GL_POLYGON);
+    glVertex2f(left, top);
+    glVertex2f(left, bottom);
+    glVertex2f(right, bottom);
+    glVertex2f(right, top);
+  glEnd();
+  // clang-format on
+
+  glPopMatrix();
+}
+
+void DrawSnakeTailUp(const struct Field* tail)
+{
+  glPushMatrix();
+  glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
+
+  float left = 0.0f;
+  float top = FIELD_SIZE;
+  float right = FIELD_SIZE;
+  float bottom = 0.0f;
+
+  glColor3ub(SNAKE_COLOR);
+
+  // clang-format off
+  glBegin(GL_POLYGON);
+    glVertex2f(left, top);
+    glVertex2f(left, bottom);
+    glVertex2f(right, bottom);
+    glVertex2f(right, top);
+  glEnd();
+  // clang-format on
+
+  glPopMatrix();
+}
+
+void DrawSnakeTailDown(const struct Field* tail)
+{
+  glPushMatrix();
+  glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
+
+  float left = 0.0f;
+  float top = FIELD_SIZE;
+  float right = FIELD_SIZE;
+  float bottom = 0.0f;
+
+  glColor3ub(SNAKE_COLOR);
+
+  // clang-format off
+  glBegin(GL_POLYGON);
+    glVertex2f(left, top);
+    glVertex2f(left, bottom);
+    glVertex2f(right, bottom);
+    glVertex2f(right, top);
+  glEnd();
+  // clang-format on
+
+  glPopMatrix();
+}
+
+void DrawSnakeTailLeft(const struct Field* tail)
+{
+  glPushMatrix();
+  glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
+
+  float left = 0.0f;
+  float top = FIELD_SIZE;
+  float right = FIELD_SIZE;
+  float bottom = 0.0f;
+
+  glColor3ub(SNAKE_COLOR);
+
+  // clang-format off
+  glBegin(GL_POLYGON);
+    glVertex2f(left, top);
+    glVertex2f(left, bottom);
+    glVertex2f(right, bottom);
+    glVertex2f(right, top);
+  glEnd();
+  // clang-format on
+
+  glPopMatrix();
+}
+
+void DrawSnakeTailRight(const struct Field* tail)
+{
+  glPushMatrix();
+  glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
+
+  float left = 0.0f;
+  float top = FIELD_SIZE;
+  float right = FIELD_SIZE;
+  float bottom = 0.0f;
+
+  glColor3ub(SNAKE_COLOR);
+
+  // clang-format off
+  glBegin(GL_POLYGON);
+    glVertex2f(left, top);
+    glVertex2f(left, bottom);
+    glVertex2f(right, bottom);
+    glVertex2f(right, top);
+  glEnd();
+  // clang-format on
+
+  glPopMatrix();
+}
+
+void DrawSnakeBody(const struct Field* body)
+{
+  glPushMatrix();
+  glTranslatef((float) body->pos.x * FIELD_SIZE, (float) body->pos.y * FIELD_SIZE, 0.0f);
+
+  float left = 0.0f;
+  float top = FIELD_SIZE;
+  float right = FIELD_SIZE;
+  float bottom = 0.0f;
+
+  glColor3ub(SNAKE_COLOR);
+
+  // clang-format off
+  glBegin(GL_POLYGON);
+    glVertex2f(left, top);
+    glVertex2f(left, bottom);
+    glVertex2f(right, bottom);
+    glVertex2f(right, top);
   glEnd();
   // clang-format on
 
