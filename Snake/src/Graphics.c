@@ -288,7 +288,7 @@ void DrawSnakeHeadUp(const struct Field* head)
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
 
   float left = 0.0f;
-  float top = FIELD_SIZE * g_game_state.offset;
+  float top = FIELD_SIZE * g_game_state.head_offset;
   float right = FIELD_SIZE;
   float bottom = 0.0f;
 
@@ -314,7 +314,7 @@ void DrawSnakeHeadDown(const struct Field* head)
   float left = 0.0f;
   float top = FIELD_SIZE;
   float right = FIELD_SIZE;
-  float bottom = FIELD_SIZE * (1.0f - g_game_state.offset);
+  float bottom = FIELD_SIZE * (1.0f - g_game_state.head_offset);
 
   glColor3ub(SNAKE_COLOR);
 
@@ -335,7 +335,7 @@ void DrawSnakeHeadLeft(const struct Field* head)
   glPushMatrix();
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
 
-  float left = FIELD_SIZE * (1.0f - g_game_state.offset);
+  float left = FIELD_SIZE * (1.0f - g_game_state.head_offset);
   float top = FIELD_SIZE;
   float right = FIELD_SIZE;
   float bottom = 0.0f;
@@ -361,7 +361,7 @@ void DrawSnakeHeadRight(const struct Field* head)
 
   float left = 0.0f;
   float top = FIELD_SIZE;
-  float right = FIELD_SIZE * g_game_state.offset;
+  float right = FIELD_SIZE * g_game_state.head_offset;
   float bottom = 0.0f;
 
   glColor3ub(SNAKE_COLOR);
@@ -384,7 +384,7 @@ void DrawSnakeTailUp(const struct Field* tail)
   glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
 
   float left = 0.0f;
-  float top = FIELD_SIZE;
+  float top = FIELD_SIZE * (1.0f - g_game_state.tail_offset);
   float right = FIELD_SIZE;
   float bottom = 0.0f;
 
@@ -410,7 +410,7 @@ void DrawSnakeTailDown(const struct Field* tail)
   float left = 0.0f;
   float top = FIELD_SIZE;
   float right = FIELD_SIZE;
-  float bottom = 0.0f;
+  float bottom = FIELD_SIZE * g_game_state.tail_offset;
 
   glColor3ub(SNAKE_COLOR);
 
@@ -431,7 +431,7 @@ void DrawSnakeTailLeft(const struct Field* tail)
   glPushMatrix();
   glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
 
-  float left = 0.0f;
+  float left = FIELD_SIZE * g_game_state.tail_offset;
   float top = FIELD_SIZE;
   float right = FIELD_SIZE;
   float bottom = 0.0f;
@@ -457,7 +457,7 @@ void DrawSnakeTailRight(const struct Field* tail)
 
   float left = 0.0f;
   float top = FIELD_SIZE;
-  float right = FIELD_SIZE;
+  float right = FIELD_SIZE * (1.0f - g_game_state.tail_offset);
   float bottom = 0.0f;
 
   glColor3ub(SNAKE_COLOR);

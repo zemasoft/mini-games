@@ -38,6 +38,7 @@ enum Heading
 enum State
 {
   State_Play,
+  State_Play_SnakeGrowing,
   State_Success,
   State_Fail,
   State_Pause
@@ -59,7 +60,8 @@ struct GameState
   size_t head;
   size_t tail;
 
-  float offset;
+  float head_offset;
+  float tail_offset;
 
   enum Heading heading;
 

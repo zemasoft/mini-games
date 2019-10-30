@@ -96,7 +96,8 @@ void L_Restart()
   g_game_state.snake[g_game_state.head++] = body;
   g_game_state.snake[g_game_state.head++] = head;
 
-  g_game_state.offset = 0.0f;
+  g_game_state.head_offset = 0.0f;
+  g_game_state.tail_offset = 0.0f;
 
   g_game_state.heading = Heading_Up;
 
@@ -123,6 +124,8 @@ void L_Update()
   static double before;
   static double move_time;
 
+  static enum State paused_state;
+
   double now = glfwGetTime();
   double elapsed = now - before;
   before = now;
@@ -138,157 +141,180 @@ void L_Update()
     return;
   }
 
-  if (g_game_state.state == State_Play)
+  enum State next_state = g_game_state.state;
+
+  switch (g_game_state.state)
   {
-    if (I_PauseKey())
-    {
-      g_game_state.state = State_Pause;
-    }
-    else
-    {
-      move_time += elapsed;
-
-      if (move_time >= g_game_state.max_move_time)
+    case State_Play:
+    case State_Play_SnakeGrowing:
+      if (I_PauseKey())
       {
-        move_time = 0.0;
+        paused_state = g_game_state.state;
+        next_state = State_Pause;
+      }
+      else
+      {
+        move_time += elapsed;
 
-        g_game_state.offset = 0.0f;
-
-        switch (I_PopDirectionKey())
+        if (move_time >= g_game_state.max_move_time)
         {
-          case GLFW_KEY_LEFT:
-            switch (g_game_state.heading)
-            {
-              case Heading_Left:
-              case Heading_Right:
-                break;
+          move_time = 0.0;
 
-              case Heading_Down:
-                PlayTurnLeftSound();
+          switch (I_PopDirectionKey())
+          {
+            case GLFW_KEY_LEFT:
+              switch (g_game_state.heading)
+              {
+                case Heading_Left:
+                case Heading_Right:
+                  break;
 
-                g_game_state.heading = Heading_Left;
-                break;
+                case Heading_Down:
+                  PlayTurnLeftSound();
 
-              case Heading_Up:
-                PlayTurnRightSound();
+                  g_game_state.heading = Heading_Left;
+                  break;
 
-                g_game_state.heading = Heading_Left;
-                break;
-            }
-            break;
+                case Heading_Up:
+                  PlayTurnRightSound();
 
-          case GLFW_KEY_RIGHT:
-            switch (g_game_state.heading)
-            {
-              case Heading_Left:
-              case Heading_Right:
-                break;
+                  g_game_state.heading = Heading_Left;
+                  break;
+              }
+              break;
 
-              case Heading_Down:
-                PlayTurnRightSound();
+            case GLFW_KEY_RIGHT:
+              switch (g_game_state.heading)
+              {
+                case Heading_Left:
+                case Heading_Right:
+                  break;
 
-                g_game_state.heading = Heading_Right;
-                break;
+                case Heading_Down:
+                  PlayTurnRightSound();
 
-              case Heading_Up:
-                PlayTurnLeftSound();
+                  g_game_state.heading = Heading_Right;
+                  break;
 
-                g_game_state.heading = Heading_Right;
-                break;
-            }
-            break;
+                case Heading_Up:
+                  PlayTurnLeftSound();
 
-          case GLFW_KEY_DOWN:
-            switch (g_game_state.heading)
-            {
-              case Heading_Left:
-                PlayTurnRightSound();
+                  g_game_state.heading = Heading_Right;
+                  break;
+              }
+              break;
 
-                g_game_state.heading = Heading_Down;
-                break;
+            case GLFW_KEY_DOWN:
+              switch (g_game_state.heading)
+              {
+                case Heading_Left:
+                  PlayTurnRightSound();
 
-              case Heading_Right:
-                PlayTurnLeftSound();
+                  g_game_state.heading = Heading_Down;
+                  break;
 
-                g_game_state.heading = Heading_Down;
-                break;
+                case Heading_Right:
+                  PlayTurnLeftSound();
 
-              case Heading_Down:
-              case Heading_Up:
-                break;
-            }
-            break;
+                  g_game_state.heading = Heading_Down;
+                  break;
 
-          case GLFW_KEY_UP:
-            switch (g_game_state.heading)
-            {
-              case Heading_Left:
-                PlayTurnLeftSound();
+                case Heading_Down:
+                case Heading_Up:
+                  break;
+              }
+              break;
 
-                g_game_state.heading = Heading_Up;
-                break;
+            case GLFW_KEY_UP:
+              switch (g_game_state.heading)
+              {
+                case Heading_Left:
+                  PlayTurnLeftSound();
 
-              case Heading_Right:
-                PlayTurnRightSound();
+                  g_game_state.heading = Heading_Up;
+                  break;
 
-                g_game_state.heading = Heading_Up;
-                break;
+                case Heading_Right:
+                  PlayTurnRightSound();
 
-              case Heading_Down:
-              case Heading_Up:
-                break;
-            }
-            break;
+                  g_game_state.heading = Heading_Up;
+                  break;
+
+                case Heading_Down:
+                case Heading_Up:
+                  break;
+              }
+              break;
+          }
+
+          switch (MoveSnake())
+          {
+            case MoveSnake_Ok:
+              next_state = State_Play;
+              break;
+
+            case MoveSnake_Food:
+              S_PlaySound(Sound_Food);
+
+              ++g_game_state.score;
+
+              PlaceFood();
+
+              next_state = State_Play_SnakeGrowing;
+              break;
+
+            case MoveSnake_Wall:
+              S_PlaySound(Sound_Wall);
+
+              next_state = State_Fail;
+              break;
+
+            case MoveSnake_Body:
+              S_PlaySound(Sound_Body);
+
+              next_state = State_Fail;
+              break;
+
+            case MoveSnake_NoSpace:
+              S_PlaySound(Sound_Success);
+
+              next_state = State_Success;
+              break;
+          }
         }
 
-        switch (MoveSnake())
+        if (next_state == State_Play)
         {
-          case MoveSnake_Ok:
-            break;
-
-          case MoveSnake_Food:
-            S_PlaySound(Sound_Food);
-
-            ++g_game_state.score;
-            PlaceFood();
-            break;
-
-          case MoveSnake_Wall:
-            S_PlaySound(Sound_Wall);
-
-            g_game_state.state = State_Fail;
-            break;
-
-          case MoveSnake_Body:
-            S_PlaySound(Sound_Body);
-
-            g_game_state.state = State_Fail;
-            break;
-
-          case MoveSnake_NoSpace:
-            S_PlaySound(Sound_Success);
-
-            g_game_state.state = State_Success;
-            break;
+          g_game_state.head_offset = (float) (move_time / g_game_state.max_move_time);
+          g_game_state.tail_offset = (float) (move_time / g_game_state.max_move_time);
+        }
+        else if (next_state == State_Play_SnakeGrowing)
+        {
+          g_game_state.head_offset = (float) (move_time / g_game_state.max_move_time);
+        }
+        else
+        {
+          g_game_state.head_offset = 1.0f;
+          g_game_state.tail_offset = 1.0f;
         }
       }
+      break;
 
-      g_game_state.offset = (float) (move_time / g_game_state.max_move_time);
-    }
+    case State_Success:
+      break;
+
+    case State_Fail:
+      break;
+
+    case State_Pause:
+      if (I_PauseKey())
+      {
+        next_state = paused_state;
+      }
+      break;
   }
-  else if (g_game_state.state == State_Success)
-  {
-  }
-  else if (g_game_state.state == State_Fail)
-  {
-  }
-  else if (g_game_state.state == State_Pause)
-  {
-    if (I_PauseKey())
-    {
-      g_game_state.state = State_Play;
-    }
-  }
+
+  g_game_state.state = next_state;
 }
 
 void L_Stop()
