@@ -8,7 +8,10 @@
 
 enum Sound
 {
-  Sound_Turn = 0,
+  Sound_Turn1 = 0,
+  Sound_Turn2,
+  Sound_Turn3,
+  Sound_Turn4,
   Sound_Food,
   Sound_Wall,
   Sound_Body,

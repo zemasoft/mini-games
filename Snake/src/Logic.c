@@ -31,10 +31,14 @@ extern GLFWwindow* g_window;
 
 static struct Field** s_empty_fields;
 
+static int s_turn_sound_index;
+
 static enum MoveSnake MoveSnake();
 static void PlaceFood();
 
 static struct Field* GetField(int x, int y);
+static void PlayTurnLeftSound();
+static void PlayTurnRightSound();
 
 void L_Start()
 {
@@ -109,6 +113,8 @@ void L_Restart()
 
   s_empty_fields = malloc(g_game_state.field_count * sizeof(struct Field*));
 
+  s_turn_sound_index = 0;
+
   PlaceFood();
 }
 
@@ -151,38 +157,86 @@ void L_Update()
         switch (I_PopDirectionKey())
         {
           case GLFW_KEY_LEFT:
-            if (g_game_state.heading != Heading_Right)
+            switch (g_game_state.heading)
             {
-              S_PlaySound(Sound_Turn);
+              case Heading_Left:
+              case Heading_Right:
+                break;
 
-              g_game_state.heading = Heading_Left;
+              case Heading_Down:
+                PlayTurnLeftSound();
+
+                g_game_state.heading = Heading_Left;
+                break;
+
+              case Heading_Up:
+                PlayTurnRightSound();
+
+                g_game_state.heading = Heading_Left;
+                break;
             }
             break;
 
           case GLFW_KEY_RIGHT:
-            if (g_game_state.heading != Heading_Left)
+            switch (g_game_state.heading)
             {
-              S_PlaySound(Sound_Turn);
+              case Heading_Left:
+              case Heading_Right:
+                break;
 
-              g_game_state.heading = Heading_Right;
+              case Heading_Down:
+                PlayTurnRightSound();
+
+                g_game_state.heading = Heading_Right;
+                break;
+
+              case Heading_Up:
+                PlayTurnLeftSound();
+
+                g_game_state.heading = Heading_Right;
+                break;
             }
             break;
 
           case GLFW_KEY_DOWN:
-            if (g_game_state.heading != Heading_Up)
+            switch (g_game_state.heading)
             {
-              S_PlaySound(Sound_Turn);
+              case Heading_Left:
+                PlayTurnRightSound();
 
-              g_game_state.heading = Heading_Down;
+                g_game_state.heading = Heading_Down;
+                break;
+
+              case Heading_Right:
+                PlayTurnLeftSound();
+
+                g_game_state.heading = Heading_Down;
+                break;
+
+              case Heading_Down:
+              case Heading_Up:
+                break;
             }
             break;
 
           case GLFW_KEY_UP:
-            if (g_game_state.heading != Heading_Down)
+            switch (g_game_state.heading)
             {
-              S_PlaySound(Sound_Turn);
+              case Heading_Left:
+                PlayTurnLeftSound();
 
-              g_game_state.heading = Heading_Up;
+                g_game_state.heading = Heading_Up;
+                break;
+
+              case Heading_Right:
+                PlayTurnRightSound();
+
+                g_game_state.heading = Heading_Up;
+                break;
+
+              case Heading_Down:
+              case Heading_Up:
+                break;
             }
             break;
         }
@@ -349,4 +403,18 @@ struct Field* GetField(int x, int y)
   assert(y >= 0 && y < g_game_state.size.y);
 
   return &g_game_state.fields[x + y * g_game_state.size.x];
+}
+
+void PlayTurnLeftSound()
+{
+  S_PlaySound(Sound_Turn1 + s_turn_sound_index);
+
+  s_turn_sound_index = (s_turn_sound_index + 1) % 4;
+}
+
+void PlayTurnRightSound()
+{
+  S_PlaySound(Sound_Turn1 + s_turn_sound_index);
+
+  s_turn_sound_index = (s_turn_sound_index - 1 + 4) % 4;
 }
