@@ -105,7 +105,7 @@ void L_Restart()
 
   g_game_state.heading = Heading_Right;
 
-  g_game_state.state = State_Play;
+  g_game_state.state = State_Pause;
 
   g_game_state.max_move_time = 0.25;
 
@@ -126,7 +126,7 @@ void L_Update()
   static double before;
   static double move_time;
 
-  static enum State paused_state;
+  static enum State paused_state = State_Play;
 
   double now = glfwGetTime();
   double elapsed = now - before;
@@ -309,7 +309,7 @@ void L_Update()
       break;
 
     case State_Pause:
-      if (I_PauseKey())
+      if (I_PauseKey() || I_GetDirectionKey() != -1)
       {
         next_state = paused_state;
       }

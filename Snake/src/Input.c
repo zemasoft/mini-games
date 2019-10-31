@@ -64,6 +64,16 @@ bool I_PauseKey()
   return res;
 }
 
+int I_GetDirectionKey()
+{
+  if (s_bot == s_top)
+  {
+    return -1;
+  }
+
+  return s_direction_keys[s_bot];
+}
+
 int I_PopDirectionKey()
 {
   if (s_bot == s_top)
