@@ -227,8 +227,8 @@ void ShuffleDices(enum DiceState state)
 {
   for (int i = 0; i < g_world.dice_count; ++i)
   {
-    g_world.dices[i].value = rand() % 6 + 1;
     g_world.dices[i].state = state;
+    g_world.dices[i].value = rand() % 6 + 1;
   }
 }
 

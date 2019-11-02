@@ -10,8 +10,6 @@
 
 struct Dice
 {
-  int value;
-
   enum DiceState
   {
     DiceState_Setup,
@@ -19,6 +17,8 @@ struct Dice
     DiceState_Success,
     DiceState_Fail
   } state;
+
+  int value;
 };
 
 struct StatusBar
