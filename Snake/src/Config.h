@@ -6,13 +6,13 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define MIN_GROUND_X_SIZE 9
-#define MAX_GROUND_X_SIZE 31
-#define DEFAULT_GROUND_X_SIZE 17
+#define MIN_X_SIZE 9
+#define MAX_X_SIZE 31
+#define DEFAULT_X_SIZE 17
 
-#define MIN_GROUND_Y_SIZE 9
-#define MAX_GROUND_Y_SIZE 31
-#define DEFAULT_GROUND_Y_SIZE 15
+#define MIN_Y_SIZE 9
+#define MAX_Y_SIZE 31
+#define DEFAULT_Y_SIZE 15
 
 #define DIRECTION_KEYS_SIZE 4
 

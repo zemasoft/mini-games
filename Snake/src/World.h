@@ -10,12 +10,6 @@
 
 struct Field
 {
-  struct
-  {
-    int x;
-    int y;
-  } pos;
-
   enum FieldValue
   {
     FieldValue_Empty,
@@ -23,6 +17,12 @@ struct Field
     FieldValue_Wall,
     FieldValue_Snake
   } value;
+
+  struct
+  {
+    int x;
+    int y;
+  } pos;
 };
 
 struct Ground
@@ -58,10 +58,6 @@ struct Snake
 
 struct World
 {
-  struct Ground ground;
-
-  struct Snake snake;
-
   enum WorldState
   {
     WorldState_Play,
@@ -70,6 +66,10 @@ struct World
     WorldState_Fail,
     WorldState_Pause
   } state;
+
+  struct Ground ground;
+
+  struct Snake snake;
 
   double max_move_time;
 

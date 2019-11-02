@@ -25,8 +25,8 @@ int main(int argc, char** argv)
 
   alutInit(&argc, argv);
 
-  g_config.ground.size.x = DEFAULT_GROUND_X_SIZE;
-  g_config.ground.size.y = DEFAULT_GROUND_Y_SIZE;
+  g_config.ground.size.x = DEFAULT_X_SIZE;
+  g_config.ground.size.y = DEFAULT_Y_SIZE;
 
   if (argc > 1)
   {
@@ -35,13 +35,13 @@ int main(int argc, char** argv)
 
     if (y_size != 0 && *end == '\0')
     {
-      if (y_size < MIN_GROUND_Y_SIZE)
+      if (y_size < MIN_Y_SIZE)
       {
-        y_size = MIN_GROUND_Y_SIZE;
+        y_size = MIN_Y_SIZE;
       }
-      else if (y_size > MAX_GROUND_Y_SIZE)
+      else if (y_size > MAX_Y_SIZE)
       {
-        y_size = MAX_GROUND_Y_SIZE;
+        y_size = MAX_Y_SIZE;
       }
 
       g_config.ground.size.x = (int) y_size;
@@ -56,13 +56,13 @@ int main(int argc, char** argv)
 
     if (x_size != 0 && *end == '\0')
     {
-      if (x_size < MIN_GROUND_X_SIZE)
+      if (x_size < MIN_X_SIZE)
       {
-        x_size = MIN_GROUND_X_SIZE;
+        x_size = MIN_X_SIZE;
       }
-      else if (x_size > MAX_GROUND_X_SIZE)
+      else if (x_size > MAX_X_SIZE)
       {
-        x_size = MAX_GROUND_X_SIZE;
+        x_size = MAX_X_SIZE;
       }
 
       g_config.ground.size.x = (int) x_size;

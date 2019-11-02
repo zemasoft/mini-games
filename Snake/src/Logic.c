@@ -49,6 +49,8 @@ void L_Start()
 
 void L_Restart()
 {
+  g_world.state = WorldState_Pause;
+
   g_world.ground.size.x = g_config.ground.size.x;
   g_world.ground.size.y = g_config.ground.size.y;
 
@@ -61,6 +63,18 @@ void L_Restart()
 
   g_world.ground.fields = malloc(g_world.ground.field_count * sizeof(struct Field));
 
+  for (int y = 0; y < g_world.ground.size.y; ++y)
+  {
+    for (int x = 0; x < g_world.ground.size.x; ++x)
+    {
+      struct Field* field = GetField(x, y);
+
+      field->value = FieldValue_Empty;
+      field->pos.x = x;
+      field->pos.y = y;
+    }
+  }
+
   if (g_world.snake.fields != NULL)
   {
     free(g_world.snake.fields);
@@ -69,18 +83,6 @@ void L_Restart()
   g_world.snake.field_count = g_world.ground.field_count;
 
   g_world.snake.fields = malloc(g_world.snake.field_count * sizeof(struct Field*));
-
-  for (int y = 0; y < g_world.ground.size.y; ++y)
-  {
-    for (int x = 0; x < g_world.ground.size.x; ++x)
-    {
-      struct Field* field = GetField(x, y);
-
-      field->pos.x = x;
-      field->pos.y = y;
-      field->value = FieldValue_Empty;
-    }
-  }
 
   int init_y_pos = g_world.ground.size.y / 2;
 
@@ -104,8 +106,6 @@ void L_Restart()
   g_world.snake.tail_offset = 0.0f;
 
   g_world.snake.heading = SnakeHeading_Right;
-
-  g_world.state = WorldState_Pause;
 
   g_world.max_move_time = 0.25;
 
