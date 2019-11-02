@@ -7,7 +7,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include "GameConfig.h"
+#include "Config.h"
 
 extern GLFWwindow* g_window;
 

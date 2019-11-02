@@ -3,16 +3,16 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef GAME_CONFIG_H
-#define GAME_CONFIG_H
+#ifndef CONFIG_H
+#define CONFIG_H
 
-#define MIN_X_SIZE 9
-#define MAX_X_SIZE 31
-#define DEFAULT_X_SIZE 17
+#define MIN_GROUND_X_SIZE 9
+#define MAX_GROUND_X_SIZE 31
+#define DEFAULT_GROUND_X_SIZE 17
 
-#define MIN_Y_SIZE 9
-#define MAX_Y_SIZE 31
-#define DEFAULT_Y_SIZE 15
+#define MIN_GROUND_Y_SIZE 9
+#define MAX_GROUND_Y_SIZE 31
+#define DEFAULT_GROUND_Y_SIZE 15
 
 #define DIRECTION_KEYS_SIZE 4
 
@@ -32,15 +32,18 @@
 
 #define SNAKE_COLOR 78, 124, 246
 
-struct GameConfig
+struct Config
 {
   struct
   {
-    int x;
-    int y;
-  } size;
+    struct
+    {
+      int x;
+      int y;
+    } size;
+  } ground;
 };
 
-extern struct GameConfig g_game_config;
+extern struct Config g_config;
 
-#endif  // GAME_CONFIG_H
+#endif  // CONFIG_H

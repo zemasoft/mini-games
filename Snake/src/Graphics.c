@@ -11,15 +11,15 @@
 
 #include <GLFW/glfw3.h>
 
-#include "GameConfig.h"
-#include "GameState.h"
+#include "Config.h"
 #include "Tools.h"
+#include "World.h"
 
 extern GLFWwindow* g_window;
 
 static void DrawStatusBar();
 static void DrawMargin();
-static void DrawFields();
+static void DrawGround();
 static void DrawSnake();
 
 static void DrawField(const struct Field* field);
@@ -48,8 +48,8 @@ void G_Restart()
 {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(-MARGIN_SIZE, (float) g_game_state.size.x * FIELD_SIZE + MARGIN_SIZE, -MARGIN_SIZE,
-          (float) g_game_state.size.y * FIELD_SIZE + MARGIN_SIZE + STATUSBAR_SIZE, -1.0f, 1.0f);
+  glOrtho(-MARGIN_SIZE, (float) g_world.ground.size.x * FIELD_SIZE + MARGIN_SIZE, -MARGIN_SIZE,
+          (float) g_world.ground.size.y * FIELD_SIZE + MARGIN_SIZE + STATUSBAR_SIZE, -1.0f, 1.0f);
 
   glMatrixMode(GL_MODELVIEW);
 }
@@ -61,7 +61,7 @@ void G_Update()
 
   DrawStatusBar();
   DrawMargin();
-  DrawFields();
+  DrawGround();
   DrawSnake();
 
   glfwSwapBuffers(g_window);
@@ -74,11 +74,11 @@ void G_Stop()
 void DrawStatusBar()
 {
   glPushMatrix();
-  glTranslatef(-MARGIN_SIZE, (float) g_game_state.size.y * FIELD_SIZE + MARGIN_SIZE, 0.0f);
+  glTranslatef(-MARGIN_SIZE, (float) g_world.ground.size.y * FIELD_SIZE + MARGIN_SIZE, 0.0f);
 
   float left = 0.0f;
   float top = STATUSBAR_SIZE;
-  float right = MARGIN_SIZE + (float) g_game_state.size.x * FIELD_SIZE + MARGIN_SIZE;
+  float right = MARGIN_SIZE + (float) g_world.ground.size.x * FIELD_SIZE + MARGIN_SIZE;
   float bottom = 0.0f;
 
   glColor3ub(STATUSBAR_COLOR);
@@ -98,8 +98,8 @@ void DrawStatusBar()
 void DrawMargin()
 {
   float left = -MARGIN_SIZE;
-  float top = (float) g_game_state.size.y * FIELD_SIZE + MARGIN_SIZE;
-  float right = (float) g_game_state.size.x * FIELD_SIZE + MARGIN_SIZE;
+  float top = (float) g_world.ground.size.y * FIELD_SIZE + MARGIN_SIZE;
+  float right = (float) g_world.ground.size.x * FIELD_SIZE + MARGIN_SIZE;
   float bottom = -MARGIN_SIZE;
 
   glColor3ub(MARGIN_COLOR);
@@ -114,17 +114,17 @@ void DrawMargin()
   // clang-format on
 }
 
-void DrawFields()
+void DrawGround()
 {
-  for (size_t i = 0; i < g_game_state.field_count; ++i)
+  for (size_t i = 0; i < g_world.ground.field_count; ++i)
   {
-    DrawField(&g_game_state.fields[i]);
+    DrawField(&g_world.ground.fields[i]);
   }
 }
 
 void DrawSnake()
 {
-  for (size_t index = g_game_state.tail; index != g_game_state.head;)
+  for (size_t index = g_world.snake.tail; index != g_world.snake.head;)
   {
     DrawSnakeElement(index);
 
@@ -174,11 +174,11 @@ void DrawField(const struct Field* field)
   glEnd();
   // clang-format on
 
-  if (field->val == Value_Food)
+  if (field->value == FieldValue_Food)
   {
     DrawFood();
   }
-  else if (field->val == Value_Wall)
+  else if (field->value == FieldValue_Wall)
   {
     // TODO
   }
@@ -288,7 +288,7 @@ void DrawSnakeHeadUp(const struct Field* head)
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
 
   float left = 0.0f;
-  float top = FIELD_SIZE * g_game_state.head_offset;
+  float top = FIELD_SIZE * g_world.snake.head_offset;
   float right = FIELD_SIZE;
   float bottom = 0.0f;
 
@@ -314,7 +314,7 @@ void DrawSnakeHeadDown(const struct Field* head)
   float left = 0.0f;
   float top = FIELD_SIZE;
   float right = FIELD_SIZE;
-  float bottom = FIELD_SIZE * (1.0f - g_game_state.head_offset);
+  float bottom = FIELD_SIZE * (1.0f - g_world.snake.head_offset);
 
   glColor3ub(SNAKE_COLOR);
 
@@ -335,7 +335,7 @@ void DrawSnakeHeadLeft(const struct Field* head)
   glPushMatrix();
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
 
-  float left = FIELD_SIZE * (1.0f - g_game_state.head_offset);
+  float left = FIELD_SIZE * (1.0f - g_world.snake.head_offset);
   float top = FIELD_SIZE;
   float right = FIELD_SIZE;
   float bottom = 0.0f;
@@ -361,7 +361,7 @@ void DrawSnakeHeadRight(const struct Field* head)
 
   float left = 0.0f;
   float top = FIELD_SIZE;
-  float right = FIELD_SIZE * g_game_state.head_offset;
+  float right = FIELD_SIZE * g_world.snake.head_offset;
   float bottom = 0.0f;
 
   glColor3ub(SNAKE_COLOR);
@@ -384,7 +384,7 @@ void DrawSnakeTailUp(const struct Field* tail)
   glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
 
   float left = 0.0f;
-  float top = FIELD_SIZE * (1.0f - g_game_state.tail_offset);
+  float top = FIELD_SIZE * (1.0f - g_world.snake.tail_offset);
   float right = FIELD_SIZE;
   float bottom = 0.0f;
 
@@ -410,7 +410,7 @@ void DrawSnakeTailDown(const struct Field* tail)
   float left = 0.0f;
   float top = FIELD_SIZE;
   float right = FIELD_SIZE;
-  float bottom = FIELD_SIZE * g_game_state.tail_offset;
+  float bottom = FIELD_SIZE * g_world.snake.tail_offset;
 
   glColor3ub(SNAKE_COLOR);
 
@@ -431,7 +431,7 @@ void DrawSnakeTailLeft(const struct Field* tail)
   glPushMatrix();
   glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
 
-  float left = FIELD_SIZE * g_game_state.tail_offset;
+  float left = FIELD_SIZE * g_world.snake.tail_offset;
   float top = FIELD_SIZE;
   float right = FIELD_SIZE;
   float bottom = 0.0f;
@@ -457,7 +457,7 @@ void DrawSnakeTailRight(const struct Field* tail)
 
   float left = 0.0f;
   float top = FIELD_SIZE;
-  float right = FIELD_SIZE * (1.0f - g_game_state.tail_offset);
+  float right = FIELD_SIZE * (1.0f - g_world.snake.tail_offset);
   float bottom = 0.0f;
 
   glColor3ub(SNAKE_COLOR);

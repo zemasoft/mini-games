@@ -12,11 +12,11 @@
 
 #include <GLFW/glfw3.h>
 
-#include "GameConfig.h"
-#include "GameState.h"
+#include "Config.h"
 #include "Input.h"
 #include "Sound.h"
 #include "Tools.h"
+#include "World.h"
 
 enum MoveSnake
 {
@@ -49,74 +49,74 @@ void L_Start()
 
 void L_Restart()
 {
-  g_game_state.size.x = g_game_config.size.x;
-  g_game_state.size.y = g_game_config.size.y;
+  g_world.ground.size.x = g_config.ground.size.x;
+  g_world.ground.size.y = g_config.ground.size.y;
 
-  g_game_state.field_count = (size_t)(g_game_state.size.x * g_game_state.size.y);
+  g_world.ground.field_count = (size_t)(g_world.ground.size.x * g_world.ground.size.y);
 
-  if (g_game_state.fields != NULL)
+  if (g_world.ground.fields != NULL)
   {
-    free(g_game_state.fields);
+    free(g_world.ground.fields);
   }
 
-  g_game_state.fields = malloc(g_game_state.field_count * sizeof(struct Field));
+  g_world.ground.fields = malloc(g_world.ground.field_count * sizeof(struct Field));
 
-  if (g_game_state.snake != NULL)
+  if (g_world.snake.fields != NULL)
   {
-    free(g_game_state.snake);
+    free(g_world.snake.fields);
   }
 
-  g_game_state.snake_count = g_game_state.field_count;
+  g_world.snake.field_count = g_world.ground.field_count;
 
-  g_game_state.snake = malloc(g_game_state.snake_count * sizeof(struct Field*));
+  g_world.snake.fields = malloc(g_world.snake.field_count * sizeof(struct Field*));
 
-  for (int y = 0; y < g_game_state.size.y; ++y)
+  for (int y = 0; y < g_world.ground.size.y; ++y)
   {
-    for (int x = 0; x < g_game_state.size.x; ++x)
+    for (int x = 0; x < g_world.ground.size.x; ++x)
     {
       struct Field* field = GetField(x, y);
 
       field->pos.x = x;
       field->pos.y = y;
-      field->val = Value_Empty;
+      field->value = FieldValue_Empty;
     }
   }
 
-  int init_y_pos = g_game_state.size.y / 2;
+  int init_y_pos = g_world.ground.size.y / 2;
 
   struct Field* head = GetField(4, init_y_pos);
   struct Field* body = GetField(3, init_y_pos);
   struct Field* tail = GetField(2, init_y_pos);
 
-  head->val = Value_Snake;
-  body->val = Value_Snake;
-  tail->val = Value_Snake;
+  head->value = FieldValue_Snake;
+  body->value = FieldValue_Snake;
+  tail->value = FieldValue_Snake;
 
-  GetField(g_game_state.size.x - 4, init_y_pos)->val = Value_Food;
+  GetField(g_world.ground.size.x - 4, init_y_pos)->value = FieldValue_Food;
 
-  g_game_state.head = 0;
-  g_game_state.tail = 0;
-  g_game_state.snake[g_game_state.head++] = tail;
-  g_game_state.snake[g_game_state.head++] = body;
-  g_game_state.snake[g_game_state.head++] = head;
+  g_world.snake.head = 0;
+  g_world.snake.tail = 0;
+  g_world.snake.fields[g_world.snake.head++] = tail;
+  g_world.snake.fields[g_world.snake.head++] = body;
+  g_world.snake.fields[g_world.snake.head++] = head;
 
-  g_game_state.head_offset = 0.0f;
-  g_game_state.tail_offset = 0.0f;
+  g_world.snake.head_offset = 0.0f;
+  g_world.snake.tail_offset = 0.0f;
 
-  g_game_state.heading = Heading_Right;
+  g_world.snake.heading = SnakeHeading_Right;
 
-  g_game_state.state = State_Pause;
+  g_world.state = WorldState_Pause;
 
-  g_game_state.max_move_time = 0.25;
+  g_world.max_move_time = 0.25;
 
-  g_game_state.score = 0;
+  g_world.score = 0;
 
   if (s_empty_fields != NULL)
   {
     free(s_empty_fields);
   }
 
-  s_empty_fields = malloc(g_game_state.field_count * sizeof(struct Field*));
+  s_empty_fields = malloc(g_world.ground.field_count * sizeof(struct Field*));
 
   s_turn_sound_index = 0;
 }
@@ -126,7 +126,7 @@ void L_Update()
   static double before;
   static double move_time;
 
-  static enum State paused_state = State_Play;
+  static enum WorldState paused_state = WorldState_Play;
 
   double now = glfwGetTime();
   double elapsed = now - before;
@@ -143,107 +143,107 @@ void L_Update()
     return;
   }
 
-  enum State next_state = g_game_state.state;
+  enum WorldState next_state = g_world.state;
 
-  switch (g_game_state.state)
+  switch (g_world.state)
   {
-    case State_Play:
-    case State_Play_SnakeGrowing:
+    case WorldState_Play:
+    case WorldState_Play_SnakeGrowing:
       if (I_PauseKey())
       {
-        paused_state = g_game_state.state;
-        next_state = State_Pause;
+        paused_state = g_world.state;
+        next_state = WorldState_Pause;
       }
       else
       {
         move_time += elapsed;
 
-        if (move_time >= g_game_state.max_move_time)
+        if (move_time >= g_world.max_move_time)
         {
           move_time = 0.0;
 
           switch (I_PopDirectionKey())
           {
             case GLFW_KEY_LEFT:
-              switch (g_game_state.heading)
+              switch (g_world.snake.heading)
               {
-                case Heading_Left:
-                case Heading_Right:
+                case SnakeHeading_Left:
+                case SnakeHeading_Right:
                   break;
 
-                case Heading_Down:
+                case SnakeHeading_Down:
                   PlayTurnLeftSound();
 
-                  g_game_state.heading = Heading_Left;
+                  g_world.snake.heading = SnakeHeading_Left;
                   break;
 
-                case Heading_Up:
+                case SnakeHeading_Up:
                   PlayTurnRightSound();
 
-                  g_game_state.heading = Heading_Left;
+                  g_world.snake.heading = SnakeHeading_Left;
                   break;
               }
               break;
 
             case GLFW_KEY_RIGHT:
-              switch (g_game_state.heading)
+              switch (g_world.snake.heading)
               {
-                case Heading_Left:
-                case Heading_Right:
+                case SnakeHeading_Left:
+                case SnakeHeading_Right:
                   break;
 
-                case Heading_Down:
+                case SnakeHeading_Down:
                   PlayTurnRightSound();
 
-                  g_game_state.heading = Heading_Right;
+                  g_world.snake.heading = SnakeHeading_Right;
                   break;
 
-                case Heading_Up:
+                case SnakeHeading_Up:
                   PlayTurnLeftSound();
 
-                  g_game_state.heading = Heading_Right;
+                  g_world.snake.heading = SnakeHeading_Right;
                   break;
               }
               break;
 
             case GLFW_KEY_DOWN:
-              switch (g_game_state.heading)
+              switch (g_world.snake.heading)
               {
-                case Heading_Left:
+                case SnakeHeading_Left:
                   PlayTurnRightSound();
 
-                  g_game_state.heading = Heading_Down;
+                  g_world.snake.heading = SnakeHeading_Down;
                   break;
 
-                case Heading_Right:
+                case SnakeHeading_Right:
                   PlayTurnLeftSound();
 
-                  g_game_state.heading = Heading_Down;
+                  g_world.snake.heading = SnakeHeading_Down;
                   break;
 
-                case Heading_Down:
-                case Heading_Up:
+                case SnakeHeading_Down:
+                case SnakeHeading_Up:
                   break;
               }
               break;
 
             case GLFW_KEY_UP:
-              switch (g_game_state.heading)
+              switch (g_world.snake.heading)
               {
-                case Heading_Left:
+                case SnakeHeading_Left:
                   PlayTurnLeftSound();
 
-                  g_game_state.heading = Heading_Up;
+                  g_world.snake.heading = SnakeHeading_Up;
                   break;
 
-                case Heading_Right:
+                case SnakeHeading_Right:
                   PlayTurnRightSound();
 
-                  g_game_state.heading = Heading_Up;
+                  g_world.snake.heading = SnakeHeading_Up;
                   break;
 
-                case Heading_Down:
-                case Heading_Up:
+                case SnakeHeading_Down:
+                case SnakeHeading_Up:
                   break;
               }
               break;
@@ -252,63 +252,63 @@ void L_Update()
           switch (MoveSnake())
           {
             case MoveSnake_Ok:
-              next_state = State_Play;
+              next_state = WorldState_Play;
               break;
 
             case MoveSnake_Food:
               S_PlaySound(Sound_Food);
 
-              ++g_game_state.score;
+              ++g_world.score;
 
               PlaceFood();
 
-              next_state = State_Play_SnakeGrowing;
+              next_state = WorldState_Play_SnakeGrowing;
               break;
 
             case MoveSnake_Wall:
               S_PlaySound(Sound_Wall);
 
-              next_state = State_Fail;
+              next_state = WorldState_Fail;
               break;
 
             case MoveSnake_Body:
               S_PlaySound(Sound_Body);
 
-              next_state = State_Fail;
+              next_state = WorldState_Fail;
               break;
 
             case MoveSnake_NoSpace:
               S_PlaySound(Sound_Success);
 
-              next_state = State_Success;
+              next_state = WorldState_Success;
               break;
           }
         }
 
-        if (next_state == State_Play)
+        if (next_state == WorldState_Play)
         {
-          g_game_state.head_offset = (float) (move_time / g_game_state.max_move_time);
-          g_game_state.tail_offset = (float) (move_time / g_game_state.max_move_time);
+          g_world.snake.head_offset = (float) (move_time / g_world.max_move_time);
+          g_world.snake.tail_offset = (float) (move_time / g_world.max_move_time);
         }
-        else if (next_state == State_Play_SnakeGrowing)
+        else if (next_state == WorldState_Play_SnakeGrowing)
         {
-          g_game_state.head_offset = (float) (move_time / g_game_state.max_move_time);
+          g_world.snake.head_offset = (float) (move_time / g_world.max_move_time);
         }
         else
         {
-          g_game_state.head_offset = 1.0f;
-          g_game_state.tail_offset = 1.0f;
+          g_world.snake.head_offset = 1.0f;
+          g_world.snake.tail_offset = 1.0f;
         }
       }
       break;
 
-    case State_Success:
+    case WorldState_Success:
       break;
 
-    case State_Fail:
+    case WorldState_Fail:
       break;
 
-    case State_Pause:
+    case WorldState_Pause:
       if (I_PauseKey() || I_GetDirectionKey() != -1)
       {
         next_state = paused_state;
@@ -316,13 +316,13 @@ void L_Update()
       break;
   }
 
-  g_game_state.state = next_state;
+  g_world.state = next_state;
 }
 
 void L_Stop()
 {
-  free(g_game_state.fields);
-  free(g_game_state.snake);
+  free(g_world.ground.fields);
+  free(g_world.snake.fields);
   free(s_empty_fields);
 }
 
@@ -333,9 +333,9 @@ enum MoveSnake MoveSnake()
   int new_x_pos = head->pos.x;
   int new_y_pos = head->pos.y;
 
-  switch (g_game_state.heading)
+  switch (g_world.snake.heading)
   {
-    case Heading_Left:
+    case SnakeHeading_Left:
       if (head->pos.x <= 0)
       {
         return MoveSnake_Wall;
@@ -344,8 +344,8 @@ enum MoveSnake MoveSnake()
       --new_x_pos;
       break;
 
-    case Heading_Right:
-      if (head->pos.x >= g_game_state.size.x - 1)
+    case SnakeHeading_Right:
+      if (head->pos.x >= g_world.ground.size.x - 1)
       {
         return MoveSnake_Wall;
       }
@@ -353,7 +353,7 @@ enum MoveSnake MoveSnake()
       ++new_x_pos;
       break;
 
-    case Heading_Down:
+    case SnakeHeading_Down:
       if (head->pos.y <= 0)
       {
         return MoveSnake_Wall;
@@ -362,8 +362,8 @@ enum MoveSnake MoveSnake()
       --new_y_pos;
       break;
 
-    case Heading_Up:
-      if (head->pos.y >= g_game_state.size.y - 1)
+    case SnakeHeading_Up:
+      if (head->pos.y >= g_world.ground.size.y - 1)
       {
         return MoveSnake_Wall;
       }
@@ -376,23 +376,23 @@ enum MoveSnake MoveSnake()
 
   struct Field* new_head = GetField(new_x_pos, new_y_pos);
 
-  switch (new_head->val)
+  switch (new_head->value)
   {
-    case Value_Empty:
+    case FieldValue_Empty:
       break;
 
-    case Value_Food:
+    case FieldValue_Food:
       res = MoveSnake_Food;
       break;
 
-    case Value_Wall:
+    case FieldValue_Wall:
       return MoveSnake_Wall;
 
-    case Value_Snake:
+    case FieldValue_Snake:
       return MoveSnake_Body;
   }
 
-  new_head->val = Value_Snake;
+  new_head->value = FieldValue_Snake;
 
   SetNewSnakeHead(new_head);
 
@@ -414,23 +414,23 @@ enum MoveSnake MoveSnake()
 void PlaceFood()
 {
   size_t count = 0;
-  for (size_t i = 0; i < g_game_state.field_count; ++i)
+  for (size_t i = 0; i < g_world.ground.field_count; ++i)
   {
-    if (g_game_state.fields[i].val == Value_Empty)
+    if (g_world.ground.fields[i].value == FieldValue_Empty)
     {
-      s_empty_fields[count++] = &g_game_state.fields[i];
+      s_empty_fields[count++] = &g_world.ground.fields[i];
     }
   }
 
-  s_empty_fields[(size_t) rand() % count]->val = Value_Food;
+  s_empty_fields[(size_t) rand() % count]->value = FieldValue_Food;
 }
 
 struct Field* GetField(int x, int y)
 {
-  assert(x >= 0 && x < g_game_state.size.x);
-  assert(y >= 0 && y < g_game_state.size.y);
+  assert(x >= 0 && x < g_world.ground.size.x);
+  assert(y >= 0 && y < g_world.ground.size.y);
 
-  return &g_game_state.fields[x + y * g_game_state.size.x];
+  return &g_world.ground.fields[x + y * g_world.ground.size.x];
 }
 
 void PlayTurnLeftSound()

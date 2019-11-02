@@ -10,22 +10,22 @@ find_package(GLFW3 REQUIRED MODULE)
 find_package(ALUT REQUIRED MODULE)  # FreeALUT
 
 add_executable(Snake
-  src/GameConfig.c
-  src/GameState.c
+  src/Config.c
   src/Graphics.c
   src/Input.c
   src/Logic.c
   src/Snake.c
   src/Sound.c
   src/Tools.c
+  src/World.c
 
-  src/GameConfig.h
-  src/GameState.h
+  src/Config.h
   src/Graphics.h
   src/Input.h
   src/Logic.h
   src/Sound.h
   src/Tools.h
+  src/World.h
 )
 
 set_target_compile_options(Snake
