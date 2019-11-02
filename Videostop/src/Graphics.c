@@ -12,8 +12,8 @@
 
 #include <GL/freeglut.h>
 
-#include "GameConfig.h"
-#include "GameState.h"
+#include "Config.h"
+#include "World.h"
 
 static void DrawDices();
 static void DrawStatusBar();
@@ -44,7 +44,7 @@ void G_Restart()
 {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(-MARGIN / 2.0f, (float) g_game_state.dice_count * DICE_SIZE + MARGIN / 2.0f,
+  glOrtho(-MARGIN / 2.0f, (float) g_world.dice_count * DICE_SIZE + MARGIN / 2.0f,
           -MARGIN / 2.0f - STATUSBAR_SIZE, DICE_SIZE + MARGIN / 2.0f, -1.0f, 1.0f);
 
   glMatrixMode(GL_MODELVIEW);
@@ -69,7 +69,7 @@ void DrawDices()
 {
   glPushMatrix();
 
-  for (int i = 0; i < g_game_state.dice_count; ++i)
+  for (int i = 0; i < g_world.dice_count; ++i)
   {
     DrawDice(i);
 
@@ -87,18 +87,18 @@ void DrawStatusBar()
   glScalef(TEXT_SIZE / 100.0f, TEXT_SIZE / 100.0f, 1.0f);
   glLineWidth(1.2f);
 
-  if (g_game_state.state == State_Setup)
+  if (g_world.state == WorldState_Setup)
   {
     glColor3f(STATUSBAR_DEFAULT_COLOR);
 
-    switch (g_game_state.statusbar_state)
+    switch (g_world.statusBar.state)
     {
-      case StatusBar_State_Show:
+      case StatusBarState_Show:
         glutStrokeString(TEXT_FONT, (unsigned char*) "Press CONTROL to start!");
         break;
-      case StatusBar_State_Hide:
+      case StatusBarState_Hide:
         break;
-      case StatusBar_State_Count:
+      case StatusBarState_Count:
         break;
     }
   }
@@ -118,18 +118,18 @@ void DrawDice(int i)
   float right = DICE_SIZE;
   float bottom = 0.0f;
 
-  switch (g_game_state.dices[i].state)
+  switch (g_world.dices[i].state)
   {
-    case State_Setup:
+    case DiceState_Setup:
       glColor3f(BORDER_SETUP_COLOR);
       break;
-    case State_Idle:
+    case DiceState_Idle:
       glColor3f(BORDER_IDLE_COLOR);
       break;
-    case State_Success:
+    case DiceState_Success:
       glColor3f(BORDER_SUCCESS_COLOR);
       break;
-    case State_Fail:
+    case DiceState_Fail:
       glColor3f(BORDER_FAIL_COLOR);
       break;
   }
@@ -148,18 +148,18 @@ void DrawDice(int i)
   glEnd();
   // clang-format on
 
-  switch (g_game_state.dices[i].state)
+  switch (g_world.dices[i].state)
   {
-    case State_Setup:
+    case DiceState_Setup:
       glColor3f(DICE_SETUP_COLOR);
       break;
-    case State_Idle:
+    case DiceState_Idle:
       glColor3f(DICE_IDLE_COLOR);
       break;
-    case State_Success:
+    case DiceState_Success:
       glColor3f(DICE_SUCCESS_COLOR);
       break;
-    case State_Fail:
+    case DiceState_Fail:
       glColor3f(DICE_FAIL_COLOR);
       break;
   }
@@ -178,23 +178,23 @@ void DrawDice(int i)
   glEnd();
   // clang-format on
 
-  switch (g_game_state.dices[i].state)
+  switch (g_world.dices[i].state)
   {
-    case State_Setup:
+    case DiceState_Setup:
       glColor3f(DOT_SETUP_COLOR);
       break;
-    case State_Idle:
+    case DiceState_Idle:
       glColor3f(DOT_IDLE_COLOR);
       break;
-    case State_Success:
+    case DiceState_Success:
       glColor3f(DOT_SUCCESS_COLOR);
       break;
-    case State_Fail:
+    case DiceState_Fail:
       glColor3f(DOT_FAIL_COLOR);
       break;
   }
 
-  DrawDots(g_game_state.dices[i].value);
+  DrawDots(g_world.dices[i].value);
 }
 
 void DrawDots(int value)
@@ -331,10 +331,10 @@ void DrawDot()
 void DrawAttempts()
 {
   char buf1[10];
-  snprintf(buf1, sizeof(buf1), "%d", g_game_state.successful_attempts);
+  snprintf(buf1, sizeof(buf1), "%d", g_world.successful_attempts);
 
   char buf2[10];
-  snprintf(buf2, sizeof(buf2), "%d", g_game_state.failed_attempts);
+  snprintf(buf2, sizeof(buf2), "%d", g_world.failed_attempts);
 
   glColor3f(STATUSBAR_DEFAULT_COLOR);
   glutStrokeString(TEXT_FONT, (unsigned char*) "Attempts: ");
@@ -349,7 +349,7 @@ void DrawAttempts()
 void DrawScore()
 {
   char buf[20];
-  snprintf(buf, sizeof(buf), " Score: %d", g_game_state.score);
+  snprintf(buf, sizeof(buf), " Score: %d", g_world.score);
 
   glColor3f(STATUSBAR_DEFAULT_COLOR);
   glutStrokeString(TEXT_FONT, (unsigned char*) &buf[0]);

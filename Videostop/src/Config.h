@@ -3,8 +3,8 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef GAME_CONFIG_H
-#define GAME_CONFIG_H
+#ifndef CONFIG_H
+#define CONFIG_H
 
 #define MIN_DICE_COUNT 2
 #define MAX_DICE_COUNT 5
@@ -47,12 +47,12 @@
 #define STATUSBAR_SUCCESS_COLOR 0.0f, 0.5f, 0.0f
 #define STATUSBAR_FAIL_COLOR 0.5f, 0.0f, 0.0f
 
-struct GameConfig
+struct Config
 {
   int dice_count;
   float shuffle_frequency;
 };
 
-extern struct GameConfig g_game_config;
+extern struct Config g_config;
 
-#endif  // GAME_CONFIG_H
+#endif  // CONFIG_H

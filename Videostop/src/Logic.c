@@ -12,15 +12,15 @@
 
 #include <GL/freeglut.h>
 
-#include "GameConfig.h"
-#include "GameState.h"
+#include "Config.h"
 #include "Graphics.h"
 #include "Input.h"
 #include "Sound.h"
+#include "World.h"
 
 static void UpdateWindowTitle();
 
-static void ShuffleDices(enum State state);
+static void ShuffleDices(enum DiceState state);
 static bool CountScore();
 
 void L_Start()
@@ -34,18 +34,17 @@ void L_Start()
 
 void L_Restart()
 {
-  g_game_state.dice_count = g_game_config.dice_count;
+  g_world.state = WorldState_Setup;
 
-  ShuffleDices(State_Setup);
+  g_world.dice_count = g_config.dice_count;
 
-  g_game_state.state = State_Setup;
+  ShuffleDices(DiceState_Setup);
 
-  g_game_state.successful_attempts = 0;
-  g_game_state.failed_attempts = 0;
+  g_world.statusBar.state = StatusBarState_Show;
 
-  g_game_state.score = 0;
-
-  g_game_state.statusbar_state = StatusBar_State_Show;
+  g_world.successful_attempts = 0;
+  g_world.failed_attempts = 0;
+  g_world.score = 0;
 }
 
 void L_Update()
@@ -59,7 +58,7 @@ void L_Update()
   int elapsed = now - before;
   before = now;
 
-  if (g_game_state.dice_count != g_game_config.dice_count)
+  if (g_world.dice_count != g_config.dice_count)
   {
     I_Restart();
     L_Restart();
@@ -92,44 +91,44 @@ void L_Update()
   bool speed_up_key = I_SpeedUpKey();
   bool speed_down_key = I_SpeedDownKey();
 
-  switch (g_game_state.state)
+  switch (g_world.state)
   {
-    case State_Setup:
+    case WorldState_Setup:
       idle_time += elapsed;
       statusbar_time += elapsed;
 
       if (control_key || control_button)
       {
         S_PlaySound(Sound_Start);
-        ShuffleDices(State_Idle);
+        ShuffleDices(DiceState_Idle);
 
-        g_game_state.state = State_Idle;
+        g_world.state = WorldState_Idle;
         idle_time = 0;
         break;
       }
 
       if (size_up_key)
       {
-        if (g_game_config.dice_count < MAX_DICE_COUNT)
+        if (g_config.dice_count < MAX_DICE_COUNT)
         {
-          ++g_game_config.dice_count;
+          ++g_config.dice_count;
         }
       }
 
       if (size_down_key)
       {
-        if (g_game_config.dice_count > MIN_DICE_COUNT)
+        if (g_config.dice_count > MIN_DICE_COUNT)
         {
-          --g_game_config.dice_count;
+          --g_config.dice_count;
         }
       }
 
       if (speed_up_key)
       {
-        g_game_config.shuffle_frequency += SHUFFLE_FREQUENCY_STEP_HZ;
-        if (g_game_config.shuffle_frequency > MAX_SHUFFLE_FREQUENCY_HZ)
+        g_config.shuffle_frequency += SHUFFLE_FREQUENCY_STEP_HZ;
+        if (g_config.shuffle_frequency > MAX_SHUFFLE_FREQUENCY_HZ)
         {
-          g_game_config.shuffle_frequency = MAX_SHUFFLE_FREQUENCY_HZ;
+          g_config.shuffle_frequency = MAX_SHUFFLE_FREQUENCY_HZ;
         }
 
         UpdateWindowTitle();
@@ -137,36 +136,35 @@ void L_Update()
 
       if (speed_down_key)
       {
-        g_game_config.shuffle_frequency -= SHUFFLE_FREQUENCY_STEP_HZ;
-        if (g_game_config.shuffle_frequency < MIN_SHUFFLE_FREQUENCY_HZ)
+        g_config.shuffle_frequency -= SHUFFLE_FREQUENCY_STEP_HZ;
+        if (g_config.shuffle_frequency < MIN_SHUFFLE_FREQUENCY_HZ)
         {
-          g_game_config.shuffle_frequency = MIN_SHUFFLE_FREQUENCY_HZ;
+          g_config.shuffle_frequency = MIN_SHUFFLE_FREQUENCY_HZ;
         }
 
         UpdateWindowTitle();
       }
 
-      if (idle_time >= 1000.0f / g_game_config.shuffle_frequency)
+      if (idle_time >= 1000.0f / g_config.shuffle_frequency)
       {
         S_PlaySound(Sound_Shuffle);
-        ShuffleDices(State_Setup);
+        ShuffleDices(DiceState_Setup);
 
         idle_time = 0;
       }
 
       if (statusbar_time >= 1000.0f / STATUSBAR_FREQUENCY_HZ)
       {
-        g_game_state.statusbar_state += 1;
-        if (g_game_state.statusbar_state >= StatusBar_State_Count)
+        if (++g_world.statusBar.state >= StatusBarState_Count)
         {
-          g_game_state.statusbar_state = 0;
+          g_world.statusBar.state = 0;
         }
 
         statusbar_time = 0;
       }
       break;
 
-    case State_Idle:
+    case WorldState_Idle:
       idle_time += elapsed;
 
       if (control_key || control_button)
@@ -175,38 +173,38 @@ void L_Update()
         {
           S_PlaySound(Sound_Success);
 
-          g_game_state.state = State_Success;
+          g_world.state = WorldState_Success;
           stop_time = 0;
         }
         else
         {
           S_PlaySound(Sound_Fail);
 
-          g_game_state.state = State_Fail;
+          g_world.state = WorldState_Fail;
           stop_time = 0;
         }
         break;
       }
 
-      if (idle_time >= 1000.0f / g_game_config.shuffle_frequency)
+      if (idle_time >= 1000.0f / g_config.shuffle_frequency)
       {
         S_PlaySound(Sound_Shuffle);
-        ShuffleDices(State_Idle);
+        ShuffleDices(DiceState_Idle);
 
         idle_time = 0;
       }
       break;
 
-    case State_Success:
-    case State_Fail:
+    case WorldState_Success:
+    case WorldState_Fail:
       stop_time += elapsed;
 
       if (stop_time >= STOP_TIME_MS)
       {
         S_PlaySound(Sound_Shuffle);
-        ShuffleDices(State_Idle);
+        ShuffleDices(DiceState_Idle);
 
-        g_game_state.state = State_Idle;
+        g_world.state = WorldState_Idle;
         idle_time = 0;
       }
       break;
@@ -220,17 +218,17 @@ void L_Stop()
 void UpdateWindowTitle()
 {
   char buf[30];
-  snprintf(buf, sizeof(buf), "Videostop @ %.2f Hz", g_game_config.shuffle_frequency);
+  snprintf(buf, sizeof(buf), "Videostop @ %.2f Hz", g_config.shuffle_frequency);
 
   glutSetWindowTitle(buf);
 }
 
-void ShuffleDices(enum State state)
+void ShuffleDices(enum DiceState state)
 {
-  for (int i = 0; i < g_game_state.dice_count; ++i)
+  for (int i = 0; i < g_world.dice_count; ++i)
   {
-    g_game_state.dices[i].value = rand() % 6 + 1;
-    g_game_state.dices[i].state = state;
+    g_world.dices[i].value = rand() % 6 + 1;
+    g_world.dices[i].state = state;
   }
 }
 
@@ -242,9 +240,9 @@ bool CountScore()
   {
     int count = 0;
 
-    for (int i = 0; i < g_game_state.dice_count; ++i)
+    for (int i = 0; i < g_world.dice_count; ++i)
     {
-      if (g_game_state.dices[i].value == value)
+      if (g_world.dices[i].value == value)
       {
         ++count;
       }
@@ -252,40 +250,40 @@ bool CountScore()
 
     if (count > 1)
     {
-      for (int i = 0; i < g_game_state.dice_count; ++i)
+      for (int i = 0; i < g_world.dice_count; ++i)
       {
-        if (g_game_state.dices[i].value == value)
+        if (g_world.dices[i].value == value)
         {
-          g_game_state.dices[i].state = State_Success;
+          g_world.dices[i].state = DiceState_Success;
         }
       }
 
-      g_game_state.score += 2 * (count - 1);
+      g_world.score += 2 * (count - 1);
       match = true;
     }
   }
 
   if (match)
   {
-    for (int i = 0; i < g_game_state.dice_count; ++i)
+    for (int i = 0; i < g_world.dice_count; ++i)
     {
-      if (g_game_state.dices[i].state != State_Success)
+      if (g_world.dices[i].state != DiceState_Success)
       {
-        g_game_state.dices[i].state = State_Idle;
+        g_world.dices[i].state = DiceState_Idle;
       }
     }
 
-    ++g_game_state.successful_attempts;
+    ++g_world.successful_attempts;
   }
   else
   {
-    for (int i = 0; i < g_game_state.dice_count; ++i)
+    for (int i = 0; i < g_world.dice_count; ++i)
     {
-      g_game_state.dices[i].state = State_Fail;
+      g_world.dices[i].state = DiceState_Fail;
     }
 
-    ++g_game_state.failed_attempts;
-    g_game_state.score -= g_game_state.dice_count;
+    ++g_world.failed_attempts;
+    g_world.score -= g_world.dice_count;
   }
 
   return match;

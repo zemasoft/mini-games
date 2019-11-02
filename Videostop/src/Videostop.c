@@ -8,7 +8,7 @@
 #include <AL/alut.h>
 #include <GL/freeglut.h>
 
-#include "GameConfig.h"
+#include "Config.h"
 #include "Graphics.h"
 #include "Input.h"
 #include "Logic.h"
@@ -31,8 +31,8 @@ void Start(int argc, char** argv)
   glutInit(&argc, argv);
   alutInit(&argc, argv);
 
-  g_game_config.dice_count = DEFAULT_DICE_COUNT;
-  g_game_config.shuffle_frequency = DEFAULT_SHUFFLE_FREQUENCY_HZ;
+  g_config.dice_count = DEFAULT_DICE_COUNT;
+  g_config.shuffle_frequency = DEFAULT_SHUFFLE_FREQUENCY_HZ;
 
   if (argc > 1)
   {
@@ -50,12 +50,12 @@ void Start(int argc, char** argv)
         dice_count = MAX_DICE_COUNT;
       }
 
-      g_game_config.dice_count = (int) dice_count;
+      g_config.dice_count = (int) dice_count;
     }
   }
 
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_MULTISAMPLE);
-  glutInitWindowSize(g_game_config.dice_count * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS);
+  glutInitWindowSize(g_config.dice_count * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS);
   glutCreateWindow("Videostop");
 
   I_Start();

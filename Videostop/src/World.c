@@ -3,6 +3,6 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include "GameConfig.h"
+#include "World.h"
 
-struct GameConfig g_game_config;
+struct World g_world;
