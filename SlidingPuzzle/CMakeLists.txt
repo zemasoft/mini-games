@@ -10,20 +10,20 @@ find_package(GLUT REQUIRED MODULE)  # FreeGLUT
 find_package(ALUT REQUIRED MODULE)  # FreeALUT
 
 add_executable(SlidingPuzzle
-  src/GameConfig.c
-  src/GameState.c
+  src/Config.c
   src/Graphics.c
   src/Input.c
   src/Logic.c
   src/SlidingPuzzle.c
   src/Sound.c
+  src/World.c
 
-  src/GameConfig.h
-  src/GameState.h
+  src/Config.h
   src/Graphics.h
   src/Input.h
   src/Logic.h
   src/Sound.h
+  src/World.h
 )
 
 set_target_compile_options(SlidingPuzzle

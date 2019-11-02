@@ -3,8 +3,8 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef GAME_CONFIG_H
-#define GAME_CONFIG_H
+#ifndef CONFIG_H
+#define CONFIG_H
 
 #include <stddef.h>  // size_t
 
@@ -46,7 +46,7 @@
 
 #define STATUSBAR_COLOR 1.0f, 1.0f, 1.0f
 
-struct GameConfig
+struct Config
 {
   struct
   {
@@ -55,6 +55,6 @@ struct GameConfig
   } size;
 };
 
-extern struct GameConfig g_game_config;
+extern struct Config g_config;
 
-#endif  // GAME_CONFIG_H
+#endif  // CONFIG_H

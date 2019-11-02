@@ -10,8 +10,8 @@
 
 #include <GL/freeglut.h>
 
-#include "GameConfig.h"
-#include "GameState.h"
+#include "Config.h"
+#include "World.h"
 
 struct Projection
 {
@@ -44,9 +44,9 @@ void G_Restart()
 {
   struct Projection projection;
   projection.left = -MARGIN / 2.0f;
-  projection.right = (float) g_game_state.size.x * PIECE_SIZE + MARGIN / 2.0f;
+  projection.right = (float) g_world.size.x * PIECE_SIZE + MARGIN / 2.0f;
   projection.bottom = -MARGIN / 2.0f - STATUSBAR_SIZE;
-  projection.top = (float) g_game_state.size.y * PIECE_SIZE + MARGIN / 2.0f;
+  projection.top = (float) g_world.size.y * PIECE_SIZE + MARGIN / 2.0f;
 
   InitPieceStrings(&projection);
 
@@ -74,17 +74,17 @@ void G_Stop()
 
 void InitPieceStrings(const struct Projection* projection)
 {
-  for (size_t i = 0; i < g_game_state.piece_count; ++i)
+  for (size_t i = 0; i < g_world.piece_count; ++i)
   {
-    InitPieceString(&g_game_state.pieces[i], projection);
+    InitPieceString(&g_world.pieces[i], projection);
   }
 }
 
 void DrawPieces()
 {
-  for (size_t i = 0; i < g_game_state.piece_count; ++i)
+  for (size_t i = 0; i < g_world.piece_count; ++i)
   {
-    DrawPiece(&g_game_state.pieces[i]);
+    DrawPiece(&g_world.pieces[i]);
   }
 }
 
@@ -96,18 +96,18 @@ void DrawStatusBar()
   glScalef(TEXT_SIZE / 100.0f, TEXT_SIZE / 100.0f, 1.0f);
   glLineWidth(1.2f);
 
-  if (g_game_state.state == State_Setup)
+  if (g_world.state == WorldState_Setup)
   {
     glColor3f(STATUSBAR_COLOR);
 
-    switch (g_game_state.statusbar_state)
+    switch (g_world.statusBar.state)
     {
-      case StatusBar_State_Show:
+      case StatusBarState_Show:
         glutStrokeString(TEXT_FONT, (unsigned char*) "Press CONTROL to start!");
         break;
-      case StatusBar_State_Hide:
+      case StatusBarState_Hide:
         break;
-      case StatusBar_State_Count:
+      case StatusBarState_Count:
         break;
     }
   }
@@ -148,16 +148,16 @@ void DrawPiece(const struct Piece* piece)
 
   switch (piece->state)
   {
-    case State_Setup:
+    case PieceState_Setup:
       glColor3f(BORDER_SETUP_COLOR);
       break;
-    case State_Idle:
+    case PieceState_Idle:
       glColor3f(BORDER_IDLE_COLOR);
       break;
-    case State_Moving:
+    case PieceState_Moving:
       glColor3f(BORDER_MOVING_COLOR);
       break;
-    case State_Success:
+    case PieceState_Success:
       glColor3f(BORDER_SUCCESS_COLOR);
       break;
   }
@@ -178,16 +178,16 @@ void DrawPiece(const struct Piece* piece)
 
   switch (piece->state)
   {
-    case State_Setup:
+    case PieceState_Setup:
       glColor3f(PIECE_SETUP_COLOR);
       break;
-    case State_Idle:
+    case PieceState_Idle:
       glColor3f(PIECE_IDLE_COLOR);
       break;
-    case State_Moving:
+    case PieceState_Moving:
       glColor3f(PIECE_MOVING_COLOR);
       break;
-    case State_Success:
+    case PieceState_Success:
       glColor3f(PIECE_SUCCESS_COLOR);
       break;
   }
@@ -215,16 +215,16 @@ void DrawValue(const struct Piece* piece)
 {
   switch (piece->state)
   {
-    case State_Setup:
+    case PieceState_Setup:
       glColor3f(VALUE_SETUP_COLOR);
       break;
-    case State_Idle:
+    case PieceState_Idle:
       glColor3f(VALUE_IDLE_COLOR);
       break;
-    case State_Moving:
+    case PieceState_Moving:
       glColor3f(VALUE_MOVING_COLOR);
       break;
-    case State_Success:
+    case PieceState_Success:
       glColor3f(VALUE_SUCCESS_COLOR);
       break;
   }
@@ -239,7 +239,7 @@ void DrawValue(const struct Piece* piece)
 void DrawMoves()
 {
   char buf[30];
-  snprintf(buf, sizeof(buf), "Moves: %d / %d", g_game_state.moves, g_game_state.single_moves);
+  snprintf(buf, sizeof(buf), "Moves: %d / %d", g_world.moves, g_world.single_moves);
 
   glColor3f(STATUSBAR_COLOR);
   glutStrokeString(TEXT_FONT, (unsigned char*) &buf[0]);

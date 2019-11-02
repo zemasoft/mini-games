@@ -3,23 +3,25 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef GAME_STATE_H
-#define GAME_STATE_H
+#ifndef WORLD_H
+#define WORLD_H
 
 #include <stddef.h>  // size_t
 
-#include "GameConfig.h"
-
-enum State
-{
-  State_Setup,
-  State_Idle,
-  State_Moving,
-  State_Success
-};
+#include "Config.h"
 
 struct Piece
 {
+  enum PieceState
+  {
+    PieceState_Setup,
+    PieceState_Idle,
+    PieceState_Moving,
+    PieceState_Success
+  } state;
+
+  int value;
+
   struct
   {
     float x;
@@ -32,10 +34,6 @@ struct Piece
     float y;
   } pos_w;
 
-  int value;
-
-  enum State state;
-
   struct
   {
     char value[STRING_SIZE];
@@ -44,8 +42,27 @@ struct Piece
   } string;
 };
 
-struct GameState
+struct StatusBar
 {
+  enum StatusBarState
+  {
+    StatusBarState_Show = 0,
+    StatusBarState_Hide,
+
+    StatusBarState_Count
+  } state;
+};
+
+struct World
+{
+  enum WorldState
+  {
+    WorldState_Setup,
+    WorldState_Idle,
+    WorldState_Moving,
+    WorldState_Success
+  } state;
+
   struct
   {
     size_t x;
@@ -56,20 +73,12 @@ struct GameState
   size_t piece_count;
   size_t blank;
 
-  enum State state;
+  struct StatusBar statusBar;
 
   int single_moves;
   int moves;
-
-  enum
-  {
-    StatusBar_State_Show = 0,
-    StatusBar_State_Hide,
-
-    StatusBar_State_Count
-  } statusbar_state;
 };
 
-extern struct GameState g_game_state;
+extern struct World g_world;
 
-#endif  // GAME_STATE_H
+#endif  // WORLD_H

@@ -9,7 +9,7 @@
 
 #include <GL/freeglut.h>
 
-#include "GameConfig.h"
+#include "Config.h"
 
 static bool s_reset_key;
 static bool s_control_key;
