@@ -106,7 +106,7 @@ void L_Update()
     I_Restart();
     L_Restart();
     S_Restart();
-    // G_Restart();
+    G_Restart();
 
     statusbar_time = 0;
     return;
