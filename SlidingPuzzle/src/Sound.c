@@ -7,8 +7,8 @@
 
 #include <AL/alut.h>
 
-static const char* s_sound_file_names[Sound_Count] = {"start.wav", "move.wav", "cannot-move.wav",
-                                                      "success.wav"};
+static const char* const s_sound_file_names[Sound_Count] = {"start.wav", "move.wav",
+                                                            "cannot-move.wav", "success.wav"};
 
 static ALuint s_sound_sources[Sound_Count];
 
@@ -33,7 +33,7 @@ void S_Stop()
 {
 }
 
-void S_PlaySound(const enum Sound sound)
+void S_PlaySound(enum Sound const sound)
 {
   alSourcePlay(s_sound_sources[sound]);
 }

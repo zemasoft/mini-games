@@ -72,7 +72,7 @@ void G_Stop()
 {
 }
 
-void InitPieceStrings(const struct Projection* projection)
+void InitPieceStrings(const struct Projection* const projection)
 {
   for (size_t i = 0; i < g_world.piece_count; ++i)
   {
@@ -119,7 +119,7 @@ void DrawStatusBar()
   glPopMatrix();
 }
 
-void InitPieceString(struct Piece* piece, const struct Projection* projection)
+void InitPieceString(struct Piece* const piece, const struct Projection* const projection)
 {
   snprintf(piece->string.value, sizeof(piece->string.value), "%d", piece->value);
 
@@ -131,7 +131,7 @@ void InitPieceString(struct Piece* piece, const struct Projection* projection)
                          (projection->top - projection->bottom) * VALUE_SIZE;
 }
 
-void DrawPiece(const struct Piece* piece)
+void DrawPiece(const struct Piece* const piece)
 {
   if (piece->value == 0)
   {
@@ -211,7 +211,7 @@ void DrawPiece(const struct Piece* piece)
   glPopMatrix();
 }
 
-void DrawValue(const struct Piece* piece)
+void DrawValue(const struct Piece* const piece)
 {
   switch (piece->state)
   {

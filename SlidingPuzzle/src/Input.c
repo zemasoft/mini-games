@@ -57,7 +57,7 @@ void I_Stop()
 
 bool I_ResetKey()
 {
-  const bool res = s_reset_key;
+  bool const res = s_reset_key;
 
   s_reset_key = false;
 
@@ -66,7 +66,7 @@ bool I_ResetKey()
 
 bool I_ControlKey()
 {
-  const bool res = s_control_key;
+  bool const res = s_control_key;
 
   s_control_key = false;
 
@@ -75,7 +75,7 @@ bool I_ControlKey()
 
 bool I_ControlButton(int* const x, int* const y)
 {
-  const bool res = s_control_button;
+  bool const res = s_control_button;
 
   s_control_button = false;
 
@@ -95,7 +95,7 @@ int I_PopDirectionKey()
     return -1;
   }
 
-  const int key = s_direction_keys[s_bot++];
+  int const key = s_direction_keys[s_bot++];
 
   if (s_bot > DIRECTION_KEYS_SIZE - 1)
   {
@@ -105,7 +105,7 @@ int I_PopDirectionKey()
   return key;
 }
 
-void Keyboard(const unsigned char key, const int x, const int y)
+void Keyboard(unsigned char const key, int const x, int const y)
 {
   (void) x;
   (void) y;
@@ -127,7 +127,7 @@ void Keyboard(const unsigned char key, const int x, const int y)
   }
 }
 
-void Special(const int key, const int x, const int y)
+void Special(int const key, int const x, int const y)
 {
   (void) x;
   (void) y;
@@ -148,7 +148,7 @@ void Special(const int key, const int x, const int y)
   }
 }
 
-void Mouse(const int button, const int state, const int x, const int y)
+void Mouse(int const button, int const state, int const x, int const y)
 {
   if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
   {
