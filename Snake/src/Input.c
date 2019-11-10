@@ -48,7 +48,7 @@ void I_Stop()
 
 bool I_ResetKey()
 {
-  bool res = s_reset_key;
+  bool const res = s_reset_key;
 
   s_reset_key = false;
 
@@ -57,7 +57,7 @@ bool I_ResetKey()
 
 bool I_PauseKey()
 {
-  bool res = s_pause_key;
+  bool const res = s_pause_key;
 
   s_pause_key = false;
 
@@ -81,7 +81,7 @@ int I_PopDirectionKey()
     return -1;
   }
 
-  int key = s_direction_keys[s_bot++];
+  int const key = s_direction_keys[s_bot++];
 
   if (s_bot > DIRECTION_KEYS_SIZE - 1)
   {
@@ -91,7 +91,8 @@ int I_PopDirectionKey()
   return key;
 }
 
-void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void KeyCallback(GLFWwindow* window, int const key, int const scancode, int const action,
+                 int const mods)
 {
   (void) window;
   (void) scancode;

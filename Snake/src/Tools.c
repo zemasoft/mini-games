@@ -20,7 +20,7 @@ size_t GetSnakeLength()
          g_world.snake.field_count;
 }
 
-void SetNewSnakeHead(struct Field* new_head)
+void SetNewSnakeHead(struct Field* const new_head)
 {
   assert(new_head->value == FieldValue_Snake);
 
@@ -30,7 +30,7 @@ void SetNewSnakeHead(struct Field* new_head)
 
 struct Field* GetSnakeHead()
 {
-  struct Field* head = g_world.snake.fields[GetSnakeHeadIndex()];
+  struct Field* const head = g_world.snake.fields[GetSnakeHeadIndex()];
 
   assert(head->value == FieldValue_Snake);
 
@@ -45,14 +45,14 @@ void RemoveSnakeTail()
 
 struct Field* GetSnakeTail()
 {
-  struct Field* tail = g_world.snake.fields[GetSnakeTailIndex()];
+  struct Field* const tail = g_world.snake.fields[GetSnakeTailIndex()];
 
   assert(tail->value == FieldValue_Snake);
 
   return tail;
 }
 
-struct Field* GetSnakeElement(size_t index)
+struct Field* GetSnakeElement(size_t const index)
 {
   assert(!IsSnakeEmpty());
 
@@ -71,19 +71,19 @@ struct Field* GetSnakeElement(size_t index)
     }
   }
 
-  struct Field* element = g_world.snake.fields[index];
+  struct Field* const element = g_world.snake.fields[index];
 
   assert(element->value == FieldValue_Snake);
 
   return element;
 }
 
-struct Field* GetNextSnakeElement(size_t index)
+struct Field* GetNextSnakeElement(size_t const index)
 {
   return GetSnakeElement(GetNextSnakeIndex(index));
 }
 
-struct Field* GetPrevSnakeElement(size_t index)
+struct Field* GetPrevSnakeElement(size_t const index)
 {
   return GetSnakeElement(GetPrevSnakeIndex(index));
 }
@@ -102,12 +102,12 @@ size_t GetSnakeTailIndex()
   return g_world.snake.tail;
 }
 
-size_t GetNextSnakeIndex(size_t index)
+size_t GetNextSnakeIndex(size_t const index)
 {
   return (index + 1) % g_world.snake.field_count;
 }
 
-size_t GetPrevSnakeIndex(size_t index)
+size_t GetPrevSnakeIndex(size_t const index)
 {
   return (index - 1 + g_world.snake.field_count) % g_world.snake.field_count;
 }

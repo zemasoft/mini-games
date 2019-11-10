@@ -67,7 +67,7 @@ void L_Restart()
   {
     for (int x = 0; x < g_world.ground.size.x; ++x)
     {
-      struct Field* field = GetField(x, y);
+      struct Field* const field = GetField(x, y);
 
       field->value = FieldValue_Empty;
       field->pos.x = x;
@@ -84,11 +84,11 @@ void L_Restart()
 
   g_world.snake.fields = malloc(g_world.snake.field_count * sizeof(struct Field*));
 
-  int init_y_pos = g_world.ground.size.y / 2;
+  int const init_y_pos = g_world.ground.size.y / 2;
 
-  struct Field* head = GetField(4, init_y_pos);
-  struct Field* body = GetField(3, init_y_pos);
-  struct Field* tail = GetField(2, init_y_pos);
+  struct Field* const head = GetField(4, init_y_pos);
+  struct Field* const body = GetField(3, init_y_pos);
+  struct Field* const tail = GetField(2, init_y_pos);
 
   head->value = FieldValue_Snake;
   body->value = FieldValue_Snake;
@@ -128,8 +128,8 @@ void L_Update()
 
   static enum WorldState paused_state = WorldState_Play;
 
-  double now = glfwGetTime();
-  double elapsed = now - before;
+  double const now = glfwGetTime();
+  double const elapsed = now - before;
   before = now;
 
   if (I_ResetKey())
@@ -328,7 +328,7 @@ void L_Stop()
 
 enum MoveSnake MoveSnake()
 {
-  const struct Field* head = GetSnakeHead();
+  const struct Field* const head = GetSnakeHead();
 
   int new_x_pos = head->pos.x;
   int new_y_pos = head->pos.y;
@@ -374,7 +374,7 @@ enum MoveSnake MoveSnake()
 
   enum MoveSnake res = MoveSnake_Ok;
 
-  struct Field* new_head = GetField(new_x_pos, new_y_pos);
+  struct Field* const new_head = GetField(new_x_pos, new_y_pos);
 
   switch (new_head->value)
   {
@@ -425,7 +425,7 @@ void PlaceFood()
   s_empty_fields[(size_t) rand() % count]->value = FieldValue_Food;
 }
 
-struct Field* GetField(int x, int y)
+struct Field* GetField(int const x, int const y)
 {
   assert(x >= 0 && x < g_world.ground.size.x);
   assert(y >= 0 && y < g_world.ground.size.y);

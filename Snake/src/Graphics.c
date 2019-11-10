@@ -76,10 +76,10 @@ void DrawStatusBar()
   glPushMatrix();
   glTranslatef(-MARGIN_SIZE, (float) g_world.ground.size.y * FIELD_SIZE + MARGIN_SIZE, 0.0f);
 
-  float left = 0.0f;
-  float top = STATUSBAR_SIZE;
-  float right = MARGIN_SIZE + (float) g_world.ground.size.x * FIELD_SIZE + MARGIN_SIZE;
-  float bottom = 0.0f;
+  float const left = 0.0f;
+  float const top = STATUSBAR_SIZE;
+  float const right = MARGIN_SIZE + (float) g_world.ground.size.x * FIELD_SIZE + MARGIN_SIZE;
+  float const bottom = 0.0f;
 
   glColor3ub(STATUSBAR_COLOR);
 
@@ -97,10 +97,10 @@ void DrawStatusBar()
 
 void DrawMargin()
 {
-  float left = -MARGIN_SIZE;
-  float top = (float) g_world.ground.size.y * FIELD_SIZE + MARGIN_SIZE;
-  float right = (float) g_world.ground.size.x * FIELD_SIZE + MARGIN_SIZE;
-  float bottom = -MARGIN_SIZE;
+  float const left = -MARGIN_SIZE;
+  float const top = (float) g_world.ground.size.y * FIELD_SIZE + MARGIN_SIZE;
+  float const right = (float) g_world.ground.size.x * FIELD_SIZE + MARGIN_SIZE;
+  float const bottom = -MARGIN_SIZE;
 
   glColor3ub(MARGIN_COLOR);
 
@@ -132,15 +132,15 @@ void DrawSnake()
   }
 }
 
-void DrawField(const struct Field* field)
+void DrawField(const struct Field* const field)
 {
   glPushMatrix();
   glTranslatef((float) field->pos.x * FIELD_SIZE, (float) field->pos.y * FIELD_SIZE, 0.0f);
 
-  float left = 0.0f;
-  float top = FIELD_SIZE;
-  float right = FIELD_SIZE;
-  float bottom = 0.0f;
+  float const left = 0.0f;
+  float const top = FIELD_SIZE;
+  float const right = FIELD_SIZE;
+  float const bottom = 0.0f;
 
   if (field->pos.x % 2 == 0)
   {
@@ -203,14 +203,14 @@ void DrawFood()
   glEnd();
 }
 
-void DrawSnakeElement(size_t index)
+void DrawSnakeElement(size_t const index)
 {
-  const struct Field* e = GetSnakeElement(index);
+  const struct Field* const e = GetSnakeElement(index);
 
   assert(e != NULL);
 
-  const struct Field* prev_e = GetPrevSnakeElement(index);
-  const struct Field* next_e = GetNextSnakeElement(index);
+  const struct Field* const prev_e = GetPrevSnakeElement(index);
+  const struct Field* const next_e = GetNextSnakeElement(index);
 
   assert(prev_e != NULL || next_e != NULL);
 
@@ -282,15 +282,15 @@ void DrawSnakeElement(size_t index)
   }
 }
 
-void DrawSnakeHeadUp(const struct Field* head)
+void DrawSnakeHeadUp(const struct Field* const head)
 {
   glPushMatrix();
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
 
-  float left = 0.0f;
-  float top = FIELD_SIZE * g_world.snake.head_offset;
-  float right = FIELD_SIZE;
-  float bottom = 0.0f;
+  float const left = 0.0f;
+  float const top = FIELD_SIZE * g_world.snake.head_offset;
+  float const right = FIELD_SIZE;
+  float const bottom = 0.0f;
 
   glColor3ub(SNAKE_COLOR);
 
@@ -306,15 +306,15 @@ void DrawSnakeHeadUp(const struct Field* head)
   glPopMatrix();
 }
 
-void DrawSnakeHeadDown(const struct Field* head)
+void DrawSnakeHeadDown(const struct Field* const head)
 {
   glPushMatrix();
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
 
-  float left = 0.0f;
-  float top = FIELD_SIZE;
-  float right = FIELD_SIZE;
-  float bottom = FIELD_SIZE * (1.0f - g_world.snake.head_offset);
+  float const left = 0.0f;
+  float const top = FIELD_SIZE;
+  float const right = FIELD_SIZE;
+  float const bottom = FIELD_SIZE * (1.0f - g_world.snake.head_offset);
 
   glColor3ub(SNAKE_COLOR);
 
@@ -330,15 +330,15 @@ void DrawSnakeHeadDown(const struct Field* head)
   glPopMatrix();
 }
 
-void DrawSnakeHeadLeft(const struct Field* head)
+void DrawSnakeHeadLeft(const struct Field* const head)
 {
   glPushMatrix();
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
 
-  float left = FIELD_SIZE * (1.0f - g_world.snake.head_offset);
-  float top = FIELD_SIZE;
-  float right = FIELD_SIZE;
-  float bottom = 0.0f;
+  float const left = FIELD_SIZE * (1.0f - g_world.snake.head_offset);
+  float const top = FIELD_SIZE;
+  float const right = FIELD_SIZE;
+  float const bottom = 0.0f;
 
   glColor3ub(SNAKE_COLOR);
 
@@ -354,15 +354,15 @@ void DrawSnakeHeadLeft(const struct Field* head)
   glPopMatrix();
 }
 
-void DrawSnakeHeadRight(const struct Field* head)
+void DrawSnakeHeadRight(const struct Field* const head)
 {
   glPushMatrix();
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
 
-  float left = 0.0f;
-  float top = FIELD_SIZE;
-  float right = FIELD_SIZE * g_world.snake.head_offset;
-  float bottom = 0.0f;
+  float const left = 0.0f;
+  float const top = FIELD_SIZE;
+  float const right = FIELD_SIZE * g_world.snake.head_offset;
+  float const bottom = 0.0f;
 
   glColor3ub(SNAKE_COLOR);
 
@@ -378,15 +378,15 @@ void DrawSnakeHeadRight(const struct Field* head)
   glPopMatrix();
 }
 
-void DrawSnakeTailUp(const struct Field* tail)
+void DrawSnakeTailUp(const struct Field* const tail)
 {
   glPushMatrix();
   glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
 
-  float left = 0.0f;
-  float top = FIELD_SIZE * (1.0f - g_world.snake.tail_offset);
-  float right = FIELD_SIZE;
-  float bottom = 0.0f;
+  float const left = 0.0f;
+  float const top = FIELD_SIZE * (1.0f - g_world.snake.tail_offset);
+  float const right = FIELD_SIZE;
+  float const bottom = 0.0f;
 
   glColor3ub(SNAKE_COLOR);
 
@@ -402,15 +402,15 @@ void DrawSnakeTailUp(const struct Field* tail)
   glPopMatrix();
 }
 
-void DrawSnakeTailDown(const struct Field* tail)
+void DrawSnakeTailDown(const struct Field* const tail)
 {
   glPushMatrix();
   glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
 
-  float left = 0.0f;
-  float top = FIELD_SIZE;
-  float right = FIELD_SIZE;
-  float bottom = FIELD_SIZE * g_world.snake.tail_offset;
+  float const left = 0.0f;
+  float const top = FIELD_SIZE;
+  float const right = FIELD_SIZE;
+  float const bottom = FIELD_SIZE * g_world.snake.tail_offset;
 
   glColor3ub(SNAKE_COLOR);
 
@@ -426,15 +426,15 @@ void DrawSnakeTailDown(const struct Field* tail)
   glPopMatrix();
 }
 
-void DrawSnakeTailLeft(const struct Field* tail)
+void DrawSnakeTailLeft(const struct Field* const tail)
 {
   glPushMatrix();
   glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
 
-  float left = FIELD_SIZE * g_world.snake.tail_offset;
-  float top = FIELD_SIZE;
-  float right = FIELD_SIZE;
-  float bottom = 0.0f;
+  float const left = FIELD_SIZE * g_world.snake.tail_offset;
+  float const top = FIELD_SIZE;
+  float const right = FIELD_SIZE;
+  float const bottom = 0.0f;
 
   glColor3ub(SNAKE_COLOR);
 
@@ -450,15 +450,15 @@ void DrawSnakeTailLeft(const struct Field* tail)
   glPopMatrix();
 }
 
-void DrawSnakeTailRight(const struct Field* tail)
+void DrawSnakeTailRight(const struct Field* const tail)
 {
   glPushMatrix();
   glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
 
-  float left = 0.0f;
-  float top = FIELD_SIZE;
-  float right = FIELD_SIZE * (1.0f - g_world.snake.tail_offset);
-  float bottom = 0.0f;
+  float const left = 0.0f;
+  float const top = FIELD_SIZE;
+  float const right = FIELD_SIZE * (1.0f - g_world.snake.tail_offset);
+  float const bottom = 0.0f;
 
   glColor3ub(SNAKE_COLOR);
 
@@ -474,15 +474,15 @@ void DrawSnakeTailRight(const struct Field* tail)
   glPopMatrix();
 }
 
-void DrawSnakeBody(const struct Field* body)
+void DrawSnakeBody(const struct Field* const body)
 {
   glPushMatrix();
   glTranslatef((float) body->pos.x * FIELD_SIZE, (float) body->pos.y * FIELD_SIZE, 0.0f);
 
-  float left = 0.0f;
-  float top = FIELD_SIZE;
-  float right = FIELD_SIZE;
-  float bottom = 0.0f;
+  float const left = 0.0f;
+  float const top = FIELD_SIZE;
+  float const right = FIELD_SIZE;
+  float const bottom = 0.0f;
 
   glColor3ub(SNAKE_COLOR);
 
