@@ -33,7 +33,7 @@ void S_Stop()
 {
 }
 
-void S_PlaySound(enum Sound sound)
+void S_PlaySound(const enum Sound sound)
 {
   alSourcePlay(s_sound_sources[sound]);
 }

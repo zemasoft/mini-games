@@ -86,8 +86,8 @@ void L_Update()
   static int before;
   static int statusbar_time;
 
-  int now = glutGet(GLUT_ELAPSED_TIME);
-  int elapsed = now - before;
+  const int now = glutGet(GLUT_ELAPSED_TIME);
+  const int elapsed = now - before;
   before = now;
 
   if (g_world.size.x != g_config.size.x || g_world.size.y != g_config.size.y)
@@ -112,10 +112,10 @@ void L_Update()
     return;
   }
 
-  bool control_key = I_ControlKey();
+  const bool control_key = I_ControlKey();
   int control_x = 0;
   int control_y = 0;
-  bool control_button = I_ControlButton(&control_x, &control_y);
+  const bool control_button = I_ControlButton(&control_x, &control_y);
 
   switch (g_world.state)
   {
@@ -243,13 +243,13 @@ void L_Update()
         default:
           if (control_button)
           {
-            size_t x = (size_t)((float) control_x / (float) glutGet(GLUT_WINDOW_WIDTH) *
-                                (float) g_world.size.x);
-            size_t y = (size_t)((float) control_y / (float) glutGet(GLUT_WINDOW_HEIGHT) *
-                                (float) g_world.size.y);
+            const size_t x = (size_t)((float) control_x / (float) glutGet(GLUT_WINDOW_WIDTH) *
+                                      (float) g_world.size.x);
+            const size_t y = (size_t)((float) control_y / (float) glutGet(GLUT_WINDOW_HEIGHT) *
+                                      (float) g_world.size.y);
 
-            size_t blank_x = g_world.blank % g_world.size.x;
-            size_t blank_y = g_world.blank / g_world.size.x;
+            const size_t blank_x = g_world.blank % g_world.size.x;
+            const size_t blank_y = g_world.blank / g_world.size.x;
 
             if (x == blank_x)
             {
@@ -324,7 +324,7 @@ void UpdateWindowTitle()
 
 void MovePieceLeft()
 {
-  size_t index = g_world.blank + 1;
+  const size_t index = g_world.blank + 1;
 
   g_world.pieces[index].pos_w.x -= 1.0f;
 
@@ -338,7 +338,7 @@ void MovePieceLeft()
 
 void MovePieceRight()
 {
-  size_t index = g_world.blank - 1;
+  const size_t index = g_world.blank - 1;
 
   g_world.pieces[index].pos_w.x += 1.0f;
 
@@ -352,7 +352,7 @@ void MovePieceRight()
 
 void MovePieceUp()
 {
-  size_t index = g_world.blank + g_world.size.x;
+  const size_t index = g_world.blank + g_world.size.x;
 
   g_world.pieces[index].pos_w.y += 1.0f;
 
@@ -366,7 +366,7 @@ void MovePieceUp()
 
 void MovePieceDown()
 {
-  size_t index = g_world.blank - g_world.size.x;
+  const size_t index = g_world.blank - g_world.size.x;
 
   g_world.pieces[index].pos_w.y -= 1.0f;
 
@@ -378,9 +378,9 @@ void MovePieceDown()
   ++g_world.moves;
 }
 
-void MovePiecesLeft(size_t count)
+void MovePiecesLeft(const size_t count)
 {
-  int temp = g_world.moves;
+  const int temp = g_world.moves;
 
   for (size_t i = 0; i < count; ++i)
   {
@@ -391,9 +391,9 @@ void MovePiecesLeft(size_t count)
   ++g_world.moves;
 }
 
-void MovePiecesRight(size_t count)
+void MovePiecesRight(const size_t count)
 {
-  int temp = g_world.moves;
+  const int temp = g_world.moves;
 
   for (size_t i = 0; i < count; ++i)
   {
@@ -404,9 +404,9 @@ void MovePiecesRight(size_t count)
   ++g_world.moves;
 }
 
-void MovePiecesUp(size_t count)
+void MovePiecesUp(const size_t count)
 {
-  int temp = g_world.moves;
+  const int temp = g_world.moves;
 
   for (size_t i = 0; i < count; ++i)
   {
@@ -417,9 +417,9 @@ void MovePiecesUp(size_t count)
   ++g_world.moves;
 }
 
-void MovePiecesDown(size_t count)
+void MovePiecesDown(const size_t count)
 {
-  int temp = g_world.moves;
+  const int temp = g_world.moves;
 
   for (size_t i = 0; i < count; ++i)
   {
@@ -555,7 +555,7 @@ void SetupPiecePositions()
   }
 }
 
-void SetPieceStates(enum PieceState state)
+void SetPieceStates(const enum PieceState state)
 {
   for (size_t i = 0; i < g_world.piece_count; ++i)
   {
@@ -582,7 +582,7 @@ void MakeResolvable()
   }
 }
 
-void SwapPieces(size_t index1, size_t index2)
+void SwapPieces(const size_t index1, const size_t index2)
 {
   struct Piece temp;
   temp = g_world.pieces[index1];
