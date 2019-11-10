@@ -52,7 +52,7 @@ void I_Stop()
 
 bool I_ResetKey()
 {
-  const bool res = s_reset_key;
+  bool const res = s_reset_key;
 
   s_reset_key = false;
 
@@ -61,7 +61,7 @@ bool I_ResetKey()
 
 bool I_ControlKey()
 {
-  const bool res = s_control_key;
+  bool const res = s_control_key;
 
   s_control_key = false;
 
@@ -70,7 +70,7 @@ bool I_ControlKey()
 
 bool I_ControlButton()
 {
-  const bool res = s_control_button;
+  bool const res = s_control_button;
 
   s_control_button = false;
 
@@ -79,7 +79,7 @@ bool I_ControlButton()
 
 bool I_SizeUpKey()
 {
-  const bool res = s_size_up_key;
+  bool const res = s_size_up_key;
 
   s_size_up_key = false;
 
@@ -88,7 +88,7 @@ bool I_SizeUpKey()
 
 bool I_SizeDownKey()
 {
-  const bool res = s_size_down_key;
+  bool const res = s_size_down_key;
 
   s_size_down_key = false;
 
@@ -97,7 +97,7 @@ bool I_SizeDownKey()
 
 bool I_SpeedUpKey()
 {
-  const bool res = s_speed_up_key;
+  bool const res = s_speed_up_key;
 
   s_speed_up_key = false;
 
@@ -106,14 +106,14 @@ bool I_SpeedUpKey()
 
 bool I_SpeedDownKey()
 {
-  const bool res = s_speed_down_key;
+  bool const res = s_speed_down_key;
 
   s_speed_down_key = false;
 
   return res;
 }
 
-void Keyboard(const unsigned char key, const int x, const int y)
+void Keyboard(unsigned char const key, int const x, int const y)
 {
   (void) x;
   (void) y;
@@ -135,7 +135,7 @@ void Keyboard(const unsigned char key, const int x, const int y)
   }
 }
 
-void Special(const int key, const int x, const int y)
+void Special(int const key, int const x, int const y)
 {
   (void) x;
   (void) y;
@@ -157,7 +157,7 @@ void Special(const int key, const int x, const int y)
   }
 }
 
-void Mouse(const int button, const int state, const int x, const int y)
+void Mouse(int const button, int const state, int const x, int const y)
 {
   (void) x;
   (void) y;

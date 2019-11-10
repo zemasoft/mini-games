@@ -111,7 +111,7 @@ void DrawStatusBar()
   glPopMatrix();
 }
 
-void DrawDice(const int i)
+void DrawDice(int const i)
 {
   float left = 0.0f;
   float top = DICE_SIZE;
@@ -197,7 +197,7 @@ void DrawDice(const int i)
   DrawDots(g_world.dices[i].value);
 }
 
-void DrawDots(const int value)
+void DrawDots(int const value)
 {
   switch (value)
   {

@@ -54,8 +54,8 @@ void L_Update()
   static int stop_time;
   static int statusbar_time;
 
-  const int now = glutGet(GLUT_ELAPSED_TIME);
-  const int elapsed = now - before;
+  int const now = glutGet(GLUT_ELAPSED_TIME);
+  int const elapsed = now - before;
   before = now;
 
   if (g_world.dice_count != g_config.dice_count)
@@ -84,12 +84,12 @@ void L_Update()
     return;
   }
 
-  const bool control_key = I_ControlKey();
-  const bool control_button = I_ControlButton();
-  const bool size_up_key = I_SizeUpKey();
-  const bool size_down_key = I_SizeDownKey();
-  const bool speed_up_key = I_SpeedUpKey();
-  const bool speed_down_key = I_SpeedDownKey();
+  bool const control_key = I_ControlKey();
+  bool const control_button = I_ControlButton();
+  bool const size_up_key = I_SizeUpKey();
+  bool const size_down_key = I_SizeDownKey();
+  bool const speed_up_key = I_SpeedUpKey();
+  bool const speed_down_key = I_SpeedDownKey();
 
   switch (g_world.state)
   {
@@ -223,7 +223,7 @@ void UpdateWindowTitle()
   glutSetWindowTitle(buf);
 }
 
-void ShuffleDices(const enum DiceState state)
+void ShuffleDices(enum DiceState const state)
 {
   for (int i = 0; i < g_world.dice_count; ++i)
   {
