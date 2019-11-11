@@ -328,7 +328,7 @@ void L_Stop()
 
 enum MoveSnake MoveSnake()
 {
-  const struct Field* const head = GetSnakeHead();
+  struct Field const* const head = GetSnakeHead();
 
   int new_x_pos = head->pos.x;
   int new_y_pos = head->pos.y;

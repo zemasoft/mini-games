@@ -22,22 +22,22 @@ static void DrawMargin();
 static void DrawGround();
 static void DrawSnake();
 
-static void DrawField(const struct Field* field);
+static void DrawField(struct Field const* field);
 static void DrawFood();
 
 static void DrawSnakeElement(size_t index);
 
-static void DrawSnakeHeadUp(const struct Field* head);
-static void DrawSnakeHeadDown(const struct Field* head);
-static void DrawSnakeHeadLeft(const struct Field* head);
-static void DrawSnakeHeadRight(const struct Field* head);
+static void DrawSnakeHeadUp(struct Field const* head);
+static void DrawSnakeHeadDown(struct Field const* head);
+static void DrawSnakeHeadLeft(struct Field const* head);
+static void DrawSnakeHeadRight(struct Field const* head);
 
-static void DrawSnakeTailUp(const struct Field* tail);
-static void DrawSnakeTailDown(const struct Field* tail);
-static void DrawSnakeTailLeft(const struct Field* tail);
-static void DrawSnakeTailRight(const struct Field* tail);
+static void DrawSnakeTailUp(struct Field const* tail);
+static void DrawSnakeTailDown(struct Field const* tail);
+static void DrawSnakeTailLeft(struct Field const* tail);
+static void DrawSnakeTailRight(struct Field const* tail);
 
-static void DrawSnakeBody(const struct Field* body);
+static void DrawSnakeBody(struct Field const* body);
 
 void G_Start()
 {
@@ -132,7 +132,7 @@ void DrawSnake()
   }
 }
 
-void DrawField(const struct Field* const field)
+void DrawField(struct Field const* const field)
 {
   glPushMatrix();
   glTranslatef((float) field->pos.x * FIELD_SIZE, (float) field->pos.y * FIELD_SIZE, 0.0f);
@@ -205,12 +205,12 @@ void DrawFood()
 
 void DrawSnakeElement(size_t const index)
 {
-  const struct Field* const e = GetSnakeElement(index);
+  struct Field const* const e = GetSnakeElement(index);
 
   assert(e != NULL);
 
-  const struct Field* const prev_e = GetPrevSnakeElement(index);
-  const struct Field* const next_e = GetNextSnakeElement(index);
+  struct Field const* const prev_e = GetPrevSnakeElement(index);
+  struct Field const* const next_e = GetNextSnakeElement(index);
 
   assert(prev_e != NULL || next_e != NULL);
 
@@ -282,7 +282,7 @@ void DrawSnakeElement(size_t const index)
   }
 }
 
-void DrawSnakeHeadUp(const struct Field* const head)
+void DrawSnakeHeadUp(struct Field const* const head)
 {
   glPushMatrix();
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
@@ -306,7 +306,7 @@ void DrawSnakeHeadUp(const struct Field* const head)
   glPopMatrix();
 }
 
-void DrawSnakeHeadDown(const struct Field* const head)
+void DrawSnakeHeadDown(struct Field const* const head)
 {
   glPushMatrix();
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
@@ -330,7 +330,7 @@ void DrawSnakeHeadDown(const struct Field* const head)
   glPopMatrix();
 }
 
-void DrawSnakeHeadLeft(const struct Field* const head)
+void DrawSnakeHeadLeft(struct Field const* const head)
 {
   glPushMatrix();
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
@@ -354,7 +354,7 @@ void DrawSnakeHeadLeft(const struct Field* const head)
   glPopMatrix();
 }
 
-void DrawSnakeHeadRight(const struct Field* const head)
+void DrawSnakeHeadRight(struct Field const* const head)
 {
   glPushMatrix();
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
@@ -378,7 +378,7 @@ void DrawSnakeHeadRight(const struct Field* const head)
   glPopMatrix();
 }
 
-void DrawSnakeTailUp(const struct Field* const tail)
+void DrawSnakeTailUp(struct Field const* const tail)
 {
   glPushMatrix();
   glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
@@ -402,7 +402,7 @@ void DrawSnakeTailUp(const struct Field* const tail)
   glPopMatrix();
 }
 
-void DrawSnakeTailDown(const struct Field* const tail)
+void DrawSnakeTailDown(struct Field const* const tail)
 {
   glPushMatrix();
   glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
@@ -426,7 +426,7 @@ void DrawSnakeTailDown(const struct Field* const tail)
   glPopMatrix();
 }
 
-void DrawSnakeTailLeft(const struct Field* const tail)
+void DrawSnakeTailLeft(struct Field const* const tail)
 {
   glPushMatrix();
   glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
@@ -450,7 +450,7 @@ void DrawSnakeTailLeft(const struct Field* const tail)
   glPopMatrix();
 }
 
-void DrawSnakeTailRight(const struct Field* const tail)
+void DrawSnakeTailRight(struct Field const* const tail)
 {
   glPushMatrix();
   glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
@@ -474,7 +474,7 @@ void DrawSnakeTailRight(const struct Field* const tail)
   glPopMatrix();
 }
 
-void DrawSnakeBody(const struct Field* const body)
+void DrawSnakeBody(struct Field const* const body)
 {
   glPushMatrix();
   glTranslatef((float) body->pos.x * FIELD_SIZE, (float) body->pos.y * FIELD_SIZE, 0.0f);

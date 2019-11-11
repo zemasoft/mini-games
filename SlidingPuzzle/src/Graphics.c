@@ -21,14 +21,14 @@ struct Projection
   float top;
 };
 
-static void InitPieceStrings(const struct Projection* projection);
+static void InitPieceStrings(struct Projection const* projection);
 static void DrawPieces();
 static void DrawStatusBar();
 
-static void InitPieceString(struct Piece* piece, const struct Projection* projection);
+static void InitPieceString(struct Piece* piece, struct Projection const* projection);
 
-static void DrawPiece(const struct Piece* piece);
-static void DrawValue(const struct Piece* piece);
+static void DrawPiece(struct Piece const* piece);
+static void DrawValue(struct Piece const* piece);
 
 static void DrawMoves();
 
@@ -72,7 +72,7 @@ void G_Stop()
 {
 }
 
-void InitPieceStrings(const struct Projection* const projection)
+void InitPieceStrings(struct Projection const* const projection)
 {
   for (size_t i = 0; i < g_world.piece_count; ++i)
   {
@@ -119,7 +119,7 @@ void DrawStatusBar()
   glPopMatrix();
 }
 
-void InitPieceString(struct Piece* const piece, const struct Projection* const projection)
+void InitPieceString(struct Piece* const piece, struct Projection const* const projection)
 {
   snprintf(piece->string.value, sizeof(piece->string.value), "%d", piece->value);
 
@@ -131,7 +131,7 @@ void InitPieceString(struct Piece* const piece, const struct Projection* const p
                          (projection->top - projection->bottom) * VALUE_SIZE;
 }
 
-void DrawPiece(const struct Piece* const piece)
+void DrawPiece(struct Piece const* const piece)
 {
   if (piece->value == 0)
   {
@@ -211,7 +211,7 @@ void DrawPiece(const struct Piece* const piece)
   glPopMatrix();
 }
 
-void DrawValue(const struct Piece* const piece)
+void DrawValue(struct Piece const* const piece)
 {
   switch (piece->state)
   {

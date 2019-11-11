@@ -7,7 +7,7 @@
 
 #include <AL/alut.h>
 
-static const char* const s_sound_file_names[Sound_Count] = {"turn1.wav", "turn2.wav",  "turn3.wav",
+static char const* const s_sound_file_names[Sound_Count] = {"turn1.wav", "turn2.wav",  "turn3.wav",
                                                             "turn4.wav", "food.wav",   "wall.wav",
                                                             "body.wav",  "success.wav"};
 
