@@ -39,6 +39,12 @@ struct Ground
 
 struct Snake
 {
+  enum SnakeState
+  {
+    SnakeState_Normal,
+    SnakeState_Growing
+  } state;
+
   struct Field** fields;
   size_t field_count;
   size_t head;
@@ -61,7 +67,6 @@ struct World
   enum WorldState
   {
     WorldState_Play,
-    WorldState_Play_SnakeGrowing,
     WorldState_Success,
     WorldState_Fail,
     WorldState_Pause

@@ -75,6 +75,8 @@ void L_Restart()
     }
   }
 
+  g_world.snake.state = SnakeState_Normal;
+
   if (g_world.snake.fields != NULL)
   {
     free(g_world.snake.fields);
@@ -126,8 +128,6 @@ void L_Update()
   static double before;
   static double move_time;
 
-  static enum WorldState paused_state = WorldState_Play;
-
   double const now = glfwGetTime();
   double const elapsed = now - before;
   before = now;
@@ -143,16 +143,12 @@ void L_Update()
     return;
   }
 
-  enum WorldState next_state = g_world.state;
-
   switch (g_world.state)
   {
     case WorldState_Play:
-    case WorldState_Play_SnakeGrowing:
       if (I_PauseKey())
       {
-        paused_state = g_world.state;
-        next_state = WorldState_Pause;
+        g_world.state = WorldState_Pause;
       }
       else
       {
@@ -252,7 +248,7 @@ void L_Update()
           switch (MoveSnake())
           {
             case MoveSnake_Ok:
-              next_state = WorldState_Play;
+              g_world.snake.state = SnakeState_Normal;
               break;
 
             case MoveSnake_Food:
@@ -262,37 +258,42 @@ void L_Update()
 
               PlaceFood();
 
-              next_state = WorldState_Play_SnakeGrowing;
+              g_world.snake.state = SnakeState_Growing;
               break;
 
             case MoveSnake_Wall:
               S_PlaySound(Sound_Wall);
 
-              next_state = WorldState_Fail;
+              g_world.state = WorldState_Fail;
               break;
 
             case MoveSnake_Body:
               S_PlaySound(Sound_Body);
 
-              next_state = WorldState_Fail;
+              g_world.state = WorldState_Fail;
               break;
 
             case MoveSnake_NoSpace:
               S_PlaySound(Sound_Success);
 
-              next_state = WorldState_Success;
+              g_world.state = WorldState_Success;
               break;
           }
         }
 
-        if (next_state == WorldState_Play)
+        if (g_world.state == WorldState_Play)
         {
-          g_world.snake.head_offset = (float) (move_time / g_world.max_move_time);
-          g_world.snake.tail_offset = (float) (move_time / g_world.max_move_time);
-        }
-        else if (next_state == WorldState_Play_SnakeGrowing)
-        {
-          g_world.snake.head_offset = (float) (move_time / g_world.max_move_time);
+          switch (g_world.snake.state)
+          {
+            case SnakeState_Normal:
+              g_world.snake.head_offset = (float) (move_time / g_world.max_move_time);
+              g_world.snake.tail_offset = (float) (move_time / g_world.max_move_time);
+              break;
+
+            case SnakeState_Growing:
+              g_world.snake.head_offset = (float) (move_time / g_world.max_move_time);
+              break;
+          }
         }
         else
         {
@@ -311,12 +312,10 @@ void L_Update()
     case WorldState_Pause:
       if (I_PauseKey() || I_GetDirectionKey() != -1)
       {
-        next_state = paused_state;
+        g_world.state = WorldState_Play;
       }
       break;
   }
-
-  g_world.state = next_state;
 }
 
 void L_Stop()
