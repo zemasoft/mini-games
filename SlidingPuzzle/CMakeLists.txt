@@ -5,8 +5,7 @@ option(SLIDINGPUZZLE_CLANGFORMAT "Setup clangformat target" OFF)
 
 include(Utils)
 
-find_package(OpenGL REQUIRED MODULE)
-find_package(GLUT REQUIRED MODULE)  # FreeGLUT
+find_package(FreeGLUT REQUIRED CONFIG)
 find_package(ALUT REQUIRED MODULE)  # FreeALUT
 
 add_executable(SlidingPuzzle
@@ -32,16 +31,13 @@ set_target_compile_options(SlidingPuzzle
 
 target_include_directories(SlidingPuzzle
   PRIVATE
-    ${OPENGL_INCLUDE_DIR}
-    ${GLUT_INCLUDE_DIR}
     ${ALUT_INCLUDE_DIRS}
     src
 )
 
 target_link_libraries(SlidingPuzzle
   PRIVATE
-    OpenGL::OpenGL
-    GLUT::GLUT
+    FreeGLUT::freeglut
     ${ALUT_LIBRARIES}
 )
 

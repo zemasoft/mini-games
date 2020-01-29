@@ -6,7 +6,7 @@ option(SNAKE_CLANGFORMAT "Setup clangformat target" OFF)
 include(Utils)
 
 find_package(OpenGL REQUIRED MODULE)
-find_package(GLFW3 REQUIRED MODULE)
+find_package(glfw3 REQUIRED CONFIG)
 find_package(ALUT REQUIRED MODULE)  # FreeALUT
 
 add_executable(Snake
@@ -34,8 +34,6 @@ set_target_compile_options(Snake
 
 target_include_directories(Snake
   PRIVATE
-    ${OPENGL_INCLUDE_DIR}
-    ${GLFW3_INCLUDE_DIR}
     ${ALUT_INCLUDE_DIRS}
     src
 )
@@ -43,7 +41,7 @@ target_include_directories(Snake
 target_link_libraries(Snake
   PRIVATE
     OpenGL::OpenGL
-    ${GLFW3_LIBRARY}
+    glfw
     ${ALUT_LIBRARIES}
     m
 )

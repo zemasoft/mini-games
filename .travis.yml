@@ -12,24 +12,13 @@ env:
   - BUILD_TYPE=Debug
   - BUILD_TYPE=Release
 
-addons:
-  apt:
-    packages:
-      - freeglut3-dev
-      - libglfw3-dev
-      - libopenal-dev
-
 install:
-  - JOBS=2
-
-  - cd ${TRAVIS_BUILD_DIR}
-  - git clone --depth=1 https://github.com/vancegroup/freealut
-  - cd freealut
-  - cmake . -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.
-  - cmake --build build -- -j${JOBS}
-  - cmake --build build --target install
+  - cd external
+  - ./freealut.sh
+  - ./freeglut.sh
+  - ./glfw.sh
+  - cd ..
 
 script:
-  - cd ${TRAVIS_BUILD_DIR}
-  - cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DALUT_ROOT_DIR=freealut
-  - cmake --build build -- -j${JOBS}
+  - cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DALUT_ROOT_DIR=external
+  - cmake --build build
