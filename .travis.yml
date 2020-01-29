@@ -15,6 +15,7 @@ env:
 addons:
   apt:
     packages:
+      - libgl1-mesa-dev
       - libopenal-dev
 
 install:
