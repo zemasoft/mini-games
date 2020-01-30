@@ -17,7 +17,7 @@ addons:
     packages:
       - libgl1-mesa-dev
       - libopenal-dev
-      - x11proto-input-dev
+      - libxi-dev
 
 install:
   - cd external
