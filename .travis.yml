@@ -16,6 +16,7 @@ addons:
   apt:
     packages:
       - libgl1-mesa-dev
+      - libglu1-mesa-dev
       - libopenal-dev
       - libxi-dev
 
