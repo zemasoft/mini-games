@@ -15,10 +15,13 @@ env:
 addons:
   apt:
     packages:
-      - libgl1-mesa-dev
-      - libglu1-mesa-dev
-      - libopenal-dev
-      - libxi-dev
+      - libgl1-mesa-dev   # FreeGLUT
+      - libglu1-mesa-dev  # FreeGLUT
+      - libopenal-dev     # FreeALUT
+      - libxcursor-dev    # GLFW
+      - libxi-dev         # FreeGLUT & GLFW
+      - libxinerama-dev   # GLFW
+      - libxrandr-dev     # GLFW
 
 install:
   - cd external
