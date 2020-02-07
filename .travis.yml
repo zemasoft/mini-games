@@ -9,10 +9,10 @@ compiler:
   - gcc
 
 env:
-  - BUILD_TYPE=Debug USE_FREEALUT=ON
-  - BUILD_TYPE=Debug USE_FREEALUT=OFF
-  - BUILD_TYPE=Release USE_FREEALUT=ON
-  - BUILD_TYPE=Release USE_FREEALUT=OFF
+  - BUILD_TYPE=Debug USE_FREEALUT=ON USE_FREEGLUT=ON
+  - BUILD_TYPE=Debug USE_FREEALUT=OFF USE_FREEGLUT=ON
+  - BUILD_TYPE=Release USE_FREEALUT=ON USE_FREEGLUT=ON
+  - BUILD_TYPE=Release USE_FREEALUT=OFF USE_FREEGLUT=ON
 
 addons:
   apt:
@@ -28,7 +28,7 @@ addons:
 install:
   - cd external
   - if [[ ${USE_FREEALUT} == ON ]]; then ./freealut.sh; fi
-  - ./freeglut.sh
+  - if [[ ${USE_FREEGLUT} == ON ]]; then ./freeglut.sh; fi
   - ./glfw.sh
   - cd ..
 
@@ -37,6 +37,9 @@ script:
     cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
                     -DALUT_ROOT_DIR=external \
                     -DSLIDINGPUZZLE_USE_FREEALUT=${USE_FREEALUT} \
+                    -DSLIDINGPUZZLE_USE_FREEGLUT=${USE_FREEGLUT} \
                     -DSNAKE_USE_FREEALUT=${USE_FREEALUT} \
-                    -DVIDEOSTOP_USE_FREEALUT=${USE_FREEALUT}
+                    -DSNAKE_USE_FREEGLUT=${USE_FREEGLUT} \
+                    -DVIDEOSTOP_USE_FREEALUT=${USE_FREEALUT} \
+                    -DVIDEOSTOP_USE_FREEGLUT=${USE_FREEGLUT}
   - cmake --build build
