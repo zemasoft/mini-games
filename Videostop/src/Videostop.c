@@ -63,7 +63,7 @@ void Start(int argc, char** argv)
   S_Start();
   G_Start();
 
-  // glutDisplayFunc(&G_Update);
+  glutDisplayFunc(&G_Update);
   glutIdleFunc(&Update);
 
   glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
