@@ -2,10 +2,8 @@ project(Videostop VERSION 1.0.0 LANGUAGES C)
 
 option(VIDEOSTOP_USE_FREEALUT "Use FreeALUT" ON)
 
-option(VIDEOSTOP_WARNIGS_AS_ERRORS "Treat warnings as errors" OFF)
+option(VIDEOSTOP_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 option(VIDEOSTOP_CLANGFORMAT "Setup clangformat target" OFF)
-
-include(Utils)
 
 if(VIDEOSTOP_USE_FREEALUT)
   find_package(ALUT REQUIRED MODULE)  # FreeALUT
@@ -30,9 +28,35 @@ add_executable(Videostop
   src/World.h
 )
 
-set_target_compile_options(Videostop
-  ${VIDEOSTOP_WARNIGS_AS_ERRORS}
-)
+if(MSVC)
+  target_compile_options(Videostop
+    PRIVATE
+      /W4
+  )
+
+  if(VIDEOSTOP_WARNINGS_AS_ERRORS)
+    target_compile_options(Videostop
+      PRIVATE
+        /WX
+    )
+  endif()
+else()
+  target_compile_options(Videostop
+    PRIVATE
+      -Wall
+      -Wextra
+      -Wpedantic
+      -Wconversion
+      -Wsign-conversion
+  )
+
+  if(VIDEOSTOP_WARNINGS_AS_ERRORS)
+    target_compile_options(Videostop
+      PRIVATE
+        -Werror
+    )
+  endif()
+endif()
 
 target_include_directories(Videostop
   PRIVATE

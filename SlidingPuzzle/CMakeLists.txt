@@ -2,10 +2,8 @@ project(SlidingPuzzle VERSION 1.0.0 LANGUAGES C)
 
 option(SLIDINGPUZZLE_USE_FREEALUT "Use FreeALUT" ON)
 
-option(SLIDINGPUZZLE_WARNIGS_AS_ERRORS "Treat warnings as errors" OFF)
+option(SLIDINGPUZZLE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 option(SLIDINGPUZZLE_CLANGFORMAT "Setup clangformat target" OFF)
-
-include(Utils)
 
 if(SLIDINGPUZZLE_USE_FREEALUT)
   find_package(ALUT REQUIRED MODULE)  # FreeALUT
@@ -30,9 +28,35 @@ add_executable(SlidingPuzzle
   src/World.h
 )
 
-set_target_compile_options(SlidingPuzzle
-  ${SLIDINGPUZZLE_WARNIGS_AS_ERRORS}
-)
+if(MSVC)
+  target_compile_options(SlidingPuzzle
+    PRIVATE
+      /W4
+  )
+
+  if(SLIDINGPUZZLE_WARNINGS_AS_ERRORS)
+    target_compile_options(SlidingPuzzle
+      PRIVATE
+        /WX
+    )
+  endif()
+else()
+  target_compile_options(SlidingPuzzle
+    PRIVATE
+      -Wall
+      -Wextra
+      -Wpedantic
+      -Wconversion
+      -Wsign-conversion
+  )
+
+  if(SLIDINGPUZZLE_WARNINGS_AS_ERRORS)
+    target_compile_options(SlidingPuzzle
+      PRIVATE
+        -Werror
+    )
+  endif()
+endif()
 
 target_include_directories(SlidingPuzzle
   PRIVATE

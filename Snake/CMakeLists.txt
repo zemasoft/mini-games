@@ -2,10 +2,8 @@ project(Snake VERSION 1.0.0 LANGUAGES C)
 
 option(SNAKE_USE_FREEALUT "Use FreeALUT" ON)
 
-option(SNAKE_WARNIGS_AS_ERRORS "Treat warnings as errors" OFF)
+option(SNAKE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 option(SNAKE_CLANGFORMAT "Setup clangformat target" OFF)
-
-include(Utils)
 
 if(SNAKE_USE_FREEALUT)
   find_package(ALUT REQUIRED MODULE)  # FreeALUT
@@ -33,9 +31,35 @@ add_executable(Snake
   src/World.h
 )
 
-set_target_compile_options(Snake
-  ${SNAKE_WARNIGS_AS_ERRORS}
-)
+if(MSVC)
+  target_compile_options(Snake
+    PRIVATE
+      /W4
+  )
+
+  if(SNAKE_WARNINGS_AS_ERRORS)
+    target_compile_options(Snake
+      PRIVATE
+        /WX
+    )
+  endif()
+else()
+  target_compile_options(Snake
+    PRIVATE
+      -Wall
+      -Wextra
+      -Wpedantic
+      -Wconversion
+      -Wsign-conversion
+  )
+
+  if(SNAKE_WARNINGS_AS_ERRORS)
+    target_compile_options(Snake
+      PRIVATE
+        -Werror
+    )
+  endif()
+endif()
 
 target_include_directories(Snake
   PRIVATE
