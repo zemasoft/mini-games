@@ -1,12 +1,17 @@
 project(SlidingPuzzle VERSION 1.0.0 LANGUAGES C)
 
+option(SLIDINGPUZZLE_USE_FREEALUT "Use FreeALUT" ON)
+
 option(SLIDINGPUZZLE_WARNIGS_AS_ERRORS "Treat warnings as errors" OFF)
 option(SLIDINGPUZZLE_CLANGFORMAT "Setup clangformat target" OFF)
 
 include(Utils)
 
+if(SLIDINGPUZZLE_USE_FREEALUT)
+  find_package(ALUT REQUIRED MODULE)  # FreeALUT
+endif()
+
 find_package(FreeGLUT REQUIRED CONFIG)
-find_package(ALUT REQUIRED MODULE)  # FreeALUT
 
 add_executable(SlidingPuzzle
   src/Config.c
@@ -31,15 +36,30 @@ set_target_compile_options(SlidingPuzzle
 
 target_include_directories(SlidingPuzzle
   PRIVATE
-    ${ALUT_INCLUDE_DIRS}
     src
 )
 
 target_link_libraries(SlidingPuzzle
   PRIVATE
     FreeGLUT::freeglut
-    ${ALUT_LIBRARIES}
 )
+
+if(SLIDINGPUZZLE_USE_FREEALUT)
+  target_compile_definitions(SlidingPuzzle
+    PRIVATE
+      USE_FREEALUT
+  )
+
+  target_include_directories(SlidingPuzzle
+    PRIVATE
+      ${ALUT_INCLUDE_DIRS}
+  )
+
+  target_link_libraries(SlidingPuzzle
+    PRIVATE
+      ${ALUT_LIBRARIES}
+  )
+endif()
 
 set_target_properties(SlidingPuzzle
   PROPERTIES

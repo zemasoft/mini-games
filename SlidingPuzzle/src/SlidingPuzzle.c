@@ -6,7 +6,10 @@
 #include <stddef.h>  // size_t
 #include <stdlib.h>  // EXIT_SUCCESS, strtol
 
+#if defined(USE_FREEALUT)
 #include <AL/alut.h>
+#endif
+
 #include <GL/freeglut.h>
 
 #include "Config.h"
@@ -30,7 +33,10 @@ int main(int argc, char** argv)
 void Start(int argc, char** argv)
 {
   glutInit(&argc, argv);
+
+#if defined(USE_FREEALUT)
   alutInit(&argc, argv);
+#endif
 
   g_config.size.x = DEFAULT_SIZE;
   g_config.size.y = DEFAULT_SIZE;
@@ -110,6 +116,9 @@ void Stop()
   glutDisplayFunc(NULL);
   glutIdleFunc(NULL);
 
+#if defined(USE_FREEALUT)
   alutExit();
+#endif
+
   glutExit();
 }

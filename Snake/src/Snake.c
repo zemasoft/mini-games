@@ -5,7 +5,10 @@
 
 #include <stdlib.h>  // EXIT_FAILURE, EXIT_SUCCESS, strtol
 
+#if defined(USE_FREEALUT)
 #include <AL/alut.h>
+#endif
+
 #include <GLFW/glfw3.h>
 
 #include "Config.h"
@@ -23,7 +26,9 @@ int main(int argc, char** argv)
     return EXIT_FAILURE;
   }
 
+#if defined(USE_FREEALUT)
   alutInit(&argc, argv);
+#endif
 
   g_config.ground.size.x = DEFAULT_X_SIZE;
   g_config.ground.size.y = DEFAULT_Y_SIZE;
@@ -76,7 +81,10 @@ int main(int argc, char** argv)
                        (int) g_config.ground.size.y * FIELD_SIZE_PIXELS, "Snake", NULL, NULL);
   if (!g_window)
   {
+#if defined(USE_FREEALUT)
     alutExit();
+#endif
+
     glfwTerminate();
     return EXIT_FAILURE;
   }
@@ -100,7 +108,10 @@ int main(int argc, char** argv)
   S_Stop();
   G_Stop();
 
+#if defined(USE_FREEALUT)
   alutExit();
+#endif
+
   glfwTerminate();
   return EXIT_SUCCESS;
 }

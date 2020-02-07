@@ -1,13 +1,18 @@
 project(Snake VERSION 1.0.0 LANGUAGES C)
 
+option(SNAKE_USE_FREEALUT "Use FreeALUT" ON)
+
 option(SNAKE_WARNIGS_AS_ERRORS "Treat warnings as errors" OFF)
 option(SNAKE_CLANGFORMAT "Setup clangformat target" OFF)
 
 include(Utils)
 
+if(SNAKE_USE_FREEALUT)
+  find_package(ALUT REQUIRED MODULE)  # FreeALUT
+endif()
+
 find_package(OpenGL REQUIRED MODULE)
 find_package(glfw3 REQUIRED CONFIG)
-find_package(ALUT REQUIRED MODULE)  # FreeALUT
 
 add_executable(Snake
   src/Config.c
@@ -34,7 +39,6 @@ set_target_compile_options(Snake
 
 target_include_directories(Snake
   PRIVATE
-    ${ALUT_INCLUDE_DIRS}
     src
 )
 
@@ -42,9 +46,25 @@ target_link_libraries(Snake
   PRIVATE
     OpenGL::OpenGL
     glfw
-    ${ALUT_LIBRARIES}
     m
 )
+
+if(SNAKE_USE_FREEALUT)
+  target_compile_definitions(Snake
+    PRIVATE
+      USE_FREEALUT
+  )
+
+  target_include_directories(Snake
+    PRIVATE
+      ${ALUT_INCLUDE_DIRS}
+  )
+
+  target_link_libraries(Snake
+    PRIVATE
+      ${ALUT_LIBRARIES}
+  )
+endif()
 
 set_target_properties(Snake
   PROPERTIES

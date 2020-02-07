@@ -1,12 +1,17 @@
 project(Videostop VERSION 1.0.0 LANGUAGES C)
 
+option(VIDEOSTOP_USE_FREEALUT "Use FreeALUT" ON)
+
 option(VIDEOSTOP_WARNIGS_AS_ERRORS "Treat warnings as errors" OFF)
 option(VIDEOSTOP_CLANGFORMAT "Setup clangformat target" OFF)
 
 include(Utils)
 
+if(VIDEOSTOP_USE_FREEALUT)
+  find_package(ALUT REQUIRED MODULE)  # FreeALUT
+endif()
+
 find_package(FreeGLUT REQUIRED CONFIG)
-find_package(ALUT REQUIRED MODULE)  # FreeALUT
 
 add_executable(Videostop
   src/Config.c
@@ -31,16 +36,31 @@ set_target_compile_options(Videostop
 
 target_include_directories(Videostop
   PRIVATE
-    ${ALUT_INCLUDE_DIRS}
     src
 )
 
 target_link_libraries(Videostop
   PRIVATE
     FreeGLUT::freeglut
-    ${ALUT_LIBRARIES}
     m
 )
+
+if(VIDEOSTOP_USE_FREEALUT)
+  target_compile_definitions(Videostop
+    PRIVATE
+      USE_FREEALUT
+  )
+
+  target_include_directories(Videostop
+    PRIVATE
+      ${ALUT_INCLUDE_DIRS}
+  )
+
+  target_link_libraries(Videostop
+    PRIVATE
+      ${ALUT_LIBRARIES}
+  )
+endif()
 
 set_target_properties(Videostop
   PROPERTIES
