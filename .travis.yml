@@ -27,7 +27,7 @@ addons:
 
 install:
   - cd external
-  - ./freealut.sh
+  - if [[ ${USE_FREEALUT} == ON ]]; then ./freealut.sh; fi
   - ./freeglut.sh
   - ./glfw.sh
   - cd ..
