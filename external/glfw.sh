@@ -6,7 +6,7 @@ rm -rf glfw
 
 git clone https://github.com/glfw/glfw
 cd glfw
-# git checkout 3.3.2
+git checkout 76406c7
 
 cmake . -Bbuild -DCMAKE_BUILD_TYPE=Release \
                 -DCMAKE_INSTALL_PREFIX=.. \

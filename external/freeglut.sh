@@ -6,7 +6,7 @@ rm -rf freeglut
 
 git clone https://github.com/dcnieho/freeglut
 cd freeglut
-# git checkout FG_3_2_1
+git checkout bbd69d6
 
 cd freeglut/freeglut
 cmake . -Bbuild -DCMAKE_BUILD_TYPE=Release \

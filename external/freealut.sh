@@ -6,7 +6,7 @@ rm -rf freealut
 
 git clone https://github.com/vancegroup/freealut
 cd freealut
-# git checkout freealut_1_1_0
+git checkout fc814e3
 
 cmake . -Bbuild -DCMAKE_BUILD_TYPE=Release \
                 -DCMAKE_INSTALL_PREFIX=.. \
