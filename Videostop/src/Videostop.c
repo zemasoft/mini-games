@@ -90,7 +90,7 @@ void Stop()
   S_Stop();
   G_Stop();
 
-  // glutDisplayFunc(NULL);
+  glutDisplayFunc(NULL);
   glutIdleFunc(NULL);
 
 #if defined(USE_FREEALUT)
