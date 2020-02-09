@@ -80,6 +80,7 @@ void I_Stop()
 
 #if defined(USE_GLFW)
   glfwSetKeyCallback(g_window, NULL);
+  glfwSetMouseButtonCallback(g_window, NULL);
 #endif
 }
 
