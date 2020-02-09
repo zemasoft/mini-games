@@ -228,27 +228,21 @@ void KeyCallback(GLFWwindow* window, int const key, int const scancode, int cons
       case GLFW_KEY_SPACE:
         s_control_key = true;
         break;
-
       case GLFW_KEY_ESCAPE:
         glfwSetWindowShouldClose(g_window, GLFW_TRUE);
         break;
-
       case GLFW_KEY_R:
         s_reset_key = true;
         break;
-
       case GLFW_KEY_RIGHT:
         s_size_up_key = true;
         break;
-
       case GLFW_KEY_LEFT:
         s_size_down_key = true;
         break;
-
       case GLFW_KEY_UP:
         s_speed_up_key = true;
         break;
-
       case GLFW_KEY_DOWN:
         s_speed_down_key = true;
         break;
