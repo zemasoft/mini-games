@@ -33,7 +33,8 @@ addons:
 install:
   - cd external
   - if [[ ${USE_FREEALUT} == ON ]]; then ./freealut.sh; fi
-  - if [[ ${USE_FREEGLUT} == ON ]]; then ./freeglut.sh; fi
+  # - if [[ ${USE_FREEGLUT} == ON ]]; then ./freeglut.sh; fi
+  ./freeglut.sh
   # - if [[ ${USE_GLFW} == ON ]]; then ./glfw.sh; fi
   - ./glfw.sh
   - cd ..
