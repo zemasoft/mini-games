@@ -18,15 +18,15 @@
 #include <GLFW/glfw3.h>
 #endif
 
-#if defined(USE_GLFW)
-extern GLFWwindow* g_window;
-#endif
-
 #include "Config.h"
 #include "Graphics.h"
 #include "Input.h"
 #include "Sound.h"
 #include "World.h"
+
+#if defined(USE_GLFW)
+extern GLFWwindow* g_window;
+#endif
 
 static void UpdateWindowTitle();
 
