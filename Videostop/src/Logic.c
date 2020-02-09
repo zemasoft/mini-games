@@ -10,7 +10,17 @@
 #include <stdlib.h>   // srand, rand
 #include <time.h>     // time
 
+#if defined(USE_FREEGLUT)
 #include <GL/freeglut.h>
+#endif
+
+#if defined(USE_GLFW)
+#include <GLFW/glfw3.h>
+#endif
+
+#if defined(USE_GLFW)
+extern GLFWwindow* g_window;
+#endif
 
 #include "Config.h"
 #include "Graphics.h"
@@ -54,7 +64,14 @@ void L_Update()
   static int stop_time;
   static int statusbar_time;
 
+#if defined(USE_FREEGLUT)
   int const now = glutGet(GLUT_ELAPSED_TIME);
+#endif
+
+#if defined(USE_GLFW)
+  int const now = (int) (glfwGetTime() * 1000.0);
+#endif
+
   int const elapsed = now - before;
   before = now;
 
@@ -220,7 +237,13 @@ void UpdateWindowTitle()
   char buf[30];
   snprintf(buf, sizeof(buf), "Videostop @ %.2f Hz", g_config.shuffle_frequency);
 
+#if defined(USE_FREEGLUT)
   glutSetWindowTitle(buf);
+#endif
+
+#if defined(USE_GLFW)
+  glfwSetWindowTitle(g_window, buf);
+#endif
 }
 
 void ShuffleDices(enum DiceState const state)

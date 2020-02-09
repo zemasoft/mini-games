@@ -2,6 +2,7 @@ project(Videostop VERSION 1.0.0 LANGUAGES C)
 
 option(VIDEOSTOP_USE_FREEALUT "Use FreeALUT" ON)
 option(VIDEOSTOP_USE_FREEGLUT "Use FreeGLUT" ON)
+option(VIDEOSTOP_USE_GLFW "Use GLFW" OFF)
 
 option(VIDEOSTOP_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 option(VIDEOSTOP_CLANGFORMAT "Setup clangformat target" OFF)
@@ -12,6 +13,11 @@ endif()
 
 if(VIDEOSTOP_USE_FREEGLUT)
   find_package(FreeGLUT REQUIRED CONFIG)
+endif()
+
+if(VIDEOSTOP_USE_GLFW)
+  find_package(OpenGL REQUIRED MODULE)
+  find_package(glfw3 REQUIRED CONFIG)
 endif()
 
 add_executable(Videostop
@@ -97,6 +103,19 @@ if(VIDEOSTOP_USE_FREEGLUT)
   target_link_libraries(Videostop
     PRIVATE
       FreeGLUT::freeglut
+  )
+endif()
+
+if(VIDEOSTOP_USE_GLFW)
+  target_compile_definitions(Videostop
+    PRIVATE
+      USE_GLFW
+  )
+
+  target_link_libraries(Videostop
+    PRIVATE
+      OpenGL::OpenGL
+      glfw
   )
 endif()
 

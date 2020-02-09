@@ -5,7 +5,17 @@
 
 #include "Input.h"
 
+#if defined(USE_FREEGLUT)
 #include <GL/freeglut.h>
+#endif
+
+#if defined(USE_GLFW)
+#include <GLFW/glfw3.h>
+#endif
+
+#if defined(USE_GLFW)
+extern GLFWwindow* g_window;
+#endif
 
 static bool s_reset_key;
 static bool s_control_key;
@@ -15,17 +25,31 @@ static bool s_size_down_key;
 static bool s_speed_up_key;
 static bool s_speed_down_key;
 
+#if defined(USE_FREEGLUT)
 static void Keyboard(unsigned char key, int x, int y);
 static void Special(int key, int x, int y);
 static void Mouse(int button, int state, int x, int y);
+#endif
+
+#if defined(USE_GLFW)
+static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+#endif
 
 void I_Start()
 {
+  I_Restart();
+
+#if defined(USE_FREEGLUT)
   glutKeyboardFunc(&Keyboard);
   glutSpecialFunc(&Special);
   glutMouseFunc(&Mouse);
+#endif
 
-  I_Restart();
+#if defined(USE_GLFW)
+  glfwSetKeyCallback(g_window, KeyCallback);
+  glfwSetMouseButtonCallback(g_window, MouseButtonCallback);
+#endif
 }
 
 void I_Restart()
@@ -41,13 +65,22 @@ void I_Restart()
 
 void I_Update()
 {
+#if defined(USE_GLFW)
+  glfwPollEvents();
+#endif
 }
 
 void I_Stop()
 {
+#if defined(USE_FREEGLUT)
   glutKeyboardFunc(NULL);
   glutSpecialFunc(NULL);
   glutMouseFunc(NULL);
+#endif
+
+#if defined(USE_GLFW)
+  glfwSetKeyCallback(g_window, NULL);
+#endif
 }
 
 bool I_ResetKey()
@@ -113,6 +146,8 @@ bool I_SpeedDownKey()
   return res;
 }
 
+#if defined(USE_FREEGLUT)
+
 void Keyboard(unsigned char const key, int const x, int const y)
 {
   (void) x;
@@ -167,3 +202,68 @@ void Mouse(int const button, int const state, int const x, int const y)
     s_control_button = true;
   }
 }
+
+#endif
+
+#if defined(USE_GLFW)
+
+void KeyCallback(GLFWwindow* window, int const key, int const scancode, int const action,
+                 int const mods)
+{
+  (void) window;
+  (void) scancode;
+  (void) mods;
+
+  if (key < 0 || key >= GLFW_KEY_LAST)
+  {
+    return;
+  }
+
+  if (action == GLFW_PRESS)
+  {
+    switch (key)
+    {
+      case GLFW_KEY_ENTER:
+      case GLFW_KEY_SPACE:
+        s_control_key = true;
+        break;
+
+      case GLFW_KEY_ESCAPE:
+        glfwSetWindowShouldClose(g_window, GLFW_TRUE);
+        break;
+
+      case GLFW_KEY_R:
+        s_reset_key = true;
+        break;
+
+      case GLFW_KEY_RIGHT:
+        s_size_up_key = true;
+        break;
+
+      case GLFW_KEY_LEFT:
+        s_size_down_key = true;
+        break;
+
+      case GLFW_KEY_UP:
+        s_speed_up_key = true;
+        break;
+
+      case GLFW_KEY_DOWN:
+        s_speed_down_key = true;
+        break;
+    }
+  }
+}
+
+void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+  (void) window;
+  (void) mods;
+
+  if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+  {
+    s_control_button = true;
+  }
+}
+
+#endif

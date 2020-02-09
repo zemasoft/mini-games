@@ -10,10 +10,20 @@
 #include <stdbool.h>  // false
 #include <stdio.h>    // snprintf
 
+#if defined(USE_FREEGLUT)
 #include <GL/freeglut.h>
+#endif
+
+#if defined(USE_GLFW)
+#include <GLFW/glfw3.h>
+#endif
 
 #include "Config.h"
 #include "World.h"
+
+#if defined(USE_GLFW)
+extern GLFWwindow* g_window;
+#endif
 
 static void DrawDices();
 static void DrawStatusBar();
@@ -28,9 +38,6 @@ static void DrawDot5();
 static void DrawDot6();
 static void DrawDot7();
 static void DrawDot();
-
-static void DrawAttempts();
-static void DrawScore();
 
 void G_Start()
 {
@@ -58,7 +65,13 @@ void G_Update()
   DrawDices();
   DrawStatusBar();
 
+#if defined(USE_FREEGLUT)
   glutSwapBuffers();
+#endif
+
+#if defined(USE_GLFW)
+  glfwSwapBuffers(g_window);
+#endif
 }
 
 void G_Stop()
@@ -81,6 +94,7 @@ void DrawDices()
 
 void DrawStatusBar()
 {
+#if defined(USE_FREEGLUT)
   glPushMatrix();
 
   glTranslatef(MARGIN / 2.0f, -MARGIN / 2.0f - TEXT_SIZE, 0.0f);
@@ -104,11 +118,38 @@ void DrawStatusBar()
   }
   else
   {
-    DrawAttempts();
-    DrawScore();
+    {
+      char buf1[10];
+      snprintf(buf1, sizeof(buf1), "%d", g_world.successful_attempts);
+
+      char buf2[10];
+      snprintf(buf2, sizeof(buf2), "%d", g_world.failed_attempts);
+
+      glColor3f(STATUSBAR_DEFAULT_COLOR);
+      glutStrokeString(TEXT_FONT, (unsigned char*) "Attempts: ");
+      glColor3f(STATUSBAR_SUCCESS_COLOR);
+      glutStrokeString(TEXT_FONT, (unsigned char*) &buf1[0]);
+      glColor3f(STATUSBAR_DEFAULT_COLOR);
+      glutStrokeString(TEXT_FONT, (unsigned char*) " / ");
+      glColor3f(STATUSBAR_FAIL_COLOR);
+      glutStrokeString(TEXT_FONT, (unsigned char*) &buf2[0]);
+    }
+
+    {
+      char buf[20];
+      snprintf(buf, sizeof(buf), " Score: %d", g_world.score);
+
+      glColor3f(STATUSBAR_DEFAULT_COLOR);
+      glutStrokeString(TEXT_FONT, (unsigned char*) &buf[0]);
+    }
   }
 
   glPopMatrix();
+#endif
+
+#if defined(USE_GLFW)
+  // TODO
+#endif
 }
 
 void DrawDice(int const i)
@@ -326,31 +367,4 @@ void DrawDot()
   }
 
   glEnd();
-}
-
-void DrawAttempts()
-{
-  char buf1[10];
-  snprintf(buf1, sizeof(buf1), "%d", g_world.successful_attempts);
-
-  char buf2[10];
-  snprintf(buf2, sizeof(buf2), "%d", g_world.failed_attempts);
-
-  glColor3f(STATUSBAR_DEFAULT_COLOR);
-  glutStrokeString(TEXT_FONT, (unsigned char*) "Attempts: ");
-  glColor3f(STATUSBAR_SUCCESS_COLOR);
-  glutStrokeString(TEXT_FONT, (unsigned char*) &buf1[0]);
-  glColor3f(STATUSBAR_DEFAULT_COLOR);
-  glutStrokeString(TEXT_FONT, (unsigned char*) " / ");
-  glColor3f(STATUSBAR_FAIL_COLOR);
-  glutStrokeString(TEXT_FONT, (unsigned char*) &buf2[0]);
-}
-
-void DrawScore()
-{
-  char buf[20];
-  snprintf(buf, sizeof(buf), " Score: %d", g_world.score);
-
-  glColor3f(STATUSBAR_DEFAULT_COLOR);
-  glutStrokeString(TEXT_FONT, (unsigned char*) &buf[0]);
 }
