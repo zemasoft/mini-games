@@ -4,7 +4,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #include <stddef.h>  // size_t
-#include <stdlib.h>  // EXIT_SUCCESS, strtol
+#include <stdlib.h>  // EXIT_FAILURE, EXIT_SUCCESS, strtol
 
 #if defined(USE_FREEALUT)
 #include <AL/alut.h>
@@ -141,8 +141,6 @@ bool Init(int argc, char** argv)
 #endif
 
 #if defined(USE_GLFW)
-  glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
   g_window =
       glfwCreateWindow((int) g_config.size.x * PIECE_SIZE_PIXELS,
                        (int) g_config.size.y * PIECE_SIZE_PIXELS, "Sliding Puzzle", NULL, NULL);

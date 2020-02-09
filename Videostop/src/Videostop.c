@@ -118,8 +118,6 @@ bool Init(int argc, char** argv)
 #endif
 
 #if defined(USE_GLFW)
-  glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
   g_window = glfwCreateWindow(g_config.dice_count * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS, "Videostop",
                               NULL, NULL);
   if (!g_window)
