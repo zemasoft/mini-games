@@ -16,6 +16,15 @@ void I_Stop();
 bool I_ResetKey();
 bool I_ControlKey();
 bool I_ControlButton(int* x, int* y);
+
+enum DirectionKeys
+{
+  KEY_LEFT,
+  KEY_RIGHT,
+  KEY_DOWN,
+  KEY_UP
+};
+
 int I_PopDirectionKey();
 
 #endif  // INPUT_H

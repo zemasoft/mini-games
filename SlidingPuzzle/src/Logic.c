@@ -11,13 +11,23 @@
 #include <stdlib.h>   // free, malloc, srand, rand
 #include <time.h>     // time
 
+#if defined(USE_FREEGLUT)
 #include <GL/freeglut.h>
+#endif
+
+#if defined(USE_GLFW)
+#include <GLFW/glfw3.h>
+#endif
 
 #include "Config.h"
 #include "Graphics.h"
 #include "Input.h"
 #include "Sound.h"
 #include "World.h"
+
+#if defined(USE_GLFW)
+extern GLFWwindow* g_window;
+#endif
 
 static void UpdateWindowTitle();
 
@@ -86,7 +96,14 @@ void L_Update()
   static int before;
   static int statusbar_time;
 
+#if defined(USE_FREEGLUT)
   int const now = glutGet(GLUT_ELAPSED_TIME);
+#endif
+
+#if defined(USE_GLFW)
+  int const now = (int) (glfwGetTime() * 1000.0);
+#endif
+
   int const elapsed = now - before;
   before = now;
 
@@ -133,7 +150,7 @@ void L_Update()
 
       switch (I_PopDirectionKey())
       {
-        case GLUT_KEY_LEFT:
+        case KEY_LEFT:
           if (g_config.size.x > MIN_SIZE)
           {
             --g_config.size.x;
@@ -142,7 +159,7 @@ void L_Update()
           }
           break;
 
-        case GLUT_KEY_RIGHT:
+        case KEY_RIGHT:
           if (g_config.size.x < MAX_SIZE)
           {
             ++g_config.size.x;
@@ -151,7 +168,7 @@ void L_Update()
           }
           break;
 
-        case GLUT_KEY_DOWN:
+        case KEY_DOWN:
           if (g_config.size.y > MIN_SIZE)
           {
             --g_config.size.y;
@@ -160,7 +177,7 @@ void L_Update()
           }
           break;
 
-        case GLUT_KEY_UP:
+        case KEY_UP:
           if (g_config.size.y < MAX_SIZE)
           {
             ++g_config.size.y;
@@ -184,7 +201,7 @@ void L_Update()
     case WorldState_Idle:
       switch (I_PopDirectionKey())
       {
-        case GLUT_KEY_LEFT:
+        case KEY_LEFT:
           if (g_world.blank % g_world.size.x != g_world.size.x - 1)
           {
             S_PlaySound(Sound_Move);
@@ -198,7 +215,7 @@ void L_Update()
           }
           break;
 
-        case GLUT_KEY_RIGHT:
+        case KEY_RIGHT:
           if (g_world.blank % g_world.size.x != 0)
           {
             S_PlaySound(Sound_Move);
@@ -212,7 +229,7 @@ void L_Update()
           }
           break;
 
-        case GLUT_KEY_DOWN:
+        case KEY_DOWN:
           if (g_world.blank >= g_world.size.x)
           {
             S_PlaySound(Sound_Move);
@@ -226,7 +243,7 @@ void L_Update()
           }
           break;
 
-        case GLUT_KEY_UP:
+        case KEY_UP:
           if (g_world.blank + g_world.size.x < g_world.size.x * g_world.size.y)
           {
             S_PlaySound(Sound_Move);
@@ -243,10 +260,21 @@ void L_Update()
         default:
           if (control_button)
           {
-            size_t const x = (size_t)((float) control_x / (float) glutGet(GLUT_WINDOW_WIDTH) *
-                                      (float) g_world.size.x);
-            size_t const y = (size_t)((float) control_y / (float) glutGet(GLUT_WINDOW_HEIGHT) *
-                                      (float) g_world.size.y);
+#if defined(USE_FREEGLUT)
+            int const window_width = glutGet(GLUT_WINDOW_WIDTH);
+            int const window_height = glutGet(GLUT_WINDOW_HEIGHT);
+#endif
+
+#if defined(USE_GLFW)
+            int window_width;
+            int window_height;
+            glfwGetWindowSize(g_window, &window_width, &window_height);
+#endif
+
+            size_t const x =
+                (size_t)((float) control_x / (float) window_width * (float) g_world.size.x);
+            size_t const y =
+                (size_t)((float) control_y / (float) window_height * (float) g_world.size.y);
 
             size_t const blank_x = g_world.blank % g_world.size.x;
             size_t const blank_y = g_world.blank / g_world.size.x;
@@ -319,7 +347,13 @@ void UpdateWindowTitle()
   char buf[30];
   snprintf(buf, sizeof(buf), "Sliding Puzzle %ldx%ld", g_config.size.y, g_config.size.x);
 
+#if defined(USE_FREEGLUT)
   glutSetWindowTitle(buf);
+#endif
+
+#if defined(USE_GLFW)
+  glfwSetWindowTitle(g_window, buf);
+#endif
 }
 
 void MovePieceLeft()

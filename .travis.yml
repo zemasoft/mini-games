@@ -33,8 +33,7 @@ addons:
 install:
   - cd external
   - if [[ ${USE_FREEALUT} == ON ]]; then ./freealut.sh; fi
-  # - if [[ ${USE_FREEGLUT} == ON ]]; then ./freeglut.sh; fi
-  ./freeglut.sh
+  - if [[ ${USE_FREEGLUT} == ON ]]; then ./freeglut.sh; fi
   # - if [[ ${USE_GLFW} == ON ]]; then ./glfw.sh; fi
   - ./glfw.sh
   - cd ..
@@ -45,8 +44,8 @@ script:
                     -DALUT_ROOT_DIR=external \
                     \
                     -DSLIDINGPUZZLE_USE_FREEALUT=${USE_FREEALUT} \
-                    -DSLIDINGPUZZLE_USE_FREEGLUT=ON \
-                    -DSLIDINGPUZZLE_USE_GLFW=OFF \
+                    -DSLIDINGPUZZLE_USE_FREEGLUT=${USE_FREEGLUT} \
+                    -DSLIDINGPUZZLE_USE_GLFW=${USE_GLFW} \
                     \
                     -DSNAKE_USE_FREEALUT=${USE_FREEALUT} \
                     -DSNAKE_USE_FREEGLUT=OFF \

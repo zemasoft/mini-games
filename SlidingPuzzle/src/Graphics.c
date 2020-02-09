@@ -8,10 +8,20 @@
 #include <stddef.h>  // size_t
 #include <stdio.h>   // snprintf
 
+#if defined(USE_FREEGLUT)
 #include <GL/freeglut.h>
+#endif
+
+#if defined(USE_GLFW)
+#include <GLFW/glfw3.h>
+#endif
 
 #include "Config.h"
 #include "World.h"
+
+#if defined(USE_GLFW)
+extern GLFWwindow* g_window;
+#endif
 
 struct Projection
 {
@@ -29,8 +39,6 @@ static void InitPieceString(struct Piece* piece, struct Projection const* projec
 
 static void DrawPiece(struct Piece const* piece);
 static void DrawValue(struct Piece const* piece);
-
-static void DrawMoves();
 
 void G_Start()
 {
@@ -65,7 +73,13 @@ void G_Update()
   DrawPieces();
   DrawStatusBar();
 
+#if defined(USE_FREEGLUT)
   glutSwapBuffers();
+#endif
+
+#if defined(USE_GLFW)
+  glfwSwapBuffers(g_window);
+#endif
 }
 
 void G_Stop()
@@ -90,6 +104,7 @@ void DrawPieces()
 
 void DrawStatusBar()
 {
+#if defined(USE_FREEGLUT)
   glPushMatrix();
 
   glTranslatef(MARGIN / 2.0f, -MARGIN / 2.0f - TEXT_SIZE - 0.05f * PIECE_SIZE, 0.0f);
@@ -113,14 +128,24 @@ void DrawStatusBar()
   }
   else
   {
-    DrawMoves();
+    char buf[30];
+    snprintf(buf, sizeof(buf), "Moves: %d / %d", g_world.moves, g_world.single_moves);
+
+    glColor3f(STATUSBAR_COLOR);
+    glutStrokeString(TEXT_FONT, (unsigned char*) &buf[0]);
   }
 
   glPopMatrix();
+#endif
+
+#if defined(USE_GLFW)
+  // TODO
+#endif
 }
 
 void InitPieceString(struct Piece* const piece, struct Projection const* const projection)
 {
+#if defined(USE_FREEGLUT)
   snprintf(piece->string.value, sizeof(piece->string.value), "%d", piece->value);
 
   piece->string.width =
@@ -129,6 +154,11 @@ void InitPieceString(struct Piece* const piece, struct Projection const* const p
 
   piece->string.height = (float) glutStrokeHeight(TEXT_FONT) / (float) glutGet(GLUT_WINDOW_HEIGHT) *
                          (projection->top - projection->bottom) * VALUE_SIZE;
+#endif
+
+#if defined(USE_GLFW)
+  // TODO
+#endif
 }
 
 void DrawPiece(struct Piece const* const piece)
@@ -213,6 +243,7 @@ void DrawPiece(struct Piece const* const piece)
 
 void DrawValue(struct Piece const* const piece)
 {
+#if defined(USE_FREEGLUT)
   switch (piece->state)
   {
     case PieceState_Setup:
@@ -234,13 +265,9 @@ void DrawValue(struct Piece const* const piece)
   glScalef(VALUE_SIZE / 100.0f, VALUE_SIZE / 100.0f, 1.0f);
   glLineWidth(1.5f);
   glutStrokeString(TEXT_FONT, (unsigned char*) &piece->string.value[0]);
-}
+#endif
 
-void DrawMoves()
-{
-  char buf[30];
-  snprintf(buf, sizeof(buf), "Moves: %d / %d", g_world.moves, g_world.single_moves);
-
-  glColor3f(STATUSBAR_COLOR);
-  glutStrokeString(TEXT_FONT, (unsigned char*) &buf[0]);
+#if defined(USE_GLFW)
+  // TODO
+#endif
 }

@@ -10,7 +10,13 @@
 #include <AL/alut.h>
 #endif
 
+#if defined(USE_FREEGLUT)
 #include <GL/freeglut.h>
+#endif
+
+#if defined(USE_GLFW)
+#include <GLFW/glfw3.h>
+#endif
 
 #include "Config.h"
 #include "Graphics.h"
@@ -18,26 +24,71 @@
 #include "Logic.h"
 #include "Sound.h"
 
-static void Start(int argc, char** argv);
+#if defined(USE_GLFW)
+GLFWwindow* g_window;
+#endif
+
+static bool Init(int argc, char** argv);
+static void Start();
 static void Update();
 static void Stop();
 
 int main(int argc, char** argv)
 {
-  Start(argc, argv);
-  Stop();
+  int exit_code = EXIT_SUCCESS;
 
-  return EXIT_SUCCESS;
-}
-
-void Start(int argc, char** argv)
-{
+#if defined(USE_FREEGLUT)
   glutInit(&argc, argv);
-
-#if defined(USE_FREEALUT)
-  alutInit(&argc, argv);
 #endif
 
+#if defined(USE_GLFW)
+  if (!glfwInit())
+  {
+    exit_code = EXIT_FAILURE;
+    goto err1;
+  }
+#endif
+
+#if defined(USE_FREEALUT)
+  if (!alutInit(&argc, argv))
+  {
+    exit_code = EXIT_FAILURE;
+    goto err2;
+  }
+#endif
+
+  if (!Init(argc, argv))
+  {
+    exit_code = EXIT_FAILURE;
+    goto err3;
+  }
+
+  Start();
+  Stop();
+
+err3:
+
+#if defined(USE_FREEALUT)
+  alutExit();
+
+err2:
+#endif
+
+#if defined(USE_GLFW)
+  glfwTerminate();
+
+err1:
+#endif
+
+#if defined(USE_FREEGLUT)
+  glutExit();
+#endif
+
+  return exit_code;
+}
+
+bool Init(int argc, char** argv)
+{
   g_config.size.x = DEFAULT_SIZE;
   g_config.size.y = DEFAULT_SIZE;
 
@@ -82,21 +133,51 @@ void Start(int argc, char** argv)
     }
   }
 
+#if defined(USE_FREEGLUT)
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_MULTISAMPLE);
   glutInitWindowSize((int) g_config.size.x * PIECE_SIZE_PIXELS,
                      (int) g_config.size.y * PIECE_SIZE_PIXELS);
   glutCreateWindow("Sliding Puzzle");
+#endif
 
+#if defined(USE_GLFW)
+  glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+  g_window =
+      glfwCreateWindow((int) g_config.size.x * PIECE_SIZE_PIXELS,
+                       (int) g_config.size.y * PIECE_SIZE_PIXELS, "Sliding Puzzle", NULL, NULL);
+  if (!g_window)
+  {
+    return false;
+  }
+
+  glfwMakeContextCurrent(g_window);
+#endif
+
+  return true;
+}
+
+void Start()
+{
   I_Start();
   L_Start();
   S_Start();
   G_Start();
 
+#if defined(USE_FREEGLUT)
   glutDisplayFunc(&G_Update);
   glutIdleFunc(&Update);
 
   glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
   glutMainLoop();
+#endif
+
+#if defined(USE_GLFW)
+  while (!glfwWindowShouldClose(g_window))
+  {
+    Update();
+  }
+#endif
 }
 
 void Update()
@@ -113,12 +194,8 @@ void Stop()
   S_Stop();
   G_Stop();
 
+#if defined(USE_FREEGLUT)
   glutDisplayFunc(NULL);
   glutIdleFunc(NULL);
-
-#if defined(USE_FREEALUT)
-  alutExit();
 #endif
-
-  glutExit();
 }
