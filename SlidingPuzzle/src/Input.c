@@ -72,6 +72,9 @@ void I_Restart()
 
 void I_Update()
 {
+#if defined(USE_GLFW)
+  glfwPollEvents();
+#endif
 }
 
 void I_Stop()
