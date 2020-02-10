@@ -124,7 +124,7 @@ bool Init(int argc, char** argv)
 #if defined(USE_GLFW)
   g_window = glfwCreateWindow(g_config.dice_count * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS, "Videostop",
                               NULL, NULL);
-  if (!g_window)
+  if (g_window == NULL)
   {
     return false;
   }

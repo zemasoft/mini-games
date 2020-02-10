@@ -148,7 +148,7 @@ bool Init(int argc, char** argv)
   g_window =
       glfwCreateWindow((int) g_config.size.x * PIECE_SIZE_PIXELS,
                        (int) g_config.size.y * PIECE_SIZE_PIXELS, "Sliding Puzzle", NULL, NULL);
-  if (!g_window)
+  if (g_window == NULL)
   {
     return false;
   }

@@ -149,7 +149,7 @@ bool Init(int argc, char** argv)
   g_window =
       glfwCreateWindow((int) g_config.ground.size.x * FIELD_SIZE_PIXELS,
                        (int) g_config.ground.size.y * FIELD_SIZE_PIXELS, "Snake", NULL, NULL);
-  if (!g_window)
+  if (g_window == NULL)
   {
     return false;
   }
