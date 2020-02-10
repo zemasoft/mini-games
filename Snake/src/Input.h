@@ -15,6 +15,15 @@ void I_Stop();
 
 bool I_ResetKey();
 bool I_PauseKey();
+
+enum DirectionKeys
+{
+  KEY_LEFT,
+  KEY_RIGHT,
+  KEY_DOWN,
+  KEY_UP
+};
+
 int I_GetDirectionKey();
 int I_PopDirectionKey();
 

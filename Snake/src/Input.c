@@ -110,26 +110,29 @@ void KeyCallback(GLFWwindow* window, int const key, int const scancode, int cons
       case GLFW_KEY_ESCAPE:
         glfwSetWindowShouldClose(g_window, GLFW_TRUE);
         break;
-
       case GLFW_KEY_R:
         s_reset_key = true;
         break;
-
       case GLFW_KEY_P:
         s_pause_key = true;
         break;
-
       case GLFW_KEY_LEFT:
-      case GLFW_KEY_RIGHT:
-      case GLFW_KEY_DOWN:
-      case GLFW_KEY_UP:
-        s_direction_keys[s_top++] = key;
-
-        if (s_top > DIRECTION_KEYS_SIZE - 1)
-        {
-          s_top = 0;
-        }
+        s_direction_keys[s_top++] = KEY_LEFT;
         break;
+      case GLFW_KEY_RIGHT:
+        s_direction_keys[s_top++] = KEY_RIGHT;
+        break;
+      case GLFW_KEY_DOWN:
+        s_direction_keys[s_top++] = KEY_DOWN;
+        break;
+      case GLFW_KEY_UP:
+        s_direction_keys[s_top++] = KEY_UP;
+        break;
+    }
+
+    if (s_top > DIRECTION_KEYS_SIZE - 1)
+    {
+      s_top = 0;
     }
   }
 }

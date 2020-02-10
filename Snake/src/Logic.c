@@ -160,7 +160,7 @@ void L_Update()
 
           switch (I_PopDirectionKey())
           {
-            case GLFW_KEY_LEFT:
+            case KEY_LEFT:
               switch (g_world.snake.heading)
               {
                 case SnakeHeading_Left:
@@ -181,7 +181,7 @@ void L_Update()
               }
               break;
 
-            case GLFW_KEY_RIGHT:
+            case KEY_RIGHT:
               switch (g_world.snake.heading)
               {
                 case SnakeHeading_Left:
@@ -202,7 +202,7 @@ void L_Update()
               }
               break;
 
-            case GLFW_KEY_DOWN:
+            case KEY_DOWN:
               switch (g_world.snake.heading)
               {
                 case SnakeHeading_Left:
@@ -223,7 +223,7 @@ void L_Update()
               }
               break;
 
-            case GLFW_KEY_UP:
+            case KEY_UP:
               switch (g_world.snake.heading)
               {
                 case SnakeHeading_Left:
