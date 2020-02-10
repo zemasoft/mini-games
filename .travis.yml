@@ -40,7 +40,7 @@ install:
 script:
   - |
     cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-                    -DALUT_ROOT_DIR=external \
+                    -DEXTERNAL_DIR=external \
                     -DSLIDINGPUZZLE_USE_FREEALUT=${USE_FREEALUT} \
                     -DSLIDINGPUZZLE_USE_FREEGLUT=${USE_FREEGLUT} \
                     -DSLIDINGPUZZLE_USE_GLFW=${USE_GLFW} \

@@ -3,8 +3,11 @@ cmake_minimum_required(VERSION 3.12)
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/clangformat-cmake/cmake)
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
-list(APPEND CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR}/external/lib/cmake/FreeGLUT)
-list(APPEND CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR}/external/lib/cmake/glfw3)
+get_filename_component(EXTERNAL_DIR ${EXTERNAL_DIR} ABSOLUTE)
+
+set(ALUT_ROOT_DIR ${EXTERNAL_DIR})
+list(APPEND CMAKE_PREFIX_PATH ${EXTERNAL_DIR}/lib/cmake/FreeGLUT)
+list(APPEND CMAKE_PREFIX_PATH ${EXTERNAL_DIR}/lib/cmake/glfw3)
 
 include(ECMEnableSanitizers)
 

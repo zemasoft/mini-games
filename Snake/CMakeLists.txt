@@ -8,16 +8,16 @@ option(SNAKE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 option(SNAKE_CLANGFORMAT "Setup clangformat target" OFF)
 
 if(SNAKE_USE_FREEALUT)
-  find_package(ALUT REQUIRED MODULE)  # FreeALUT
+  find_package(ALUT MODULE REQUIRED)  # FreeALUT
 endif()
 
 if(SNAKE_USE_FREEGLUT)
-  find_package(FreeGLUT REQUIRED CONFIG)
+  find_package(FreeGLUT CONFIG REQUIRED)
 endif()
 
 if(SNAKE_USE_GLFW)
-  find_package(OpenGL REQUIRED MODULE)
-  find_package(glfw3 REQUIRED CONFIG)
+  find_package(OpenGL MODULE REQUIRED)
+  find_package(glfw3 CONFIG REQUIRED)
 endif()
 
 add_executable(Snake
