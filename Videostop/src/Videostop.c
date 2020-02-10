@@ -3,7 +3,8 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <stdlib.h>  // EXIT_FAILURE, EXIT_SUCCESS, strtol
+#include <stdbool.h>  // bool
+#include <stdlib.h>   // EXIT_FAILURE, EXIT_SUCCESS, strtol
 
 #if defined(USE_FREEALUT)
 #include <AL/alut.h>
