@@ -17,7 +17,7 @@ bool I_ResetKey();
 bool I_ControlKey();
 bool I_ControlButton(int* x, int* y);
 
-enum DirectionKeys
+enum Key
 {
   KEY_LEFT,
   KEY_RIGHT,

@@ -16,7 +16,7 @@ void I_Stop();
 bool I_ResetKey();
 bool I_PauseKey();
 
-enum DirectionKeys
+enum Key
 {
   KEY_LEFT,
   KEY_RIGHT,
