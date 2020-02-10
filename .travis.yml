@@ -44,10 +44,13 @@ script:
                     -DSLIDINGPUZZLE_USE_FREEALUT=${USE_FREEALUT} \
                     -DSLIDINGPUZZLE_USE_FREEGLUT=${USE_FREEGLUT} \
                     -DSLIDINGPUZZLE_USE_GLFW=${USE_GLFW} \
+                    -DSLIDINGPUZZLE_WARNINGS_AS_ERRORS=ON \
                     -DSNAKE_USE_FREEALUT=${USE_FREEALUT} \
                     -DSNAKE_USE_FREEGLUT=${USE_FREEGLUT} \
                     -DSNAKE_USE_GLFW=${USE_GLFW} \
+                    -DSNAKE_WARNINGS_AS_ERRORS=ON \
                     -DVIDEOSTOP_USE_FREEALUT=${USE_FREEALUT} \
                     -DVIDEOSTOP_USE_FREEGLUT=${USE_FREEGLUT} \
-                    -DVIDEOSTOP_USE_GLFW=${USE_GLFW}
+                    -DVIDEOSTOP_USE_GLFW=${USE_GLFW} \
+                    -DVIDEOSTOP_WARNINGS_AS_ERRORS=ON
   - cmake --build build
