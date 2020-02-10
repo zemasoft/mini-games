@@ -158,6 +158,8 @@ void InitPieceString(struct Piece* const piece, struct Projection const* const p
 
 #if defined(USE_GLFW)
   // TODO
+  (void) piece;
+  (void) projection;
 #endif
 }
 
@@ -269,5 +271,6 @@ void DrawValue(struct Piece const* const piece)
 
 #if defined(USE_GLFW)
   // TODO
+  (void) piece;
 #endif
 }

@@ -449,14 +449,14 @@ struct Field* GetField(int const x, int const y)
 
 void PlayTurnLeftSound()
 {
-  S_PlaySound(Sound_Turn1 + s_turn_sound_index);
+  S_PlaySound(Sound_Turn1 + (enum Sound) s_turn_sound_index);
 
   s_turn_sound_index = (s_turn_sound_index + 1) % 4;
 }
 
 void PlayTurnRightSound()
 {
-  S_PlaySound(Sound_Turn1 + s_turn_sound_index);
+  S_PlaySound(Sound_Turn1 + (enum Sound) s_turn_sound_index);
 
   s_turn_sound_index = (s_turn_sound_index - 1 + 4) % 4;
 }
