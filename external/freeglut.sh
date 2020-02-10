@@ -21,3 +21,5 @@ cmake . -Bbuild -DCMAKE_BUILD_TYPE=Release \
                 -DFREEGLUT_REPLACE_GLUT=OFF
 cmake --build build
 cmake --build build --target install
+
+echo "All OK"

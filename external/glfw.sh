@@ -21,3 +21,5 @@ cmake . -Bbuild -DCMAKE_BUILD_TYPE=Release \
                 -DGLFW_USE_WAYLAND=OFF
 cmake --build build
 cmake --build build --target install
+
+echo "All OK"

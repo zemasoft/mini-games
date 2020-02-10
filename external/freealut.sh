@@ -20,3 +20,5 @@ cmake . -Bbuild -DCMAKE_BUILD_TYPE=Release \
                 -DBUILD_USE_WERROR=OFF
 cmake --build build
 cmake --build build --target install
+
+echo "All OK"
