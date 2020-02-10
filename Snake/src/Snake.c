@@ -9,7 +9,13 @@
 #include <AL/alut.h>
 #endif
 
+#if defined(USE_FREEGLUT)
+#include <GL/freeglut.h>
+#endif
+
+#if defined(USE_GLFW)
 #include <GLFW/glfw3.h>
+#endif
 
 #include "Config.h"
 #include "Graphics.h"
@@ -17,19 +23,71 @@
 #include "Logic.h"
 #include "Sound.h"
 
+#if defined(USE_GLFW)
 GLFWwindow* g_window;
+#endif
+
+static bool Init(int argc, char** argv);
+static void Start();
+static void Update();
+static void Stop();
 
 int main(int argc, char** argv)
 {
-  if (!glfwInit())
-  {
-    return EXIT_FAILURE;
-  }
+  int exit_code = EXIT_SUCCESS;
 
-#if defined(USE_FREEALUT)
-  alutInit(&argc, argv);
+#if defined(USE_FREEGLUT)
+  glutInit(&argc, argv);
 #endif
 
+#if defined(USE_GLFW)
+  if (!glfwInit())
+  {
+    exit_code = EXIT_FAILURE;
+    goto err1;
+  }
+#endif
+
+#if defined(USE_FREEALUT)
+  if (!alutInit(&argc, argv))
+  {
+    exit_code = EXIT_FAILURE;
+    goto err2;
+  }
+#endif
+
+  if (!Init(argc, argv))
+  {
+    exit_code = EXIT_FAILURE;
+    goto err3;
+  }
+
+  Start();
+  Stop();
+
+err3:
+
+#if defined(USE_FREEALUT)
+  alutExit();
+
+err2:
+#endif
+
+#if defined(USE_GLFW)
+  glfwTerminate();
+
+err1:
+#endif
+
+#if defined(USE_FREEGLUT)
+  glutExit();
+#endif
+
+  return exit_code;
+}
+
+bool Init(int argc, char** argv)
+{
   g_config.ground.size.x = DEFAULT_X_SIZE;
   g_config.ground.size.y = DEFAULT_Y_SIZE;
 
@@ -74,6 +132,14 @@ int main(int argc, char** argv)
     }
   }
 
+#if defined(USE_FREEGLUT)
+  glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_MULTISAMPLE);
+  glutInitWindowSize((int) g_config.ground.size.x * FIELD_SIZE_PIXELS,
+                     (int) g_config.ground.size.y * FIELD_SIZE_PIXELS);
+  glutCreateWindow("Videostop");
+#endif
+
+#if defined(USE_GLFW)
   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
   g_window =
@@ -81,37 +147,54 @@ int main(int argc, char** argv)
                        (int) g_config.ground.size.y * FIELD_SIZE_PIXELS, "Snake", NULL, NULL);
   if (!g_window)
   {
-#if defined(USE_FREEALUT)
-    alutExit();
-#endif
-
-    glfwTerminate();
-    return EXIT_FAILURE;
+    return false;
   }
 
   glfwMakeContextCurrent(g_window);
+#endif
 
+  return true;
+}
+
+void Start()
+{
   I_Start();
   L_Start();
   S_Start();
   G_Start();
 
+#if defined(USE_FREEGLUT)
+  glutDisplayFunc(&G_Update);
+  glutIdleFunc(&Update);
+
+  glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+  glutMainLoop();
+#endif
+
+#if defined(USE_GLFW)
   while (!glfwWindowShouldClose(g_window))
   {
-    I_Update();
-    L_Update();
-    G_Update();
+    Update();
   }
+#endif
+}
 
+void Update()
+{
+  I_Update();
+  L_Update();
+  G_Update();
+}
+
+void Stop()
+{
   I_Stop();
   L_Stop();
   S_Stop();
   G_Stop();
 
-#if defined(USE_FREEALUT)
-  alutExit();
+#if defined(USE_FREEGLUT)
+  glutDisplayFunc(NULL);
+  glutIdleFunc(NULL);
 #endif
-
-  glfwTerminate();
-  return EXIT_SUCCESS;
 }

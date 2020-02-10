@@ -10,7 +10,13 @@
 #include <stdlib.h>  // free, malloc, srand, rand
 #include <time.h>    // time
 
+#if defined(USE_FREEGLUT)
+#include <GL/freeglut.h>
+#endif
+
+#if defined(USE_GLFW)
 #include <GLFW/glfw3.h>
+#endif
 
 #include "Config.h"
 #include "Input.h"
@@ -27,7 +33,9 @@ enum MoveSnake
   MoveSnake_NoSpace
 };
 
+#if defined(USE_GLFW)
 extern GLFWwindow* g_window;
+#endif
 
 static struct Field** s_empty_fields;
 
@@ -128,7 +136,14 @@ void L_Update()
   static double before;
   static double move_time;
 
+#if defined(USE_FREEGLUT)
+  double const now = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
+#endif
+
+#if defined(USE_GLFW)
   double const now = glfwGetTime();
+#endif
+
   double const elapsed = now - before;
   before = now;
 

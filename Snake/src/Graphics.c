@@ -9,13 +9,21 @@
 #include <math.h>    // M_PI, cos, sin
 #include <stddef.h>  // size_t
 
+#if defined(USE_FREEGLUT)
+#include <GL/freeglut.h>
+#endif
+
+#if defined(USE_GLFW)
 #include <GLFW/glfw3.h>
+#endif
 
 #include "Config.h"
 #include "Tools.h"
 #include "World.h"
 
+#if defined(USE_GLFW)
 extern GLFWwindow* g_window;
+#endif
 
 static void DrawStatusBar();
 static void DrawMargin();
@@ -64,7 +72,13 @@ void G_Update()
   DrawGround();
   DrawSnake();
 
+#if defined(USE_FREEGLUT)
+  glutSwapBuffers();
+#endif
+
+#if defined(USE_GLFW)
   glfwSwapBuffers(g_window);
+#endif
 }
 
 void G_Stop()
