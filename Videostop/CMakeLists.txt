@@ -8,7 +8,7 @@ option(VIDEOSTOP_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 option(VIDEOSTOP_CLANGFORMAT "Setup clangformat target" OFF)
 
 if(VIDEOSTOP_USE_FREEALUT)
-  find_package(ALUT MODULE REQUIRED)  # FreeALUT
+  find_package(FreeALUT MODULE REQUIRED)
 endif()
 
 if(VIDEOSTOP_USE_FREEGLUT)
@@ -83,14 +83,9 @@ if(VIDEOSTOP_USE_FREEALUT)
       USE_FREEALUT
   )
 
-  target_include_directories(Videostop
-    PRIVATE
-      ${ALUT_INCLUDE_DIRS}
-  )
-
   target_link_libraries(Videostop
     PRIVATE
-      ${ALUT_LIBRARIES}
+      FreeALUT::FreeALUT
   )
 endif()
 

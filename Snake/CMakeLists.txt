@@ -8,7 +8,7 @@ option(SNAKE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 option(SNAKE_CLANGFORMAT "Setup clangformat target" OFF)
 
 if(SNAKE_USE_FREEALUT)
-  find_package(ALUT MODULE REQUIRED)  # FreeALUT
+  find_package(FreeALUT MODULE REQUIRED)
 endif()
 
 if(SNAKE_USE_FREEGLUT)
@@ -85,14 +85,9 @@ if(SNAKE_USE_FREEALUT)
       USE_FREEALUT
   )
 
-  target_include_directories(Snake
-    PRIVATE
-      ${ALUT_INCLUDE_DIRS}
-  )
-
   target_link_libraries(Snake
     PRIVATE
-      ${ALUT_LIBRARIES}
+      FreeALUT::FreeALUT
   )
 endif()
 

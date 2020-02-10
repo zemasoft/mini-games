@@ -8,7 +8,7 @@ option(SLIDINGPUZZLE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 option(SLIDINGPUZZLE_CLANGFORMAT "Setup clangformat target" OFF)
 
 if(SLIDINGPUZZLE_USE_FREEALUT)
-  find_package(ALUT MODULE REQUIRED)  # FreeALUT
+  find_package(FreeALUT MODULE REQUIRED)
 endif()
 
 if(SLIDINGPUZZLE_USE_FREEGLUT)
@@ -78,14 +78,9 @@ if(SLIDINGPUZZLE_USE_FREEALUT)
       USE_FREEALUT
   )
 
-  target_include_directories(SlidingPuzzle
-    PRIVATE
-      ${ALUT_INCLUDE_DIRS}
-  )
-
   target_link_libraries(SlidingPuzzle
     PRIVATE
-      ${ALUT_LIBRARIES}
+      FreeALUT::FreeALUT
   )
 endif()
 
