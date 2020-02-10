@@ -32,6 +32,7 @@ static bool Init(int argc, char** argv);
 static void Start();
 static void Update();
 static void Stop();
+static void Terminate();
 
 int main(int argc, char** argv)
 {
@@ -65,6 +66,8 @@ int main(int argc, char** argv)
 
   Start();
   Stop();
+
+  Terminate();
 
 err3:
 
@@ -149,6 +152,7 @@ bool Init(int argc, char** argv)
     return false;
   }
 
+  glfwShowWindow(g_window);
   glfwMakeContextCurrent(g_window);
 #endif
 
@@ -195,5 +199,12 @@ void Stop()
 #if defined(USE_FREEGLUT)
   glutDisplayFunc(NULL);
   glutIdleFunc(NULL);
+#endif
+}
+
+void Terminate()
+{
+#if defined(USE_GLFW)
+  glfwDestroyWindow(g_window);
 #endif
 }
