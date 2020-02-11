@@ -3,6 +3,7 @@ project(SlidingPuzzle VERSION 1.0.0 LANGUAGES C)
 option(SLIDINGPUZZLE_USE_FREEALUT "Use FreeALUT" ON)
 option(SLIDINGPUZZLE_USE_FREEGLUT "Use FreeGLUT" ON)
 option(SLIDINGPUZZLE_USE_GLFW "Use GLFW" OFF)
+option(SLIDINGPUZZLE_USE_SDL2 "Use SDL2" OFF)
 
 option(SLIDINGPUZZLE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 option(SLIDINGPUZZLE_CLANGFORMAT "Setup clangformat target" OFF)
@@ -18,6 +19,10 @@ endif()
 if(SLIDINGPUZZLE_USE_GLFW)
   find_package(OpenGL MODULE REQUIRED)
   find_package(glfw3 CONFIG REQUIRED)
+endif()
+
+if(SLIDINGPUZZLE_USE_SDL2)
+  find_package(SDL2 MODULE REQUIRED)
 endif()
 
 add_executable(SlidingPuzzle
@@ -106,6 +111,18 @@ if(SLIDINGPUZZLE_USE_GLFW)
     PRIVATE
       OpenGL::OpenGL
       glfw
+  )
+endif()
+
+if(SLIDINGPUZZLE_USE_SDL2)
+  target_compile_definitions(SlidingPuzzle
+    PRIVATE
+      USE_SDL2
+  )
+
+  target_link_libraries(SlidingPuzzle
+    PRIVATE
+      SDL2::SDL2
   )
 endif()
 

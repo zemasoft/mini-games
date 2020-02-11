@@ -3,6 +3,7 @@ project(Snake VERSION 1.0.0 LANGUAGES C)
 option(SNAKE_USE_FREEALUT "Use FreeALUT" ON)
 option(SNAKE_USE_FREEGLUT "Use FreeGLUT" OFF)
 option(SNAKE_USE_GLFW "Use GLFW" ON)
+option(SNAKE_USE_SDL2 "Use SDL2" OFF)
 
 option(SNAKE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 option(SNAKE_CLANGFORMAT "Setup clangformat target" OFF)
@@ -18,6 +19,10 @@ endif()
 if(SNAKE_USE_GLFW)
   find_package(OpenGL MODULE REQUIRED)
   find_package(glfw3 CONFIG REQUIRED)
+endif()
+
+if(SNAKE_USE_SDL2)
+  find_package(SDL2 MODULE REQUIRED)
 endif()
 
 add_executable(Snake
@@ -113,6 +118,18 @@ if(SNAKE_USE_GLFW)
     PRIVATE
       OpenGL::OpenGL
       glfw
+  )
+endif()
+
+if(SNAKE_USE_SDL2)
+  target_compile_definitions(Snake
+    PRIVATE
+      USE_SDL2
+  )
+
+  target_link_libraries(Snake
+    PRIVATE
+      SDL2::SDL2
   )
 endif()
 
