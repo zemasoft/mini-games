@@ -254,7 +254,7 @@ void KeyCallback(GLFWwindow* window, int const key, int const scancode, int cons
   }
 }
 
-void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+void MouseButtonCallback(GLFWwindow* window, int const button, int const action, int const mods)
 {
   (void) window;
   (void) mods;
@@ -265,7 +265,7 @@ void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
   }
 }
 
-void CursorPosCallback(GLFWwindow* window, double xpos, double ypos)
+void CursorPosCallback(GLFWwindow* window, double const xpos, double const ypos)
 {
   (void) window;
 

@@ -3,7 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <stdbool.h>  // bool
+#include <stdbool.h>  // bool, false, true
 #include <stddef.h>   // size_t
 #include <stdlib.h>   // EXIT_FAILURE, EXIT_SUCCESS, strtol
 
