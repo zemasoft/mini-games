@@ -18,6 +18,10 @@
 #include <GLFW/glfw3.h>
 #endif
 
+#if defined(USE_SDL2)
+#include <SDL2/SDL.h>
+#endif
+
 #include "Config.h"
 #include "Graphics.h"
 #include "Input.h"
@@ -26,6 +30,10 @@
 
 #if defined(USE_GLFW)
 extern GLFWwindow* g_window;
+#endif
+
+#if defined(USE_SDL2)
+extern SDL_Window* g_window;
 #endif
 
 static void UpdateWindowTitle();
@@ -70,6 +78,10 @@ void L_Update()
 
 #if defined(USE_GLFW)
   int const now = (int) (glfwGetTime() * 1000.0);
+#endif
+
+#if defined(USE_SDL2)
+  int const now = SDL_GetTicks();
 #endif
 
   int const elapsed = now - before;
@@ -243,6 +255,10 @@ void UpdateWindowTitle()
 
 #if defined(USE_GLFW)
   glfwSetWindowTitle(g_window, buf);
+#endif
+
+#if defined(USE_SDL2)
+  SDL_SetWindowTitle(g_window, buf);
 #endif
 }
 

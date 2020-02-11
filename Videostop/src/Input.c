@@ -13,8 +13,16 @@
 #include <GLFW/glfw3.h>
 #endif
 
+#if defined(USE_SDL2)
+#include <SDL2/SDL.h>
+#endif
+
 #if defined(USE_GLFW)
 extern GLFWwindow* g_window;
+#endif
+
+#if defined(USE_SDL2)
+extern bool g_quit;
 #endif
 
 static bool s_reset_key;
@@ -67,6 +75,17 @@ void I_Update()
 {
 #if defined(USE_GLFW)
   glfwPollEvents();
+#endif
+
+#if defined(USE_SDL2)
+  SDL_Event e;
+  while (SDL_PollEvent(&e) != 0)
+  {
+    if (e.type == SDL_QUIT)
+    {
+      g_quit = true;
+    }
+  }
 #endif
 }
 
