@@ -117,7 +117,7 @@ void L_Restart()
 
   g_world.snake.heading = SnakeHeading_Right;
 
-  g_world.max_move_time = 0.25;
+  g_world.max_move_time = 250;
 
   g_world.score = 0;
 
@@ -133,18 +133,18 @@ void L_Restart()
 
 void L_Update()
 {
-  static double before;
-  static double move_time;
+  static unsigned before;
+  static unsigned move_time;
 
 #if defined(USE_FREEGLUT)
-  double const now = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
+  unsigned const now = (unsigned) glutGet(GLUT_ELAPSED_TIME);
 #endif
 
 #if defined(USE_GLFW)
-  double const now = glfwGetTime();
+  unsigned const now = (unsigned) (glfwGetTime() * 1000.0);
 #endif
 
-  double const elapsed = now - before;
+  unsigned const elapsed = now - before;
   before = now;
 
   if (I_ResetKey())
@@ -154,7 +154,7 @@ void L_Update()
     S_Restart();
     // G_Restart();
 
-    move_time = 0.0;
+    move_time = 0;
     return;
   }
 
@@ -171,7 +171,7 @@ void L_Update()
 
         if (move_time >= g_world.max_move_time)
         {
-          move_time = 0.0;
+          move_time = 0;
 
           switch (I_PopDirectionKey())
           {
@@ -301,12 +301,12 @@ void L_Update()
           switch (g_world.snake.state)
           {
             case SnakeState_Normal:
-              g_world.snake.head_offset = (float) (move_time / g_world.max_move_time);
-              g_world.snake.tail_offset = (float) (move_time / g_world.max_move_time);
+              g_world.snake.head_offset = (float) move_time / (float) g_world.max_move_time;
+              g_world.snake.tail_offset = (float) move_time / (float) g_world.max_move_time;
               break;
 
             case SnakeState_Growing:
-              g_world.snake.head_offset = (float) (move_time / g_world.max_move_time);
+              g_world.snake.head_offset = (float) move_time / (float) g_world.max_move_time;
               break;
           }
         }

@@ -93,18 +93,18 @@ void L_Restart()
 
 void L_Update()
 {
-  static int before;
-  static int statusbar_time;
+  static unsigned before;
+  static unsigned statusbar_time;
 
 #if defined(USE_FREEGLUT)
-  int const now = glutGet(GLUT_ELAPSED_TIME);
+  unsigned const now = (unsigned) glutGet(GLUT_ELAPSED_TIME);
 #endif
 
 #if defined(USE_GLFW)
-  int const now = (int) (glfwGetTime() * 1000.0);
+  unsigned const now = (unsigned) (glfwGetTime() * 1000.0);
 #endif
 
-  int const elapsed = now - before;
+  unsigned const elapsed = now - before;
   before = now;
 
   if (g_world.size.x != g_config.size.x || g_world.size.y != g_config.size.y)
