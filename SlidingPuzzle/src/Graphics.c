@@ -16,11 +16,20 @@
 #include <GLFW/glfw3.h>
 #endif
 
+#if defined(USE_SDL2)
+#include <GL/gl.h>
+#include <SDL2/SDL.h>
+#endif
+
 #include "Config.h"
 #include "World.h"
 
 #if defined(USE_GLFW)
 extern GLFWwindow* g_window;
+#endif
+
+#if defined(USE_SDL2)
+extern SDL_Window* g_window;
 #endif
 
 struct Projection
@@ -42,6 +51,11 @@ static void DrawValue(struct Piece const* piece);
 
 void G_Start()
 {
+#if defined(USE_SDL2)
+  SDL_GL_CreateContext(g_window);
+  SDL_GL_SetSwapInterval(1);
+#endif
+
   glEnable(GL_MULTISAMPLE);
   glDisable(GL_DEPTH_TEST);
 
@@ -79,6 +93,10 @@ void G_Update()
 
 #if defined(USE_GLFW)
   glfwSwapBuffers(g_window);
+#endif
+
+#if defined(USE_SDL2)
+  SDL_GL_SwapWindow(g_window);
 #endif
 }
 
@@ -141,6 +159,10 @@ void DrawStatusBar()
 #if defined(USE_GLFW)
   // TODO
 #endif
+
+#if defined(USE_SDL2)
+  // TODO
+#endif
 }
 
 void InitPieceString(struct Piece* const piece, struct Projection const* const projection)
@@ -157,6 +179,12 @@ void InitPieceString(struct Piece* const piece, struct Projection const* const p
 #endif
 
 #if defined(USE_GLFW)
+  // TODO
+  (void) piece;
+  (void) projection;
+#endif
+
+#if defined(USE_SDL2)
   // TODO
   (void) piece;
   (void) projection;
@@ -270,6 +298,11 @@ void DrawValue(struct Piece const* const piece)
 #endif
 
 #if defined(USE_GLFW)
+  // TODO
+  (void) piece;
+#endif
+
+#if defined(USE_SDL2)
   // TODO
   (void) piece;
 #endif

@@ -15,10 +15,18 @@
 #include <GLFW/glfw3.h>
 #endif
 
+#if defined(USE_SDL2)
+#include <SDL2/SDL.h>
+#endif
+
 #include "Config.h"
 
 #if defined(USE_GLFW)
 extern GLFWwindow* g_window;
+#endif
+
+#if defined(USE_SDL2)
+extern bool g_quit;
 #endif
 
 static bool s_reset_key;
@@ -41,6 +49,12 @@ static void Mouse(int button, int state, int x, int y);
 static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 static void CursorPosCallback(GLFWwindow* window, double xpos, double ypos);
+#endif
+
+#if defined(USE_SDL2)
+static void ProcessKeyEvent(SDL_Event const* e);
+static void ProcessMouseButtonEvent(SDL_Event const* e);
+static void ProcessMouseMotionEvent(SDL_Event const* e);
 #endif
 
 void I_Start()
@@ -74,6 +88,30 @@ void I_Update()
 {
 #if defined(USE_GLFW)
   glfwPollEvents();
+#endif
+
+#if defined(USE_SDL2)
+  SDL_Event e;
+  while (SDL_PollEvent(&e) != 0)
+  {
+    switch (e.type)
+    {
+      case SDL_QUIT:
+        g_quit = true;
+        break;
+      case SDL_KEYDOWN:
+      case SDL_KEYUP:
+        ProcessKeyEvent(&e);
+        break;
+      case SDL_MOUSEBUTTONDOWN:
+      case SDL_MOUSEBUTTONUP:
+        ProcessMouseButtonEvent(&e);
+        break;
+      case SDL_MOUSEMOTION:
+        ProcessMouseMotionEvent(&e);
+        break;
+    }
+  }
 #endif
 }
 
@@ -271,6 +309,68 @@ void CursorPosCallback(GLFWwindow* window, double const xpos, double const ypos)
 
   s_control_x = (int) xpos;
   s_control_y = (int) ypos;
+}
+
+#endif
+
+#if defined(USE_SDL2)
+
+void ProcessKeyEvent(SDL_Event const* const e)
+{
+  if (e->type == SDL_KEYDOWN)
+  {
+    if (e->key.keysym.scancode == SDL_SCANCODE_RETURN)
+    {
+      s_control_key = true;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_SPACE)
+    {
+      s_control_key = true;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+    {
+      g_quit = true;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_R)
+    {
+      s_reset_key = true;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_LEFT)
+    {
+      s_direction_keys[s_top++] = KEY_LEFT;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_RIGHT)
+    {
+      s_direction_keys[s_top++] = KEY_RIGHT;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_DOWN)
+    {
+      s_direction_keys[s_top++] = KEY_DOWN;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_UP)
+    {
+      s_direction_keys[s_top++] = KEY_UP;
+    }
+
+    if (s_top > DIRECTION_KEYS_SIZE - 1)
+    {
+      s_top = 0;
+    }
+  }
+}
+
+void ProcessMouseButtonEvent(SDL_Event const* const e)
+{
+  if (e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_LEFT)
+  {
+    s_control_button = true;
+  }
+}
+
+void ProcessMouseMotionEvent(SDL_Event const* e)
+{
+  s_control_x = e->motion.x;
+  s_control_y = e->motion.y;
 }
 
 #endif
