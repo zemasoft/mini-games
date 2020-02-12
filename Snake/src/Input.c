@@ -13,10 +13,18 @@
 #include <GLFW/glfw3.h>
 #endif
 
+#if defined(USE_SDL2)
+#include <SDL2/SDL.h>
+#endif
+
 #include "Config.h"
 
 #if defined(USE_GLFW)
 extern GLFWwindow* g_window;
+#endif
+
+#if defined(USE_SDL2)
+extern bool g_quit;
 #endif
 
 static bool s_reset_key;
@@ -33,6 +41,10 @@ static void Special(int key, int x, int y);
 
 #if defined(USE_GLFW)
 static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+#endif
+
+#if defined(USE_SDL2)
+static void ProcessKeyEvent(SDL_Event const* e);
 #endif
 
 void I_Start()
@@ -62,6 +74,23 @@ void I_Update()
 {
 #if defined(USE_GLFW)
   glfwPollEvents();
+#endif
+
+#if defined(USE_SDL2)
+  SDL_Event e;
+  while (SDL_PollEvent(&e) != 0)
+  {
+    switch (e.type)
+    {
+      case SDL_QUIT:
+        g_quit = true;
+        break;
+      case SDL_KEYDOWN:
+      case SDL_KEYUP:
+        ProcessKeyEvent(&e);
+        break;
+    }
+  }
 #endif
 }
 
@@ -211,6 +240,50 @@ void KeyCallback(GLFWwindow* window, int const key, int const scancode, int cons
       case GLFW_KEY_UP:
         s_direction_keys[s_top++] = KEY_UP;
         break;
+    }
+
+    if (s_top > DIRECTION_KEYS_SIZE - 1)
+    {
+      s_top = 0;
+    }
+  }
+}
+
+#endif
+
+#if defined(USE_SDL2)
+
+void ProcessKeyEvent(SDL_Event const* const e)
+{
+  if (e->type == SDL_KEYDOWN)
+  {
+    if (e->key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+    {
+      g_quit = true;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_P)
+    {
+      s_pause_key = true;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_R)
+    {
+      s_reset_key = true;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_LEFT)
+    {
+      s_direction_keys[s_top++] = KEY_LEFT;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_RIGHT)
+    {
+      s_direction_keys[s_top++] = KEY_RIGHT;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_DOWN)
+    {
+      s_direction_keys[s_top++] = KEY_DOWN;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_UP)
+    {
+      s_direction_keys[s_top++] = KEY_UP;
     }
 
     if (s_top > DIRECTION_KEYS_SIZE - 1)

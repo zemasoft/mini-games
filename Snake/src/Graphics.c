@@ -17,12 +17,21 @@
 #include <GLFW/glfw3.h>
 #endif
 
+#if defined(USE_SDL2)
+#include <GL/gl.h>
+#include <SDL2/SDL.h>
+#endif
+
 #include "Config.h"
 #include "Tools.h"
 #include "World.h"
 
 #if defined(USE_GLFW)
 extern GLFWwindow* g_window;
+#endif
+
+#if defined(USE_SDL2)
+extern SDL_Window* g_window;
 #endif
 
 static void DrawStatusBar();
@@ -49,6 +58,11 @@ static void DrawSnakeBody(struct Field const* body);
 
 void G_Start()
 {
+#if defined(USE_SDL2)
+  SDL_GL_CreateContext(g_window);
+  SDL_GL_SetSwapInterval(1);
+#endif
+
   G_Restart();
 }
 
@@ -78,6 +92,10 @@ void G_Update()
 
 #if defined(USE_GLFW)
   glfwSwapBuffers(g_window);
+#endif
+
+#if defined(USE_SDL2)
+  SDL_GL_SwapWindow(g_window);
 #endif
 }
 

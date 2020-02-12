@@ -18,6 +18,10 @@
 #include <GLFW/glfw3.h>
 #endif
 
+#if defined(USE_SDL2)
+#include <SDL2/SDL.h>
+#endif
+
 #include "Config.h"
 #include "Input.h"
 #include "Sound.h"
@@ -32,10 +36,6 @@ enum MoveSnake
   MoveSnake_Body,
   MoveSnake_NoSpace
 };
-
-#if defined(USE_GLFW)
-extern GLFWwindow* g_window;
-#endif
 
 static struct Field** s_empty_fields;
 
@@ -142,6 +142,10 @@ void L_Update()
 
 #if defined(USE_GLFW)
   unsigned const now = (unsigned) (glfwGetTime() * 1000.0);
+#endif
+
+#if defined(USE_SDL2)
+  unsigned const now = SDL_GetTicks();
 #endif
 
   unsigned const elapsed = now - before;
