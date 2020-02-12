@@ -44,6 +44,11 @@ static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, i
 static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 #endif
 
+#if defined(USE_SDL2)
+static void ProcessKeyEvent(SDL_Event const* e);
+static void ProcessMouseButtonEvent(SDL_Event const* e);
+#endif
+
 void I_Start()
 {
   I_Restart();
@@ -81,9 +86,19 @@ void I_Update()
   SDL_Event e;
   while (SDL_PollEvent(&e) != 0)
   {
-    if (e.type == SDL_QUIT)
+    switch (e.type)
     {
-      g_quit = true;
+      case SDL_QUIT:
+        g_quit = true;
+        break;
+      case SDL_KEYDOWN:
+      case SDL_KEYUP:
+        ProcessKeyEvent(&e);
+        break;
+      case SDL_MOUSEBUTTONDOWN:
+      case SDL_MOUSEBUTTONUP:
+        ProcessMouseButtonEvent(&e);
+        break;
     }
   }
 #endif
@@ -275,6 +290,57 @@ void MouseButtonCallback(GLFWwindow* window, int const button, int const action,
   (void) mods;
 
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+  {
+    s_control_button = true;
+  }
+}
+
+#endif
+
+#if defined(USE_SDL2)
+
+void ProcessKeyEvent(SDL_Event const* const e)
+{
+  if (e->type == SDL_KEYDOWN)
+  {
+    if (e->key.keysym.scancode == SDL_SCANCODE_RETURN)
+    {
+      s_control_key = true;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_SPACE)
+    {
+      s_control_key = true;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+    {
+      g_quit = true;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_R)
+    {
+      s_reset_key = true;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_RIGHT)
+    {
+      s_size_up_key = true;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_LEFT)
+    {
+      s_size_down_key = true;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_UP)
+    {
+      s_speed_up_key = true;
+    }
+    else if (e->key.keysym.scancode == SDL_SCANCODE_DOWN)
+    {
+      s_speed_down_key = true;
+    }
+  }
+}
+
+void ProcessMouseButtonEvent(SDL_Event const* const e)
+{
+  if (e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_LEFT)
   {
     s_control_button = true;
   }
