@@ -2,7 +2,9 @@
 
 set -e
 
-./common.sh
+SCRIPT_DIR=$(dirname $(readlink -f $0))
+
+${SCRIPT_DIR}/common.sh
 
 rm -rf sdl2
 
