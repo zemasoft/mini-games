@@ -1,7 +1,7 @@
 find_package(OpenAL MODULE REQUIRED)
 
 set(FreeALUT_ROOT
-  ${EXTERNAL_DIR}
+  $ENV{EXTERNAL_DIR}
   CACHE
   PATH
   "FreeALUT root directory"

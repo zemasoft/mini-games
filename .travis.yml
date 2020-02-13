@@ -37,17 +37,15 @@ addons:
       - libxrandr-dev     # GLFW
 
 install:
-  - cd external
-  - if [[ ${USE_FREEALUT} == ON ]]; then ./freealut.sh; fi
-  - if [[ ${USE_FREEGLUT} == ON ]]; then ./freeglut.sh; fi
-  - if [[ ${USE_GLFW} == ON ]]; then ./glfw.sh; fi
-  - if [[ ${USE_SDL2} == ON ]]; then ./sdl2.sh; fi
-  - cd ..
+  - export EXTERNAL_DIR=$(pwd)/external
+  - if [[ ${USE_FREEALUT} == ON ]]; then ./script/freealut.sh; fi
+  - if [[ ${USE_FREEGLUT} == ON ]]; then ./script/freeglut.sh; fi
+  - if [[ ${USE_GLFW} == ON ]]; then ./script/glfw.sh; fi
+  - if [[ ${USE_SDL2} == ON ]]; then ./script/sdl2.sh; fi
 
 script:
   - |
     cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-                    -DEXTERNAL_DIR=external \
                     -DSLIDINGPUZZLE_USE_FREEALUT=${USE_FREEALUT} \
                     -DSLIDINGPUZZLE_USE_FREEGLUT=${USE_FREEGLUT} \
                     -DSLIDINGPUZZLE_USE_GLFW=${USE_GLFW} \

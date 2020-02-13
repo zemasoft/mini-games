@@ -1,7 +1,7 @@
 find_package(OpenGL MODULE REQUIRED)
 
 set(SDL2_ROOT
-  ${EXTERNAL_DIR}
+  $ENV{EXTERNAL_DIR}
   CACHE
   PATH
   "SDL2 root directory"

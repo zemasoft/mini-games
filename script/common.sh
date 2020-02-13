@@ -8,24 +8,19 @@ if [[ ! -v BUILD_TYPE ]]; then
 fi
 
 if [[ ${BUILD_TYPE} == Debug ]]; then
-  :
+  optimization=OFF
 elif [[ ${BUILD_TYPE} == RelWithDebInfo ]]; then
-  :
+  optimization=ON
 elif [[ ${BUILD_TYPE} == Release ]]; then
-  :
+  optimization=ON
 else
   echo "'BUILD_TYPE' set to unknown value '${BUILD_TYPE}'. Use 'Debug', 'RelWithDebInfo', or 'Release'" >&2
   exit 1
 fi
 
-rm -rf sdl2
+if [[ ! -v EXTERNAL_DIR ]]; then
+  echo "'EXTERNAL_DIR' not set. Set it using 'export EXTERNAL_DIR=type'" >&2
+  exit 1
+fi
 
-mkdir sdl2
-wget -c https://www.libsdl.org/release/SDL2-2.0.10.tar.gz -O - | tar -xzv -C sdl2 --strip-components 1
-
-cd sdl2
-./configure --prefix=$(pwd)/..
-make
-make install
-
-echo "All OK"
+mkdir -p ${EXTERNAL_DIR}
