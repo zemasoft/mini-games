@@ -203,7 +203,7 @@ void Special(int const key, int const x, int const y)
 
 #if defined(USE_GLFW)
 
-void KeyCallback(GLFWwindow* window, int const key, int const scancode, int const action,
+void KeyCallback(GLFWwindow* const window, int const key, int const scancode, int const action,
                  int const mods)
 {
   (void) window;

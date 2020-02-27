@@ -269,7 +269,7 @@ void Terminate()
 
 #if defined(USE_GLFW)
 
-void FramebufferSizeCallback(GLFWwindow* window, int const width, int const height)
+void FramebufferSizeCallback(GLFWwindow* const window, int const width, int const height)
 {
   (void) window;
 
@@ -280,7 +280,7 @@ void FramebufferSizeCallback(GLFWwindow* window, int const width, int const heig
 
 #if defined(USE_SDL2)
 
-int WindowResizedEventWatcher(void* data, SDL_Event* event)
+int WindowResizedEventWatcher(void* const data, SDL_Event* const event)
 {
   (void) data;
 

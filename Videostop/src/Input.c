@@ -242,7 +242,7 @@ void Mouse(int const button, int const state, int const x, int const y)
 
 #if defined(USE_GLFW)
 
-void KeyCallback(GLFWwindow* window, int const key, int const scancode, int const action,
+void KeyCallback(GLFWwindow* const window, int const key, int const scancode, int const action,
                  int const mods)
 {
   (void) window;
@@ -284,7 +284,8 @@ void KeyCallback(GLFWwindow* window, int const key, int const scancode, int cons
   }
 }
 
-void MouseButtonCallback(GLFWwindow* window, int const button, int const action, int const mods)
+void MouseButtonCallback(GLFWwindow* const window, int const button, int const action,
+                         int const mods)
 {
   (void) window;
   (void) mods;
