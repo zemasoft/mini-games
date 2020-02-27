@@ -163,7 +163,7 @@ bool Init(int argc, char** argv)
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_MULTISAMPLE);
   glutInitWindowSize((int) g_config.ground.size.x * FIELD_SIZE_PIXELS,
                      (int) g_config.ground.size.y * FIELD_SIZE_PIXELS);
-  glutCreateWindow("Videostop");
+  glutCreateWindow("Snake");
 #endif
 
 #if defined(USE_GLFW)
@@ -182,7 +182,7 @@ bool Init(int argc, char** argv)
 #endif
 
 #if defined(USE_SDL2)
-  g_window = SDL_CreateWindow("Videostop", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+  g_window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                               (int) g_config.ground.size.x * FIELD_SIZE_PIXELS,
                               (int) g_config.ground.size.y * FIELD_SIZE_PIXELS, SDL_WINDOW_OPENGL);
   if (g_window == NULL)
