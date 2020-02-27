@@ -44,6 +44,10 @@ static void Update();
 static void Stop();
 static void Terminate();
 
+#if defined(USE_GLFW)
+static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
+#endif
+
 int main(int argc, char** argv)
 {
   int exit_code = EXIT_SUCCESS;
@@ -176,6 +180,8 @@ bool Init(int argc, char** argv)
     return false;
   }
 
+  glfwSetFramebufferSizeCallback(g_window, FramebufferSizeCallback);
+
   glfwShowWindow(g_window);
   glfwMakeContextCurrent(g_window);
 #endif
@@ -254,3 +260,14 @@ void Terminate()
   SDL_DestroyWindow(g_window);
 #endif
 }
+
+#if defined(USE_GLFW)
+
+void FramebufferSizeCallback(GLFWwindow* window, int const width, int const height)
+{
+  (void) window;
+
+  G_Resize(width, height);
+}
+
+#endif

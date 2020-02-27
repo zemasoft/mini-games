@@ -96,6 +96,11 @@ void G_Stop()
 {
 }
 
+void G_Resize(int const width, int const height)
+{
+  glViewport(0, 0, width, height);
+}
+
 void DrawDices()
 {
   glPushMatrix();

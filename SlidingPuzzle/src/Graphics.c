@@ -104,6 +104,11 @@ void G_Stop()
 {
 }
 
+void G_Resize(int const width, int const height)
+{
+  glViewport(0, 0, width, height);
+}
+
 void InitPieceStrings(struct Projection const* const projection)
 {
   for (size_t i = 0; i < g_world.piece_count; ++i)
