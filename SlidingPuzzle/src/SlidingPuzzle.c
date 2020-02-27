@@ -48,6 +48,10 @@ static void Terminate();
 static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
 #endif
 
+#if defined(USE_SDL2)
+static int WindowResizedEventWatcher(void* data, SDL_Event* event);
+#endif
+
 int main(int argc, char** argv)
 {
   int exit_code = EXIT_SUCCESS;
@@ -195,6 +199,8 @@ bool Init(int argc, char** argv)
   {
     return false;
   }
+
+  SDL_AddEventWatch(WindowResizedEventWatcher, g_window);
 #endif
 
   return true;
@@ -268,6 +274,26 @@ void FramebufferSizeCallback(GLFWwindow* window, int const width, int const heig
   (void) window;
 
   G_Resize(width, height);
+}
+
+#endif
+
+#if defined(USE_SDL2)
+
+int WindowResizedEventWatcher(void* data, SDL_Event* event)
+{
+  (void) data;
+
+  if (event->type == SDL_WINDOWEVENT && event->window.event == SDL_WINDOWEVENT_RESIZED)
+  {
+    int width;
+    int height;
+    SDL_GL_GetDrawableSize(g_window, &width, &height);
+
+    G_Resize(width, height);
+  }
+
+  return 0;
 }
 
 #endif
