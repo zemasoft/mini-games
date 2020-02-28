@@ -289,46 +289,59 @@ void L_Update()
             SDL_GetWindowSize(g_window, &window_width, &window_height);
 #endif
 
-            size_t const x =
-                (size_t)((float) control_x / (float) window_width * (float) g_world.size.x);
-            size_t const y =
-                (size_t)((float) control_y / (float) window_height * (float) g_world.size.y);
+            float const logical_width = (float) g_world.size.x * PIECE_SIZE + MARGIN;
+            float const logical_height =
+                (float) g_world.size.y * PIECE_SIZE + MARGIN + STATUSBAR_SIZE;
 
-            size_t const blank_x = g_world.blank % g_world.size.x;
-            size_t const blank_y = g_world.blank / g_world.size.x;
+            float const logical_x =
+                logical_width / (float) window_width * (float) control_x - MARGIN / 2.0f;
+            float const logical_y =
+                logical_height / (float) window_height * (float) control_y - MARGIN / 2.0f;
 
-            if (x == blank_x)
+            if (logical_x >= 0.0f && logical_x < (float) g_world.size.x * PIECE_SIZE &&
+                logical_y >= 0.0f && logical_y < (float) g_world.size.y * PIECE_SIZE)
             {
-              if (y < blank_y)
+              size_t const x = (size_t) logical_x;
+              size_t const y = (size_t) logical_y;
+
+              size_t const blank_x = g_world.blank % g_world.size.x;
+              size_t const blank_y = g_world.blank / g_world.size.x;
+
+              if (x == blank_x)
               {
-                S_PlaySound(Sound_Move);
-                MovePiecesDown(blank_y - y);
+                if (y < blank_y)
+                {
+                  S_PlaySound(Sound_Move);
+                  MovePiecesDown(blank_y - y);
+                }
+                else if (y > blank_y)
+                {
+                  S_PlaySound(Sound_Move);
+                  MovePiecesUp(y - blank_y);
+                }
+
+                g_world.state = WorldState_Moving;
               }
-              else if (y > blank_y)
+              else if (y == blank_y)
               {
-                S_PlaySound(Sound_Move);
-                MovePiecesUp(y - blank_y);
+                if (x < blank_x)
+                {
+                  S_PlaySound(Sound_Move);
+                  MovePiecesRight(blank_x - x);
+                }
+                else if (x > blank_x)
+                {
+                  S_PlaySound(Sound_Move);
+                  MovePiecesLeft(x - blank_x);
+                }
+
+                g_world.state = WorldState_Moving;
+              }
+              else
+              {
+                S_PlaySound(Sound_CannotMove);
               }
             }
-            else if (y == blank_y)
-            {
-              if (x < blank_x)
-              {
-                S_PlaySound(Sound_Move);
-                MovePiecesRight(blank_x - x);
-              }
-              else if (x > blank_x)
-              {
-                S_PlaySound(Sound_Move);
-                MovePiecesLeft(x - blank_x);
-              }
-            }
-            else
-            {
-              S_PlaySound(Sound_CannotMove);
-            }
-
-            g_world.state = WorldState_Moving;
           }
       }
       break;
