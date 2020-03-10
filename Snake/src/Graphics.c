@@ -9,6 +9,10 @@
 #include <math.h>    // M_PI, cos, sin
 #include <stddef.h>  // size_t
 
+#ifndef M_PI
+#define M_PI (3.14159265358979323846264338327950288)
+#endif
+
 #if defined(USE_FREEGLUT)
 #include <GL/freeglut.h>
 #endif
