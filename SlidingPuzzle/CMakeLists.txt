@@ -57,6 +57,7 @@ if(MSVC)
 else()
   target_compile_options(SlidingPuzzle
     PRIVATE
+      -std=c99
       -Wall
       -Wextra
       -Wpedantic

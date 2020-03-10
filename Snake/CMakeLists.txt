@@ -59,6 +59,7 @@ if(MSVC)
 else()
   target_compile_options(Snake
     PRIVATE
+      -std=c99
       -Wall
       -Wextra
       -Wpedantic

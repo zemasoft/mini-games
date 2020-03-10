@@ -57,6 +57,7 @@ if(MSVC)
 else()
   target_compile_options(Videostop
     PRIVATE
+      -std=c99
       -Wall
       -Wextra
       -Wpedantic
