@@ -54,11 +54,6 @@ static void DrawDot();
 
 void G_Start()
 {
-#if defined(USE_SDL2)
-  SDL_GL_CreateContext(g_window);
-  SDL_GL_SetSwapInterval(1);
-#endif
-
   glEnable(GL_MULTISAMPLE);
   glDisable(GL_DEPTH_TEST);
 

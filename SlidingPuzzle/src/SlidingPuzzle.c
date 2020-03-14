@@ -184,10 +184,12 @@ bool Init(int argc, char** argv)
     return false;
   }
 
+  glfwMakeContextCurrent(g_window);
+  glfwSwapInterval(1);
+
   glfwSetFramebufferSizeCallback(g_window, FramebufferSizeCallback);
 
   glfwShowWindow(g_window);
-  glfwMakeContextCurrent(g_window);
 #endif
 
 #if defined(USE_SDL2)
@@ -200,7 +202,12 @@ bool Init(int argc, char** argv)
     return false;
   }
 
+  SDL_GL_CreateContext(g_window);
+  SDL_GL_SetSwapInterval(1);
+
   SDL_AddEventWatch(WindowResizedEventWatcher, g_window);
+
+  SDL_ShowWindow(g_window);
 #endif
 
   return true;

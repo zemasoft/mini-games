@@ -62,11 +62,6 @@ static void DrawSnakeBody(struct Field const* body);
 
 void G_Start()
 {
-#if defined(USE_SDL2)
-  SDL_GL_CreateContext(g_window);
-  SDL_GL_SetSwapInterval(1);
-#endif
-
   G_Restart();
 }
 
