@@ -171,10 +171,11 @@ void InitPieceString(struct Piece* const piece, struct Projection const* const p
   snprintf(piece->string.value, sizeof(piece->string.value), "%d", piece->value);
 
   piece->string.width = glutStrokeLengthf(TEXT_FONT, (unsigned char*) &piece->string.value[0]) /
-                        (float) glutGet(GLUT_WINDOW_WIDTH) *
+                        (float) glutGet(GLUT_INIT_WINDOW_WIDTH) *
                         (projection->right - projection->left) * VALUE_SIZE;
 
-  piece->string.height = (float) glutStrokeHeight(TEXT_FONT) / (float) glutGet(GLUT_WINDOW_HEIGHT) *
+  piece->string.height = (float) glutStrokeHeight(TEXT_FONT) /
+                         (float) glutGet(GLUT_INIT_WINDOW_HEIGHT) *
                          (projection->top - projection->bottom) * VALUE_SIZE;
 #endif
 
