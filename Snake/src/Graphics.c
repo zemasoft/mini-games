@@ -73,12 +73,12 @@ void G_Restart()
           (float) g_world.ground.size.y * FIELD_SIZE + MARGIN_SIZE + STATUSBAR_SIZE, -1.0f, 1.0f);
 
   glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
 }
 
 void G_Update()
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  glLoadIdentity();
 
   DrawStatusBar();
   DrawMargin();

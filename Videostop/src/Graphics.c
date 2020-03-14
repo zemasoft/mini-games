@@ -68,12 +68,12 @@ void G_Restart()
           -MARGIN / 2.0f - STATUSBAR_SIZE, DICE_SIZE + MARGIN / 2.0f, -1.0f, 1.0f);
 
   glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
 }
 
 void G_Update()
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  glLoadIdentity();
 
   DrawDices();
   DrawStatusBar();

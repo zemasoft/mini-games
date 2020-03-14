@@ -65,19 +65,19 @@ void G_Restart()
   projection.bottom = -MARGIN / 2.0f - STATUSBAR_SIZE;
   projection.top = (float) g_world.size.y * PIECE_SIZE + MARGIN / 2.0f;
 
-  InitPieceStrings(&projection);
-
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(projection.left, projection.right, projection.bottom, projection.top, -1.0f, 1.0f);
 
   glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+
+  InitPieceStrings(&projection);
 }
 
 void G_Update()
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  glLoadIdentity();
 
   DrawPieces();
   DrawStatusBar();
@@ -170,9 +170,9 @@ void InitPieceString(struct Piece* const piece, struct Projection const* const p
 #if defined(USE_FREEGLUT)
   snprintf(piece->string.value, sizeof(piece->string.value), "%d", piece->value);
 
-  piece->string.width =
-      (float) glutStrokeLength(TEXT_FONT, (unsigned char*) &piece->string.value[0]) /
-      (float) glutGet(GLUT_WINDOW_WIDTH) * (projection->right - projection->left) * VALUE_SIZE;
+  piece->string.width = glutStrokeLengthf(TEXT_FONT, (unsigned char*) &piece->string.value[0]) /
+                        (float) glutGet(GLUT_WINDOW_WIDTH) *
+                        (projection->right - projection->left) * VALUE_SIZE;
 
   piece->string.height = (float) glutStrokeHeight(TEXT_FONT) / (float) glutGet(GLUT_WINDOW_HEIGHT) *
                          (projection->top - projection->bottom) * VALUE_SIZE;
