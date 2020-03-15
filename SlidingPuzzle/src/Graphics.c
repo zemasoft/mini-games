@@ -5,8 +5,9 @@
 
 #include "Graphics.h"
 
-#include <stddef.h>  // size_t
-#include <stdio.h>   // snprintf
+#include <stdbool.h>  // bool, false, true
+#include <stddef.h>   // size_t
+#include <stdio.h>    // snprintf
 
 #if defined(USE_FREEGLUT)
 #include <GL/freeglut.h>
@@ -44,7 +45,8 @@ static void InitPieceStrings(struct Projection const* projection);
 static void DrawPieces();
 static void DrawStatusBar();
 
-static void InitPieceString(struct Piece* piece, struct Projection const* projection);
+static void InitPieceString(struct Piece* piece, struct Projection const* projection, float xf,
+                            float yf);
 
 static void DrawPiece(struct Piece const* piece);
 static void DrawValue(struct Piece const* piece);
@@ -106,9 +108,23 @@ void G_Resize(int const width, int const height)
 
 void InitPieceStrings(struct Projection const* const projection)
 {
+  static struct Projection first_projection;
+  static bool first = true;
+
+  if (first)
+  {
+    first_projection = *projection;
+    first = false;
+  }
+
+  float xf =
+      (first_projection.right - first_projection.left) / (projection->right - projection->left);
+  float yf =
+      (first_projection.top - first_projection.bottom) / (projection->top - projection->bottom);
+
   for (size_t i = 0; i < g_world.piece_count; ++i)
   {
-    InitPieceString(&g_world.pieces[i], projection);
+    InitPieceString(&g_world.pieces[i], projection, xf, yf);
   }
 }
 
@@ -165,18 +181,19 @@ void DrawStatusBar()
 #endif
 }
 
-void InitPieceString(struct Piece* const piece, struct Projection const* const projection)
+void InitPieceString(struct Piece* const piece, struct Projection const* const projection, float xf,
+                     float yf)
 {
 #if defined(USE_FREEGLUT)
   snprintf(piece->string.value, sizeof(piece->string.value), "%d", piece->value);
 
   piece->string.width = glutStrokeLengthf(TEXT_FONT, (unsigned char*) &piece->string.value[0]) /
                         (float) glutGet(GLUT_INIT_WINDOW_WIDTH) *
-                        (projection->right - projection->left) * VALUE_SIZE;
+                        (projection->right - projection->left) * VALUE_SIZE * xf;
 
   piece->string.height = (float) glutStrokeHeight(TEXT_FONT) /
                          (float) glutGet(GLUT_INIT_WINDOW_HEIGHT) *
-                         (projection->top - projection->bottom) * VALUE_SIZE;
+                         (projection->top - projection->bottom) * VALUE_SIZE * yf;
 #endif
 
 #if defined(USE_GLFW)
