@@ -14,7 +14,7 @@
 #define M_PI (3.14159265358979323846264338327950288)
 #endif
 
-#if defined(USE_FREEGLUT)
+#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
 #include <GL/freeglut.h>
 #endif
 
@@ -116,7 +116,7 @@ void DrawDices()
 
 void DrawStatusBar()
 {
-#if defined(USE_FREEGLUT)
+#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   glPushMatrix();
 
   glTranslatef(MARGIN / 2.0f, -MARGIN / 2.0f - TEXT_SIZE, 0.0f);

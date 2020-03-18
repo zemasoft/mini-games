@@ -11,7 +11,7 @@
 #include <AL/alut.h>
 #endif
 
-#if defined(USE_FREEGLUT)
+#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
 #include <GL/freeglut.h>
 #endif
 
@@ -56,7 +56,7 @@ int main(int argc, char** argv)
 {
   int exit_code = EXIT_SUCCESS;
 
-#if defined(USE_FREEGLUT)
+#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   glutInit(&argc, argv);
 #endif
 
@@ -115,7 +115,7 @@ err2:
 err1:
 #endif
 
-#if defined(USE_FREEGLUT)
+#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   glutExit();
 #endif
 
@@ -176,6 +176,8 @@ bool Init(int argc, char** argv)
 #endif
 
 #if defined(USE_GLFW)
+  glfwWindowHint(GLFW_SAMPLES, 4);
+
   g_window =
       glfwCreateWindow((int) g_config.size.x * PIECE_SIZE_PIXELS,
                        (int) g_config.size.y * PIECE_SIZE_PIXELS, "Sliding Puzzle", NULL, NULL);

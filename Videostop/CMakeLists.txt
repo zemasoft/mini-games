@@ -2,6 +2,7 @@ project(Videostop VERSION 1.0.0 LANGUAGES C)
 
 option(VIDEOSTOP_USE_FREEALUT "Use FreeALUT" ON)
 option(VIDEOSTOP_USE_FREEGLUT "Use FreeGLUT" ON)
+option(VIDEOSTOP_USE_FREEGLUT_FOR_TEXT "Use FreeGLUT for text" OFF)
 option(VIDEOSTOP_USE_GLFW "Use GLFW" OFF)
 option(VIDEOSTOP_USE_SDL2 "Use SDL2" OFF)
 
@@ -12,7 +13,7 @@ if(VIDEOSTOP_USE_FREEALUT)
   find_package(FreeALUT MODULE REQUIRED)
 endif()
 
-if(VIDEOSTOP_USE_FREEGLUT)
+if(VIDEOSTOP_USE_FREEGLUT OR VIDEOSTOP_USE_FREEGLUT_FOR_TEXT)
   find_package(FreeGLUT CONFIG REQUIRED)
 endif()
 
@@ -100,7 +101,16 @@ if(VIDEOSTOP_USE_FREEGLUT)
     PRIVATE
       USE_FREEGLUT
   )
+endif()
 
+if(VIDEOSTOP_USE_FREEGLUT_FOR_TEXT)
+  target_compile_definitions(Videostop
+    PRIVATE
+      USE_FREEGLUT_FOR_TEXT
+  )
+endif()
+
+if(VIDEOSTOP_USE_FREEGLUT OR VIDEOSTOP_USE_FREEGLUT_FOR_TEXT)
   target_link_libraries(Videostop
     PRIVATE
       FreeGLUT::freeglut

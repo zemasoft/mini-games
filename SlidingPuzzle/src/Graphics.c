@@ -9,7 +9,7 @@
 #include <stddef.h>   // size_t
 #include <stdio.h>    // snprintf
 
-#if defined(USE_FREEGLUT)
+#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
 #include <GL/freeglut.h>
 #endif
 
@@ -138,7 +138,7 @@ void DrawPieces()
 
 void DrawStatusBar()
 {
-#if defined(USE_FREEGLUT)
+#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   glPushMatrix();
 
   glTranslatef(MARGIN / 2.0f, -MARGIN / 2.0f - TEXT_SIZE - 0.05f * PIECE_SIZE, 0.0f);
@@ -184,7 +184,7 @@ void DrawStatusBar()
 void InitPieceString(struct Piece* const piece, struct Projection const* const projection, float xf,
                      float yf)
 {
-#if defined(USE_FREEGLUT)
+#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   snprintf(piece->string.value, sizeof(piece->string.value), "%d", piece->value);
 
   piece->string.width = glutStrokeLengthf(TEXT_FONT, (unsigned char*) &piece->string.value[0]) /
@@ -291,7 +291,7 @@ void DrawPiece(struct Piece const* const piece)
 
 void DrawValue(struct Piece const* const piece)
 {
-#if defined(USE_FREEGLUT)
+#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   switch (piece->state)
   {
     case PieceState_Setup:
