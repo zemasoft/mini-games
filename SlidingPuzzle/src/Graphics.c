@@ -208,14 +208,14 @@ void InitPieceString(struct Piece* const piece, float xf, float yf)
   // TODO
   (void) piece;
   (void) xf;
-  (void) xf;
+  (void) yf;
 #endif
 
 #if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
   (void) piece;
   (void) xf;
-  (void) xf;
+  (void) yf;
 #endif
 }
 
