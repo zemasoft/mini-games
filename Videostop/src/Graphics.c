@@ -169,11 +169,11 @@ void DrawStatusBar()
   glPopMatrix();
 #endif
 
-#if defined(USE_GLFW)
+#if defined(USE_GLFW) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
 #endif
 
-#if defined(USE_SDL2)
+#if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
 #endif
 }

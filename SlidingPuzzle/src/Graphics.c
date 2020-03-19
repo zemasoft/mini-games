@@ -45,8 +45,7 @@ static void InitPieceStrings(struct Projection const* projection);
 static void DrawPieces();
 static void DrawStatusBar();
 
-static void InitPieceString(struct Piece* piece, struct Projection const* projection, float xf,
-                            float yf);
+static void InitPieceString(struct Piece* piece, float xf, float yf);
 
 static void DrawPiece(struct Piece const* piece);
 static void DrawValue(struct Piece const* piece);
@@ -108,23 +107,37 @@ void G_Resize(int const width, int const height)
 
 void InitPieceStrings(struct Projection const* const projection)
 {
-  static struct Projection first_projection;
-  static bool first = true;
+  static float xf;
+  static float yf;
+  static bool init = true;
 
-  if (first)
+  if (init)
   {
-    first_projection = *projection;
-    first = false;
-  }
+#if defined(USE_FREEGLUT)
+    int const window_width = glutGet(GLUT_WINDOW_WIDTH);
+    int const window_height = glutGet(GLUT_WINDOW_HEIGHT);
+#endif
 
-  float xf =
-      (first_projection.right - first_projection.left) / (projection->right - projection->left);
-  float yf =
-      (first_projection.top - first_projection.bottom) / (projection->top - projection->bottom);
+#if defined(USE_GLFW)
+    int window_width;
+    int window_height;
+    glfwGetWindowSize(g_window, &window_width, &window_height);
+#endif
+
+#if defined(USE_SDL2)
+    int window_width;
+    int window_height;
+    SDL_GetWindowSize(g_window, &window_width, &window_height);
+#endif
+
+    xf = (projection->right - projection->left) / (float) window_width;
+    yf = (projection->top - projection->bottom) / (float) window_height;
+    init = false;
+  }
 
   for (size_t i = 0; i < g_world.piece_count; ++i)
   {
-    InitPieceString(&g_world.pieces[i], projection, xf, yf);
+    InitPieceString(&g_world.pieces[i], xf, yf);
   }
 }
 
@@ -172,40 +185,37 @@ void DrawStatusBar()
   glPopMatrix();
 #endif
 
-#if defined(USE_GLFW)
+#if defined(USE_GLFW) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
 #endif
 
-#if defined(USE_SDL2)
+#if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
 #endif
 }
 
-void InitPieceString(struct Piece* const piece, struct Projection const* const projection, float xf,
-                     float yf)
+void InitPieceString(struct Piece* const piece, float xf, float yf)
 {
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   snprintf(piece->string.value, sizeof(piece->string.value), "%d", piece->value);
 
-  piece->string.width = glutStrokeLengthf(TEXT_FONT, (unsigned char*) &piece->string.value[0]) /
-                        (float) glutGet(GLUT_INIT_WINDOW_WIDTH) *
-                        (projection->right - projection->left) * VALUE_SIZE * xf;
-
-  piece->string.height = (float) glutStrokeHeight(TEXT_FONT) /
-                         (float) glutGet(GLUT_INIT_WINDOW_HEIGHT) *
-                         (projection->top - projection->bottom) * VALUE_SIZE * yf;
+  piece->string.width =
+      glutStrokeLengthf(TEXT_FONT, (unsigned char*) &piece->string.value[0]) * VALUE_SIZE * xf;
+  piece->string.height = (float) glutStrokeHeight(TEXT_FONT) * VALUE_SIZE * yf;
 #endif
 
-#if defined(USE_GLFW)
+#if defined(USE_GLFW) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
   (void) piece;
-  (void) projection;
+  (void) xf;
+  (void) xf;
 #endif
 
-#if defined(USE_SDL2)
+#if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
   (void) piece;
-  (void) projection;
+  (void) xf;
+  (void) xf;
 #endif
 }
 
@@ -315,12 +325,12 @@ void DrawValue(struct Piece const* const piece)
   glutStrokeString(TEXT_FONT, (unsigned char*) &piece->string.value[0]);
 #endif
 
-#if defined(USE_GLFW)
+#if defined(USE_GLFW) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
   (void) piece;
 #endif
 
-#if defined(USE_SDL2)
+#if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
   (void) piece;
 #endif
