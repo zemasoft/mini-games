@@ -41,7 +41,7 @@ struct Projection
   float top;
 };
 
-static void InitPieceStrings(struct Projection const* projection);
+static void InitStrings(struct Projection const* projection);
 static void DrawPieces();
 static void DrawStatusBar();
 
@@ -73,7 +73,7 @@ void G_Restart()
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  InitPieceStrings(&projection);
+  InitStrings(&projection);
 }
 
 void G_Update()
@@ -105,7 +105,7 @@ void G_Resize(int const width, int const height)
   glViewport(0, 0, width, height);
 }
 
-void InitPieceStrings(struct Projection const* const projection)
+void InitStrings(struct Projection const* const projection)
 {
   static float xf;
   static float yf;
@@ -139,6 +139,8 @@ void InitPieceStrings(struct Projection const* const projection)
   {
     InitPieceString(&g_world.pieces[i], xf, yf);
   }
+
+  g_world.statusBar.string_height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * yf;
 }
 
 void DrawPieces()
@@ -154,7 +156,10 @@ void DrawStatusBar()
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   glPushMatrix();
 
-  glTranslatef(MARGIN / 2.0f, -MARGIN / 2.0f - TEXT_SIZE - 0.05f * PIECE_SIZE, 0.0f);
+  glTranslatef(MARGIN / 2.0f,
+               -MARGIN / 2.0f - STATUSBAR_SIZE +
+                   (STATUSBAR_SIZE - g_world.statusBar.string_height * 0.75f) / 2.0f,
+               0.0f);
   glScalef(TEXT_SIZE / 100.0f, TEXT_SIZE / 100.0f, 1.0f);
   glLineWidth(1.2f);
 

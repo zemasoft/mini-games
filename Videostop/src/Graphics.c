@@ -38,6 +38,15 @@ extern GLFWwindow* g_window;
 extern SDL_Window* g_window;
 #endif
 
+struct Projection
+{
+  float left;
+  float right;
+  float bottom;
+  float top;
+};
+
+static void InitStrings(struct Projection const* projection);
 static void DrawDices();
 static void DrawStatusBar();
 
@@ -62,13 +71,20 @@ void G_Start()
 
 void G_Restart()
 {
+  struct Projection projection;
+  projection.left = -MARGIN / 2.0f;
+  projection.right = (float) g_world.dice_count * DICE_SIZE + MARGIN / 2.0f;
+  projection.bottom = -MARGIN / 2.0f - STATUSBAR_SIZE;
+  projection.top = DICE_SIZE + MARGIN / 2.0f;
+
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(-MARGIN / 2.0f, (float) g_world.dice_count * DICE_SIZE + MARGIN / 2.0f,
-          -MARGIN / 2.0f - STATUSBAR_SIZE, DICE_SIZE + MARGIN / 2.0f, -1.0f, 1.0f);
+  glOrtho(projection.left, projection.right, projection.bottom, projection.top, -1.0f, 1.0f);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+
+  InitStrings(&projection);
 }
 
 void G_Update()
@@ -100,6 +116,40 @@ void G_Resize(int const width, int const height)
   glViewport(0, 0, width, height);
 }
 
+void InitStrings(struct Projection const* const projection)
+{
+  static float xf;
+  static float yf;
+  static bool init = true;
+
+  if (init)
+  {
+#if defined(USE_FREEGLUT)
+    int const window_width = glutGet(GLUT_WINDOW_WIDTH);
+    int const window_height = glutGet(GLUT_WINDOW_HEIGHT);
+#endif
+
+#if defined(USE_GLFW)
+    int window_width;
+    int window_height;
+    glfwGetWindowSize(g_window, &window_width, &window_height);
+#endif
+
+#if defined(USE_SDL2)
+    int window_width;
+    int window_height;
+    SDL_GetWindowSize(g_window, &window_width, &window_height);
+#endif
+
+    xf = (projection->right - projection->left) / (float) window_width;
+    yf = (projection->top - projection->bottom) / (float) window_height;
+    init = false;
+  }
+
+  (void) xf;
+  g_world.statusBar.string_height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * yf;
+}
+
 void DrawDices()
 {
   glPushMatrix();
@@ -119,7 +169,10 @@ void DrawStatusBar()
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   glPushMatrix();
 
-  glTranslatef(MARGIN / 2.0f, -MARGIN / 2.0f - TEXT_SIZE, 0.0f);
+  glTranslatef(MARGIN / 2.0f,
+               -MARGIN / 2.0f - STATUSBAR_SIZE +
+                   (STATUSBAR_SIZE - g_world.statusBar.string_height * 0.75f) / 2.0f,
+               0.0f);
   glScalef(TEXT_SIZE / 100.0f, TEXT_SIZE / 100.0f, 1.0f);
   glLineWidth(1.2f);
 
