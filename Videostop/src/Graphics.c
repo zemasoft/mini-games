@@ -61,6 +61,9 @@ static void DrawDot6();
 static void DrawDot7();
 static void DrawDot();
 
+static int GetWindowWidth();
+static int GetWindowHeight();
+
 void G_Start()
 {
   glEnable(GL_MULTISAMPLE);
@@ -124,25 +127,8 @@ void InitStrings(struct Projection const* const projection)
 
   if (init)
   {
-#if defined(USE_FREEGLUT)
-    int const window_width = glutGet(GLUT_WINDOW_WIDTH);
-    int const window_height = glutGet(GLUT_WINDOW_HEIGHT);
-#endif
-
-#if defined(USE_GLFW)
-    int window_width;
-    int window_height;
-    glfwGetWindowSize(g_window, &window_width, &window_height);
-#endif
-
-#if defined(USE_SDL2)
-    int window_width;
-    int window_height;
-    SDL_GetWindowSize(g_window, &window_width, &window_height);
-#endif
-
-    xf = (projection->right - projection->left) / (float) window_width;
-    yf = (projection->top - projection->bottom) / (float) window_height;
+    xf = (projection->right - projection->left) / (float) GetWindowWidth();
+    yf = (projection->top - projection->bottom) / (float) GetWindowHeight();
     init = false;
   }
 
@@ -476,4 +462,50 @@ void DrawDot()
   }
 
   glEnd();
+}
+
+int GetWindowWidth()
+{
+#if defined(USE_FREEGLUT)
+  return glutGet(GLUT_WINDOW_WIDTH);
+#endif
+
+#if defined(USE_GLFW)
+  int window_width;
+  int window_height;
+  glfwGetWindowSize(g_window, &window_width, &window_height);
+
+  return window_width;
+#endif
+
+#if defined(USE_SDL2)
+  int window_width;
+  int window_height;
+  SDL_GetWindowSize(g_window, &window_width, &window_height);
+
+  return window_width;
+#endif
+}
+
+int GetWindowHeight()
+{
+#if defined(USE_FREEGLUT)
+  return glutGet(GLUT_WINDOW_HEIGHT);
+#endif
+
+#if defined(USE_GLFW)
+  int window_width;
+  int window_height;
+  glfwGetWindowSize(g_window, &window_width, &window_height);
+
+  return window_height;
+#endif
+
+#if defined(USE_SDL2)
+  int window_width;
+  int window_height;
+  SDL_GetWindowSize(g_window, &window_width, &window_height);
+
+  return window_height;
+#endif
 }
