@@ -33,15 +33,7 @@ extern GLFWwindow* g_window;
 extern SDL_Window* g_window;
 #endif
 
-struct Projection
-{
-  float left;
-  float right;
-  float bottom;
-  float top;
-};
-
-static void InitStrings(struct Projection const* projection);
+static void InitStrings();
 static void DrawPieces();
 static void DrawStatusBar();
 
@@ -53,6 +45,11 @@ static void DrawValue(struct Piece const* piece);
 static int GetWindowWidth();
 static int GetWindowHeight();
 
+static float GetLeft();
+static float GetRight();
+static float GetBottom();
+static float GetTop();
+
 void G_Start()
 {
   glEnable(GL_MULTISAMPLE);
@@ -63,20 +60,14 @@ void G_Start()
 
 void G_Restart()
 {
-  struct Projection projection;
-  projection.left = -MARGIN / 2.0f;
-  projection.right = (float) g_world.size.x * PIECE_SIZE + MARGIN / 2.0f;
-  projection.bottom = -MARGIN / 2.0f - STATUSBAR_SIZE;
-  projection.top = (float) g_world.size.y * PIECE_SIZE + MARGIN / 2.0f;
-
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(projection.left, projection.right, projection.bottom, projection.top, -1.0f, 1.0f);
+  glOrtho(GetLeft(), GetRight(), GetBottom(), GetTop(), -1.0f, 1.0f);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  InitStrings(&projection);
+  InitStrings();
 }
 
 void G_Update()
@@ -108,7 +99,7 @@ void G_Resize(int const width, int const height)
   glViewport(0, 0, width, height);
 }
 
-void InitStrings(struct Projection const* const projection)
+void InitStrings()
 {
   static float xf;
   static float yf;
@@ -116,8 +107,8 @@ void InitStrings(struct Projection const* const projection)
 
   if (init)
   {
-    xf = (projection->right - projection->left) / (float) GetWindowWidth();
-    yf = (projection->top - projection->bottom) / (float) GetWindowHeight();
+    xf = (GetRight() - GetLeft()) / (float) GetWindowWidth();
+    yf = (GetTop() - GetBottom()) / (float) GetWindowHeight();
     init = false;
   }
 
@@ -141,10 +132,10 @@ void DrawStatusBar()
 {
   glPushMatrix();
 
-  float left = -MARGIN / 2.0f;
+  float left = GetLeft();
   float top = -MARGIN / 2.0f;
-  float right = (float) g_world.size.x * PIECE_SIZE + MARGIN / 2.0f;
-  float bottom = -MARGIN / 2.0f - STATUSBAR_SIZE;
+  float right = GetRight();
+  float bottom = GetBottom();
 
   switch (g_world.state)
   {
@@ -173,8 +164,7 @@ void DrawStatusBar()
 
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   glTranslatef(MARGIN / 2.0f,
-               -MARGIN / 2.0f - STATUSBAR_SIZE +
-                   (STATUSBAR_SIZE - g_world.statusBar.string_height * 0.75f) / 2.0f,
+               GetBottom() + (STATUSBAR_SIZE - g_world.statusBar.string_height * 0.75f) / 2.0f,
                0.0f);
   glScalef(TEXT_SIZE / 100.0f, TEXT_SIZE / 100.0f, 1.0f);
   glLineWidth(1.2f);
@@ -355,6 +345,26 @@ void DrawValue(struct Piece const* const piece)
   // TODO
   (void) piece;
 #endif
+}
+
+float GetLeft()
+{
+  return -MARGIN / 2.0f;
+}
+
+float GetRight()
+{
+  return (float) g_world.size.x * PIECE_SIZE + MARGIN / 2.0f;
+}
+
+float GetBottom()
+{
+  return -MARGIN / 2.0f - STATUSBAR_SIZE;
+}
+
+float GetTop()
+{
+  return (float) g_world.size.y * PIECE_SIZE + MARGIN / 2.0f;
 }
 
 int GetWindowWidth()
