@@ -153,9 +153,39 @@ void DrawPieces()
 
 void DrawStatusBar()
 {
-#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   glPushMatrix();
 
+  float left = -MARGIN / 2.0f;
+  float top = -MARGIN / 2.0f;
+  float right = (float) g_world.size.x * PIECE_SIZE + MARGIN / 2.0f;
+  float bottom = -MARGIN / 2.0f - STATUSBAR_SIZE;
+
+  switch (g_world.state)
+  {
+    case WorldState_Setup:
+      glColor3f(STATUSBAR_SETUP_COLOR);
+      break;
+    case WorldState_Idle:
+      glColor3f(STATUSBAR_IDLE_COLOR);
+      break;
+    case WorldState_Moving:
+      glColor3f(STATUSBAR_MOVING_COLOR);
+      break;
+    case WorldState_Success:
+      glColor3f(STATUSBAR_SUCCESS_COLOR);
+      break;
+  }
+
+  // clang-format off
+  glBegin(GL_POLYGON);
+    glVertex2f(left, top);
+    glVertex2f(left, bottom);
+    glVertex2f(right, bottom);
+    glVertex2f(right, top);
+  glEnd();
+  // clang-format on
+
+#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   glTranslatef(MARGIN / 2.0f,
                -MARGIN / 2.0f - STATUSBAR_SIZE +
                    (STATUSBAR_SIZE - g_world.statusBar.string_height * 0.75f) / 2.0f,
@@ -165,7 +195,7 @@ void DrawStatusBar()
 
   if (g_world.state == WorldState_Setup)
   {
-    glColor3f(STATUSBAR_COLOR);
+    glColor3f(STATUSBAR_TEXT_COLOR);
 
     switch (g_world.statusBar.state)
     {
@@ -183,11 +213,9 @@ void DrawStatusBar()
     char buf[30];
     snprintf(buf, sizeof(buf), "Moves: %d / %d", g_world.moves, g_world.single_moves);
 
-    glColor3f(STATUSBAR_COLOR);
+    glColor3f(STATUSBAR_TEXT_COLOR);
     glutStrokeString(TEXT_FONT, (unsigned char*) &buf[0]);
   }
-
-  glPopMatrix();
 #endif
 
 #if defined(USE_GLFW) && !defined(USE_FREEGLUT_FOR_TEXT)
@@ -197,6 +225,8 @@ void DrawStatusBar()
 #if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
 #endif
+
+  glPopMatrix();
 }
 
 void InitPieceString(struct Piece* const piece, float xf, float yf)

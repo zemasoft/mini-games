@@ -44,7 +44,12 @@
 #define VALUE_MOVING_COLOR 1.0f, 1.0f, 1.0f
 #define VALUE_SUCCESS_COLOR 1.0f, 1.0f, 1.0f
 
-#define STATUSBAR_COLOR 1.0f, 1.0f, 1.0f
+#define STATUSBAR_SETUP_COLOR 0.2f, 0.2f, 0.2f
+#define STATUSBAR_IDLE_COLOR 0.2f, 0.2f, 0.2f
+#define STATUSBAR_MOVING_COLOR 0.2f, 0.2f, 0.2f
+#define STATUSBAR_SUCCESS_COLOR 0.2f, 0.2f, 0.2f
+
+#define STATUSBAR_TEXT_COLOR 1.0f, 1.0f, 1.0f
 
 struct Config
 {
