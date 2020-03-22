@@ -137,10 +137,12 @@ void RecountStatusBar()
 
 #if defined(USE_GLFW) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
+  (void) s_statusBar;
 #endif
 
 #if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
+  (void) s_statusBar;
 #endif
 }
 
