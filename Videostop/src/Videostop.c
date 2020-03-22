@@ -199,6 +199,7 @@ void Start()
 
 #if defined(USE_FREEGLUT)
   glutDisplayFunc(&G_Update);
+  glutReshapeFunc(&G_Resize);
   glutIdleFunc(&Update);
 
   glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
@@ -236,6 +237,7 @@ void Stop()
 
 #if defined(USE_FREEGLUT)
   glutDisplayFunc(NULL);
+  glutReshapeFunc(NULL);
   glutIdleFunc(NULL);
 #endif
 }
