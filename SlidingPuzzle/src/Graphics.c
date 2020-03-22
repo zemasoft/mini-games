@@ -117,7 +117,17 @@ void InitStrings()
     InitPieceString(&g_world.pieces[i], xf, yf);
   }
 
+#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   g_world.statusBar.string_height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * yf;
+#endif
+
+#if defined(USE_GLFW) && !defined(USE_FREEGLUT_FOR_TEXT)
+  // TODO
+#endif
+
+#if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
+  // TODO
+#endif
 }
 
 void DrawPieces()

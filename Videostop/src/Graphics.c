@@ -123,8 +123,22 @@ void InitStrings()
     init = false;
   }
 
+#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   (void) xf;
   g_world.statusBar.string_height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * yf;
+#endif
+
+#if defined(USE_GLFW) && !defined(USE_FREEGLUT_FOR_TEXT)
+  // TODO
+  (void) xf;
+  (void) yf;
+#endif
+
+#if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
+  // TODO
+  (void) xf;
+  (void) yf;
+#endif
 }
 
 void DrawDices()
