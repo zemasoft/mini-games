@@ -38,29 +38,16 @@ extern GLFWwindow* g_window;
 extern SDL_Window* g_window;
 #endif
 
+static int s_init_window_width;
+static int s_init_window_height;
+static float s_init_width;
+static float s_init_height;
+
 static struct
 {
-  float size;
-  float size_px;
-
-#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
-  int init_window_width;
-  int init_window_height;
-  float init_width;
-  float init_height;
-
-  struct
-  {
-    float height;
-
-    struct
-    {
-      float x;
-      float y;
-    } scale;
-  } string;
-#endif
-} s_statusBar;
+  float x;
+  float y;
+} s_scale;
 
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
 static struct
@@ -68,11 +55,11 @@ static struct
   float x;
   float y;
 } s_string_scale;
+
+static float s_statusBar_string_height;
 #endif
 
-static void InitStatusBar();
-
-static void RecountStatusBar();
+static void RecountStatusBarString();
 static void DrawDices();
 static void DrawStatusBar();
 
@@ -97,11 +84,17 @@ static float GetTop();
 
 void G_Start()
 {
-  InitStatusBar();
+  s_scale.x = 1.0f;
+  s_scale.y = 1.0f;
+
+  s_init_window_width = GetWindowWidth();
+  s_init_window_height = GetWindowHeight();
+  s_init_width = GetRight() - GetLeft();
+  s_init_height = GetTop() - GetBottom();
 
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
-  s_string_scale.x = (GetRight() - GetLeft()) / (float) GetWindowWidth();
-  s_string_scale.y = (GetTop() - GetBottom()) / (float) GetWindowHeight();
+  s_string_scale.x = s_init_width / (float) s_init_window_width;
+  s_string_scale.y = s_init_height / (float) s_init_window_height;
 #endif
 
   glEnable(GL_MULTISAMPLE);
@@ -112,7 +105,12 @@ void G_Start()
 
 void G_Restart()
 {
-  RecountStatusBar();
+  s_scale.x = (float) s_init_window_width / (float) GetWindowWidth() * (GetRight() - GetLeft()) /
+              s_init_width;
+  s_scale.y = (float) s_init_window_height / (float) GetWindowHeight() * (GetTop() - GetBottom()) /
+              s_init_height;
+
+  RecountStatusBarString();
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -153,39 +151,20 @@ void G_Resize(int const width, int const height)
   G_Restart();
 }
 
-void InitStatusBar()
+void RecountStatusBarString()
 {
-  s_statusBar.size = STATUSBAR_SIZE;
-  s_statusBar.size_px = s_statusBar.size / (GetTop() - GetBottom()) * (float) GetWindowHeight();
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
-  s_statusBar.init_window_width = GetWindowWidth();
-  s_statusBar.init_window_height = GetWindowHeight();
-  s_statusBar.init_width = GetRight() - GetLeft();
-  s_statusBar.init_height = GetTop() - GetBottom();
-#endif
-}
-
-void RecountStatusBar()
-{
-  s_statusBar.size = (GetTop() - GetBottom() - s_statusBar.size) * s_statusBar.size_px /
-                     ((float) GetWindowHeight() - s_statusBar.size_px);
-
-#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
-  s_statusBar.string.height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * s_string_scale.y;
-  s_statusBar.string.scale.x = (float) s_statusBar.init_window_width / (float) GetWindowWidth() *
-                               (GetRight() - GetLeft()) / s_statusBar.init_width;
-  s_statusBar.string.scale.y = (float) s_statusBar.init_window_height / (float) GetWindowHeight() *
-                               (GetTop() - GetBottom()) / s_statusBar.init_height;
+  s_statusBar_string_height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * s_string_scale.y;
 #endif
 
 #if defined(USE_GLFW) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
-  (void) s_statusBar;
+  (void) s_statusBar_string_height;
 #endif
 
 #if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
-  (void) s_statusBar;
+  (void) s_statusBar_string_height;
 #endif
 }
 
@@ -238,13 +217,10 @@ void DrawStatusBar()
   // clang-format on
 
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
-  glTranslatef(GetLeft() + MARGIN * s_statusBar.string.scale.x,
-               GetBottom() + (s_statusBar.size -
-                              s_statusBar.string.height * 0.75f * s_statusBar.string.scale.y) /
-                                 2.0f,
-               0.0f);
-  glScalef(TEXT_SIZE / 100.0f * s_statusBar.string.scale.x,
-           TEXT_SIZE / 100.0f * s_statusBar.string.scale.y, 1.0f);
+  glTranslatef(
+      GetLeft() + MARGIN * s_scale.x,
+      GetBottom() + (STATUSBAR_SIZE - s_statusBar_string_height * 0.75f) / 2.0f * s_scale.y, 0.0f);
+  glScalef(TEXT_SIZE / 100.0f * s_scale.x, TEXT_SIZE / 100.0f * s_scale.y, 1.0f);
   glLineWidth(1.2f);
 
   if (g_world.state == WorldState_Setup)
@@ -531,7 +507,7 @@ float GetRight()
 
 float GetBottom()
 {
-  return -MARGIN / 2.0f - s_statusBar.size;
+  return -MARGIN / 2.0f - STATUSBAR_SIZE * s_scale.y;
 }
 
 float GetTop()
