@@ -40,12 +40,6 @@ extern SDL_Window* g_window;
 
 static struct
 {
-  float x;
-  float y;
-} s_string_factor;
-
-static struct
-{
   float size;
   float size_px;
 
@@ -67,6 +61,14 @@ static struct
   } string;
 #endif
 } s_statusBar;
+
+#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
+static struct
+{
+  float x;
+  float y;
+} s_string_scale;
+#endif
 
 static void InitStatusBar();
 
@@ -95,10 +97,12 @@ static float GetTop();
 
 void G_Start()
 {
-  s_string_factor.x = (GetRight() - GetLeft()) / (float) GetWindowWidth();
-  s_string_factor.y = (GetTop() - GetBottom()) / (float) GetWindowHeight();
-
   InitStatusBar();
+
+#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
+  s_string_scale.x = (GetRight() - GetLeft()) / (float) GetWindowWidth();
+  s_string_scale.y = (GetTop() - GetBottom()) / (float) GetWindowHeight();
+#endif
 
   glEnable(GL_MULTISAMPLE);
   glDisable(GL_DEPTH_TEST);
@@ -167,7 +171,7 @@ void RecountStatusBar()
                      ((float) GetWindowHeight() - s_statusBar.size_px);
 
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
-  s_statusBar.string.height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * s_string_factor.y;
+  s_statusBar.string.height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * s_string_scale.y;
   s_statusBar.string.scale.x = (float) s_statusBar.init_window_width / (float) GetWindowWidth() *
                                (GetRight() - GetLeft()) / s_statusBar.init_width;
   s_statusBar.string.scale.y = (float) s_statusBar.init_window_height / (float) GetWindowHeight() *
