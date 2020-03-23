@@ -156,16 +156,6 @@ void RecountStatusBarString()
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   s_statusBar_string_height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * s_string_scale.y;
 #endif
-
-#if defined(USE_GLFW) && !defined(USE_FREEGLUT_FOR_TEXT)
-  // TODO
-  (void) s_statusBar_string_height;
-#endif
-
-#if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
-  // TODO
-  (void) s_statusBar_string_height;
-#endif
 }
 
 void DrawDices()
