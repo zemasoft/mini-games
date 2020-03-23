@@ -62,7 +62,6 @@ script:
                     -DSLIDINGPUZZLE_WARNINGS_AS_ERRORS=ON \
                     -DSNAKE_USE_FREEALUT=${USE_FREEALUT} \
                     -DSNAKE_USE_FREEGLUT=${USE_FREEGLUT} \
-                    -DSNAKE_USE_FREEGLUT_FOR_TEXT=${USE_FREEGLUT_FOR_TEXT} \
                     -DSNAKE_USE_GLFW=${USE_GLFW} \
                     -DSNAKE_USE_SDL2=${USE_SDL2} \
                     -DSNAKE_WARNINGS_AS_ERRORS=ON \
