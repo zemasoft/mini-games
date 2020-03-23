@@ -51,8 +51,6 @@ struct StatusBar
 
     StatusBarState_Count
   } state;
-
-  float string_height;
 };
 
 struct World

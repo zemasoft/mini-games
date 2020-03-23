@@ -33,11 +33,26 @@ extern GLFWwindow* g_window;
 extern SDL_Window* g_window;
 #endif
 
-static void InitStrings();
+static struct
+{
+  float x;
+  float y;
+} s_string_factor;
+
+static struct
+{
+  struct
+  {
+    float height;
+  } string;
+} s_statusBar;
+
+static void RecountPieceStrings();
+static void RecountStatusBar();
 static void DrawPieces();
 static void DrawStatusBar();
 
-static void InitPieceString(struct Piece* piece, float xf, float yf);
+static void RecountPieceString(struct Piece* piece);
 
 static void DrawPiece(struct Piece const* piece);
 static void DrawValue(struct Piece const* piece);
@@ -55,6 +70,9 @@ void G_Start()
   glEnable(GL_MULTISAMPLE);
   glDisable(GL_DEPTH_TEST);
 
+  s_string_factor.x = (GetRight() - GetLeft()) / (float) GetWindowWidth();
+  s_string_factor.y = (GetTop() - GetBottom()) / (float) GetWindowHeight();
+
   G_Restart();
 }
 
@@ -67,7 +85,8 @@ void G_Restart()
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  InitStrings();
+  RecountPieceStrings();
+  RecountStatusBar();
 }
 
 void G_Update()
@@ -97,36 +116,32 @@ void G_Stop()
 void G_Resize(int const width, int const height)
 {
   glViewport(0, 0, width, height);
+
+  G_Restart();
 }
 
-void InitStrings()
+void RecountPieceStrings()
 {
-  static float xf;
-  static float yf;
-  static bool init = true;
-
-  if (init)
-  {
-    xf = (GetRight() - GetLeft()) / (float) GetWindowWidth();
-    yf = (GetTop() - GetBottom()) / (float) GetWindowHeight();
-    init = false;
-  }
-
   for (size_t i = 0; i < g_world.piece_count; ++i)
   {
-    InitPieceString(&g_world.pieces[i], xf, yf);
+    RecountPieceString(&g_world.pieces[i]);
   }
+}
 
+void RecountStatusBar()
+{
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
-  g_world.statusBar.string_height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * yf;
+  s_statusBar.string.height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * s_string_factor.y;
 #endif
 
 #if defined(USE_GLFW) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
+  (void) s_statusBar;
 #endif
 
 #if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
+  (void) s_statusBar;
 #endif
 }
 
@@ -174,8 +189,7 @@ void DrawStatusBar()
 
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   glTranslatef(MARGIN / 2.0f,
-               GetBottom() + (STATUSBAR_SIZE - g_world.statusBar.string_height * 0.75f) / 2.0f,
-               0.0f);
+               GetBottom() + (STATUSBAR_SIZE - s_statusBar.string.height * 0.75f) / 2.0f, 0.0f);
   glScalef(TEXT_SIZE / 100.0f, TEXT_SIZE / 100.0f, 1.0f);
   glLineWidth(1.2f);
 
@@ -215,28 +229,24 @@ void DrawStatusBar()
   glPopMatrix();
 }
 
-void InitPieceString(struct Piece* const piece, float xf, float yf)
+void RecountPieceString(struct Piece* const piece)
 {
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   snprintf(piece->string.value, sizeof(piece->string.value), "%d", piece->value);
 
-  piece->string.width =
-      glutStrokeLengthf(TEXT_FONT, (unsigned char*) &piece->string.value[0]) * VALUE_SIZE * xf;
-  piece->string.height = (float) glutStrokeHeight(TEXT_FONT) * VALUE_SIZE * yf;
+  piece->string.width = glutStrokeLengthf(TEXT_FONT, (unsigned char*) &piece->string.value[0]) *
+                        VALUE_SIZE * s_string_factor.x;
+  piece->string.height = (float) glutStrokeHeight(TEXT_FONT) * VALUE_SIZE * s_string_factor.y;
 #endif
 
 #if defined(USE_GLFW) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
   (void) piece;
-  (void) xf;
-  (void) yf;
 #endif
 
 #if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
   // TODO
   (void) piece;
-  (void) xf;
-  (void) yf;
 #endif
 }
 
