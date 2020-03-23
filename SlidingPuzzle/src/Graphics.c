@@ -227,7 +227,7 @@ void DrawStatusBar()
   // clang-format on
 
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
-  glTranslatef(MARGIN / 2.0f,
+  glTranslatef(GetLeft() + MARGIN * s_statusBar.string.scale.x,
                GetBottom() + (s_statusBar.size -
                               s_statusBar.string.height * 0.75f * s_statusBar.string.scale.y) /
                                  2.0f,
