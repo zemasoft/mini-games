@@ -34,12 +34,14 @@ struct Piece
     float y;
   } pos_w;
 
+#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   struct
   {
     char value[STRING_SIZE];
     float width;
     float height;
   } string;
+#endif
 };
 
 struct StatusBar

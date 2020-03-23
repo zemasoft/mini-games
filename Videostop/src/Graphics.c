@@ -56,7 +56,13 @@ static struct
   float y;
 } s_string_scale;
 
-static float s_statusBar_string_height;
+static struct
+{
+  struct
+  {
+    float height;
+  } string;
+} s_statusBar;
 #endif
 
 static void RecountStatusBarString();
@@ -154,7 +160,7 @@ void G_Resize(int const width, int const height)
 void RecountStatusBarString()
 {
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
-  s_statusBar_string_height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * s_string_scale.y;
+  s_statusBar.string.height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * s_string_scale.y;
 #endif
 }
 
@@ -209,7 +215,7 @@ void DrawStatusBar()
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   glTranslatef(
       GetLeft() + MARGIN * s_scale.x,
-      GetBottom() + (STATUSBAR_SIZE - s_statusBar_string_height * 0.75f) / 2.0f * s_scale.y, 0.0f);
+      GetBottom() + (STATUSBAR_SIZE - s_statusBar.string.height * 0.75f) / 2.0f * s_scale.y, 0.0f);
   glScalef(TEXT_SIZE / 100.0f * s_scale.x, TEXT_SIZE / 100.0f * s_scale.y, 1.0f);
   glLineWidth(1.2f);
 
