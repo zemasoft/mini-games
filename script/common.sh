@@ -18,9 +18,17 @@ else
   exit 1
 fi
 
+echo "BUILD_TYPE=${BUILD_TYPE}"
+
 if [[ ! -v EXTERNAL_DIR ]]; then
   echo "'EXTERNAL_DIR' not set. Set it using 'export EXTERNAL_DIR=type'" >&2
   exit 1
 fi
 
-mkdir -p ${EXTERNAL_DIR}
+echo "EXTERNAL_DIR=${EXTERNAL_DIR}"
+
+if [[ ! -v CLEANUP ]]; then
+  export CLEANUP=false
+fi
+
+echo "CLEANUP=${CLEANUP}"

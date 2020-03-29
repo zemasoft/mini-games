@@ -5,6 +5,7 @@ set -e
 SCRIPT_DIR=$(dirname $(readlink -f $0))
 
 ${SCRIPT_DIR}/common.sh
+mkdir -p ${EXTERNAL_DIR}
 
 rm -rf freeglut
 
@@ -23,5 +24,10 @@ cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
                 -DFREEGLUT_BUILD_DEMOS=OFF
 cmake --build build
 cmake --build build --target install
+
+cd ../../..
+if [[ ${CLEANUP} == true ]]; then
+  rm -rf freeglut
+fi
 
 echo "All OK"

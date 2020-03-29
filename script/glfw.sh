@@ -5,6 +5,7 @@ set -e
 SCRIPT_DIR=$(dirname $(readlink -f $0))
 
 ${SCRIPT_DIR}/common.sh
+mkdir -p ${EXTERNAL_DIR}
 
 rm -rf glfw
 
@@ -20,5 +21,10 @@ cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
                 -DGLFW_BUILD_DOCS=OFF
 cmake --build build
 cmake --build build --target install
+
+cd ..
+if [[ ${CLEANUP} == true ]]; then
+  rm -rf glfw
+fi
 
 echo "All OK"
