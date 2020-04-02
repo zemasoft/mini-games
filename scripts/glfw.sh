@@ -7,23 +7,25 @@ SCRIPT_DIR=$(dirname $(readlink -f $0))
 ${SCRIPT_DIR}/common.sh
 mkdir -p ${EXTERNAL_DIR}
 
-rm -rf freealut
+rm -rf glfw
 
-git clone https://github.com/vancegroup/freealut
-cd freealut
-git checkout fc814e3
+git clone https://github.com/glfw/glfw
+cd glfw
+git checkout 76406c7
 
 cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
                 -DCMAKE_INSTALL_PREFIX=${EXTERNAL_DIR} \
-                -DBUILD_EXAMPLES=OFF \
-                -DBUILD_TESTS=OFF \
-                -DBUILD_OPTIMIZATION=${optimization}
+                -DBUILD_SHARED_LIBS=ON \
+                -DGLFW_BUILD_EXAMPLES=OFF \
+                -DGLFW_BUILD_TESTS=OFF \
+                -DGLFW_BUILD_DOCS=OFF
 cmake --build build
 cmake --build build --target install
 
 cd ..
-if [[ ${CLEANUP} == true ]]; then
-  rm -rf freealut
+if [[ ${CLEANUP} == true ]]
+then
+  rm -rf glfw
 fi
 
 echo "All OK"

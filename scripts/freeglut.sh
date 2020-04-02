@@ -26,7 +26,8 @@ cmake --build build
 cmake --build build --target install
 
 cd ../../..
-if [[ ${CLEANUP} == true ]]; then
+if [[ ${CLEANUP} == true ]]
+then
   rm -rf freeglut
 fi
 

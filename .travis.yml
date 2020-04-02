@@ -46,10 +46,10 @@ addons:
 
 install:
   - export EXTERNAL_DIR=$(pwd)/external
-  - if [[ ${USE_FREEALUT} == ON ]]; then ./script/freealut.sh; fi
-  - if [[ ${USE_FREEGLUT} == ON || ${USE_FREEGLUT_FOR_TEXT} == ON ]]; then ./script/freeglut.sh; fi
-  - if [[ ${USE_GLFW} == ON ]]; then ./script/glfw.sh; fi
-  - if [[ ${USE_SDL2} == ON ]]; then ./script/sdl2.sh; fi
+  - if [[ ${USE_FREEALUT} == ON ]]; then ./scripts/freealut.sh; fi
+  - if [[ ${USE_FREEGLUT} == ON || ${USE_FREEGLUT_FOR_TEXT} == ON ]]; then ./scripts/freeglut.sh; fi
+  - if [[ ${USE_GLFW} == ON ]]; then ./scripts/glfw.sh; fi
+  - if [[ ${USE_SDL2} == ON ]]; then ./scripts/sdl2.sh; fi
 
 script:
   - |
