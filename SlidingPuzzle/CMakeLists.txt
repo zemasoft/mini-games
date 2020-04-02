@@ -7,7 +7,6 @@ option(SLIDINGPUZZLE_USE_GLFW "Use GLFW" OFF)
 option(SLIDINGPUZZLE_USE_SDL2 "Use SDL2" OFF)
 
 option(SLIDINGPUZZLE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
-option(SLIDINGPUZZLE_CLANGFORMAT "Setup clangformat target" OFF)
 
 if(SLIDINGPUZZLE_USE_FREEALUT)
   find_package(FreeALUT MODULE REQUIRED)
@@ -141,9 +140,3 @@ set_target_properties(SlidingPuzzle
   PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/SlidingPuzzle
 )
-
-if(SLIDINGPUZZLE_CLANGFORMAT)
-  include(ClangFormat)
-
-  target_clangformat_setup(SlidingPuzzle)
-endif()

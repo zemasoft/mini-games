@@ -6,7 +6,6 @@ option(SNAKE_USE_GLFW "Use GLFW" ON)
 option(SNAKE_USE_SDL2 "Use SDL2" OFF)
 
 option(SNAKE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
-option(SNAKE_CLANGFORMAT "Setup clangformat target" OFF)
 
 if(SNAKE_USE_FREEALUT)
   find_package(FreeALUT MODULE REQUIRED)
@@ -138,9 +137,3 @@ set_target_properties(Snake
   PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/Snake
 )
-
-if(SNAKE_CLANGFORMAT)
-  include(ClangFormat)
-
-  target_clangformat_setup(Snake)
-endif()

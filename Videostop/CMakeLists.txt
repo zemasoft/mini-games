@@ -7,7 +7,6 @@ option(VIDEOSTOP_USE_GLFW "Use GLFW" OFF)
 option(VIDEOSTOP_USE_SDL2 "Use SDL2" OFF)
 
 option(VIDEOSTOP_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
-option(VIDEOSTOP_CLANGFORMAT "Setup clangformat target" OFF)
 
 if(VIDEOSTOP_USE_FREEALUT)
   find_package(FreeALUT MODULE REQUIRED)
@@ -146,9 +145,3 @@ set_target_properties(Videostop
   PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/Videostop
 )
-
-if(VIDEOSTOP_CLANGFORMAT)
-  include(ClangFormat)
-
-  target_clangformat_setup(Videostop)
-endif()

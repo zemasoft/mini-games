@@ -5,6 +5,7 @@ AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
 BreakBeforeBraces: Allman
 ColumnLimit: 100
+IncludeBlocks: Preserve
 KeepEmptyLinesAtTheStartOfBlocks: true
 SpaceAfterCStyleCast: true
 Standard: Cpp11
