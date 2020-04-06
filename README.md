@@ -18,7 +18,7 @@ This project is licensed under the [Boost 1.0][license.url].
 [language.badge]: https://img.shields.io/badge/language-C-blue.svg
 
 [standard.url]:   http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
-[standard.badge]: https://img.shields.io/badge/C99-blue.svg
+[standard.badge]: https://img.shields.io/badge/C-99-blue.svg
 
 [license.url]:    http://www.boost.org/LICENSE_1_0.txt
 [license.badge]:  https://img.shields.io/badge/license-Boost%201.0-blue.svg
