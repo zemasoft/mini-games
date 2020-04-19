@@ -145,3 +145,10 @@ set_target_properties(Videostop
   PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/Videostop
 )
+
+install(
+  TARGETS
+    Videostop
+  DESTINATION
+    bin
+)

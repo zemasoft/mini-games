@@ -137,3 +137,10 @@ set_target_properties(Snake
   PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/Snake
 )
+
+install(
+  TARGETS
+    Snake
+  DESTINATION
+    bin
+)

@@ -140,3 +140,10 @@ set_target_properties(SlidingPuzzle
   PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/SlidingPuzzle
 )
+
+install(
+  TARGETS
+    SlidingPuzzle
+  DESTINATION
+    bin
+)
