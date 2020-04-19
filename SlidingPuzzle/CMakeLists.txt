@@ -141,9 +141,18 @@ set_target_properties(SlidingPuzzle
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
 )
 
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 install(
   TARGETS
     SlidingPuzzle
   DESTINATION
-    bin
+    mini-games/SlidingPuzzle/bin
+)
+
+install(
+  DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/assets
+  DESTINATION
+    mini-games/SlidingPuzzle
 )

@@ -138,9 +138,18 @@ set_target_properties(Snake
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
 )
 
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 install(
   TARGETS
     Snake
   DESTINATION
-    bin
+    mini-games/Snake/bin
+)
+
+install(
+  DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/assets
+  DESTINATION
+    mini-games/Snake
 )
