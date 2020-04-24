@@ -25,6 +25,8 @@ if(VIDEOSTOP_USE_SDL2)
   find_package(SDL2 MODULE REQUIRED)
 endif()
 
+set(CMAKE_INSTALL_RPATH $ORIGIN/../../lib)
+
 add_executable(Videostop
   src/Config.c
   src/Graphics.c
@@ -145,8 +147,6 @@ set_target_properties(Videostop
   PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
 )
-
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 install(
   TARGETS
