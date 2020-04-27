@@ -17,8 +17,7 @@ if(SLIDINGPUZZLE_USE_FREEGLUT OR SLIDINGPUZZLE_USE_FREEGLUT_FOR_TEXT)
 endif()
 
 if(SLIDINGPUZZLE_USE_GLFW)
-  find_package(OpenGL MODULE REQUIRED)
-  find_package(glfw3 CONFIG REQUIRED)
+  find_package(GLFW MODULE REQUIRED)
 endif()
 
 if(SLIDINGPUZZLE_USE_SDL2)
@@ -121,8 +120,7 @@ if(SLIDINGPUZZLE_USE_GLFW)
 
   target_link_libraries(SlidingPuzzle
     PRIVATE
-      OpenGL::OpenGL
-      glfw
+      GLFW::GLFW
   )
 endif()
 

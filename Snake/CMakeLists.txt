@@ -16,8 +16,7 @@ if(SNAKE_USE_FREEGLUT)
 endif()
 
 if(SNAKE_USE_GLFW)
-  find_package(OpenGL MODULE REQUIRED)
-  find_package(glfw3 CONFIG REQUIRED)
+  find_package(GLFW MODULE REQUIRED)
 endif()
 
 if(SNAKE_USE_SDL2)
@@ -118,8 +117,7 @@ if(SNAKE_USE_GLFW)
 
   target_link_libraries(Snake
     PRIVATE
-      OpenGL::OpenGL
-      glfw
+      GLFW::GLFW
   )
 endif()
 

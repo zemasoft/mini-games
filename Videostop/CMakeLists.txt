@@ -17,8 +17,7 @@ if(VIDEOSTOP_USE_FREEGLUT OR VIDEOSTOP_USE_FREEGLUT_FOR_TEXT)
 endif()
 
 if(VIDEOSTOP_USE_GLFW)
-  find_package(OpenGL MODULE REQUIRED)
-  find_package(glfw3 CONFIG REQUIRED)
+  find_package(GLFW MODULE REQUIRED)
 endif()
 
 if(VIDEOSTOP_USE_SDL2)
@@ -126,8 +125,7 @@ if(VIDEOSTOP_USE_GLFW)
 
   target_link_libraries(Videostop
     PRIVATE
-      OpenGL::OpenGL
-      glfw
+      GLFW::GLFW
   )
 endif()
 
