@@ -13,7 +13,7 @@ if(SLIDINGPUZZLE_USE_FREEALUT)
 endif()
 
 if(SLIDINGPUZZLE_USE_FREEGLUT OR SLIDINGPUZZLE_USE_FREEGLUT_FOR_TEXT)
-  find_package(FreeGLUT CONFIG REQUIRED)
+  find_package(FreeGLUT MODULE REQUIRED)
 endif()
 
 if(SLIDINGPUZZLE_USE_GLFW)
@@ -109,7 +109,7 @@ endif()
 if(SLIDINGPUZZLE_USE_FREEGLUT OR SLIDINGPUZZLE_USE_FREEGLUT_FOR_TEXT)
   target_link_libraries(SlidingPuzzle
     PRIVATE
-      FreeGLUT::freeglut
+      FreeGLUT::FreeGLUT
   )
 endif()
 

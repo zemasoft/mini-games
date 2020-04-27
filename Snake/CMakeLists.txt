@@ -12,7 +12,7 @@ if(SNAKE_USE_FREEALUT)
 endif()
 
 if(SNAKE_USE_FREEGLUT)
-  find_package(FreeGLUT CONFIG REQUIRED)
+  find_package(FreeGLUT MODULE REQUIRED)
 endif()
 
 if(SNAKE_USE_GLFW)
@@ -106,7 +106,7 @@ if(SNAKE_USE_FREEGLUT)
 
   target_link_libraries(Snake
     PRIVATE
-      FreeGLUT::freeglut
+      FreeGLUT::FreeGLUT
   )
 endif()
 

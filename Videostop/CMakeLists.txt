@@ -13,7 +13,7 @@ if(VIDEOSTOP_USE_FREEALUT)
 endif()
 
 if(VIDEOSTOP_USE_FREEGLUT OR VIDEOSTOP_USE_FREEGLUT_FOR_TEXT)
-  find_package(FreeGLUT CONFIG REQUIRED)
+  find_package(FreeGLUT MODULE REQUIRED)
 endif()
 
 if(VIDEOSTOP_USE_GLFW)
@@ -114,7 +114,7 @@ endif()
 if(VIDEOSTOP_USE_FREEGLUT OR VIDEOSTOP_USE_FREEGLUT_FOR_TEXT)
   target_link_libraries(Videostop
     PRIVATE
-      FreeGLUT::freeglut
+      FreeGLUT::FreeGLUT
   )
 endif()
 
