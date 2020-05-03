@@ -8,6 +8,8 @@
 
 #include <stddef.h>  // size_t
 
+#define UPDATE_PERIOD_MS 10
+
 #define MIN_SIZE 2
 #define MAX_SIZE 10
 #define DEFAULT_SIZE 4

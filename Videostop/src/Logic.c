@@ -67,25 +67,9 @@ void L_Restart()
 
 void L_Update()
 {
-  static unsigned before;
   static unsigned idle_time;
   static unsigned stop_time;
   static unsigned statusbar_time;
-
-#if defined(USE_FREEGLUT)
-  unsigned const now = (unsigned) glutGet(GLUT_ELAPSED_TIME);
-#endif
-
-#if defined(USE_GLFW)
-  unsigned const now = (unsigned) (glfwGetTime() * 1000.0);
-#endif
-
-#if defined(USE_SDL2)
-  unsigned const now = SDL_GetTicks();
-#endif
-
-  unsigned const elapsed = now - before;
-  before = now;
 
   if (g_world.dice_count != g_config.dice_count)
   {
@@ -123,8 +107,8 @@ void L_Update()
   switch (g_world.state)
   {
     case WorldState_Setup:
-      idle_time += elapsed;
-      statusbar_time += elapsed;
+      idle_time += UPDATE_PERIOD_MS;
+      statusbar_time += UPDATE_PERIOD_MS;
 
       if (control_key || control_button)
       {
@@ -194,7 +178,7 @@ void L_Update()
       break;
 
     case WorldState_Idle:
-      idle_time += elapsed;
+      idle_time += UPDATE_PERIOD_MS;
 
       if (control_key || control_button)
       {
@@ -226,7 +210,7 @@ void L_Update()
 
     case WorldState_Success:
     case WorldState_Fail:
-      stop_time += elapsed;
+      stop_time += UPDATE_PERIOD_MS;
 
       if (stop_time >= STOP_TIME_MS)
       {

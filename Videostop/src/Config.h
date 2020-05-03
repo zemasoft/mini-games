@@ -6,6 +6,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define UPDATE_PERIOD_MS 10
+
 #define MIN_DICE_COUNT 2
 #define MAX_DICE_COUNT 5
 #define DEFAULT_DICE_COUNT 3

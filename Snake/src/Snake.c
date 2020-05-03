@@ -233,8 +233,33 @@ void Start()
 
 void Update()
 {
+  static unsigned before;
+  static unsigned lag;
+
+#if defined(USE_FREEGLUT)
+  unsigned const now = (unsigned) glutGet(GLUT_ELAPSED_TIME);
+#endif
+
+#if defined(USE_GLFW)
+  unsigned const now = (unsigned) (glfwGetTime() * 1000.0);
+#endif
+
+#if defined(USE_SDL2)
+  unsigned const now = SDL_GetTicks();
+#endif
+
+  unsigned const elapsed = now - before;
+  before = now;
+  lag += elapsed;
+
   I_Update();
-  L_Update();
+
+  while (lag >= UPDATE_PERIOD_MS)
+  {
+    L_Update();
+    lag -= UPDATE_PERIOD_MS;
+  }
+
   G_Update();
 }
 

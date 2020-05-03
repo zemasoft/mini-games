@@ -133,23 +133,7 @@ void L_Restart()
 
 void L_Update()
 {
-  static unsigned before;
   static unsigned move_time;
-
-#if defined(USE_FREEGLUT)
-  unsigned const now = (unsigned) glutGet(GLUT_ELAPSED_TIME);
-#endif
-
-#if defined(USE_GLFW)
-  unsigned const now = (unsigned) (glfwGetTime() * 1000.0);
-#endif
-
-#if defined(USE_SDL2)
-  unsigned const now = SDL_GetTicks();
-#endif
-
-  unsigned const elapsed = now - before;
-  before = now;
 
   if (I_ResetKey())
   {
@@ -171,7 +155,7 @@ void L_Update()
       }
       else
       {
-        move_time += elapsed;
+        move_time += UPDATE_PERIOD_MS;
 
         if (move_time >= g_world.max_move_time)
         {
