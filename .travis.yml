@@ -45,7 +45,7 @@ addons:
       - libxrandr-dev     # GLFW
 
 install:
-  - export EXTERNAL_DIR=$(pwd)/external
+  - export DEPS_DIR=$(pwd)/deps
   - if [[ ${USE_FREEALUT} == ON ]]; then ./scripts/freealut.sh; fi
   - if [[ ${USE_FREEGLUT} == ON || ${USE_FREEGLUT_FOR_TEXT} == ON ]]; then ./scripts/freeglut.sh; fi
   - if [[ ${USE_GLFW} == ON ]]; then ./scripts/glfw.sh; fi

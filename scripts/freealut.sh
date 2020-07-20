@@ -5,7 +5,7 @@ set -e
 SCRIPT_DIR=$(dirname $(readlink -f $0))
 
 ${SCRIPT_DIR}/common.sh
-mkdir -p ${EXTERNAL_DIR}
+mkdir -p ${DEPS_DIR}
 
 rm -rf freealut
 
@@ -13,7 +13,7 @@ git clone https://github.com/vancegroup/freealut
 cd freealut
 
 cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-                -DCMAKE_INSTALL_PREFIX=${EXTERNAL_DIR} \
+                -DCMAKE_INSTALL_PREFIX=${DEPS_DIR} \
                 -DBUILD_EXAMPLES=OFF \
                 -DBUILD_TESTS=OFF \
                 -DBUILD_OPTIMIZATION=${optimization}

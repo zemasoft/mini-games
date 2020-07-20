@@ -5,7 +5,7 @@ set -e
 SCRIPT_DIR=$(dirname $(readlink -f $0))
 
 ${SCRIPT_DIR}/common.sh
-mkdir -p ${EXTERNAL_DIR}
+mkdir -p ${DEPS_DIR}
 
 rm -rf freeglut
 
@@ -14,7 +14,7 @@ cd freeglut
 
 cd freeglut/freeglut
 cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-                -DCMAKE_INSTALL_PREFIX=${EXTERNAL_DIR} \
+                -DCMAKE_INSTALL_PREFIX=${DEPS_DIR} \
                 -DOpenGL_GL_PREFERENCE=LEGACY \
                 -DFREEGLUT_BUILD_STATIC_LIBS=OFF \
                 -DFREEGLUT_PRINT_ERRORS=${print_errors} \

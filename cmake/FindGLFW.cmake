@@ -1,7 +1,7 @@
 find_package(OpenGL MODULE REQUIRED)
 
 set(GLFW_ROOT
-  $ENV{EXTERNAL_DIR}
+  $ENV{DEPS_DIR}
   CACHE
   PATH
   "GLFW root directory"

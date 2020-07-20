@@ -24,13 +24,13 @@ fi
 
 echo "BUILD_TYPE=${BUILD_TYPE}"
 
-if [[ ! -v EXTERNAL_DIR ]]
+if [[ ! -v DEPS_DIR ]]
 then
-  echo "'EXTERNAL_DIR' not set. Set it using 'export EXTERNAL_DIR=/absolute/path/to/dir'" >&2
+  echo "'DEPS_DIR' not set. Set it using 'export DEPS_DIR=/absolute/path/to/dir'" >&2
   exit 1
 fi
 
-echo "EXTERNAL_DIR=${EXTERNAL_DIR}"
+echo "DEPS_DIR=${DEPS_DIR}"
 
 if [[ ! -v CLEANUP ]]
 then
