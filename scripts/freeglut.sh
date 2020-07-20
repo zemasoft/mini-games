@@ -2,6 +2,7 @@
 
 set -e
 
+SCRIPT_BASE=$(basename $(readlink -f $0))
 SCRIPT_DIR=$(dirname $(readlink -f $0))
 
 ${SCRIPT_DIR}/common.sh
@@ -30,4 +31,4 @@ then
   rm -rf freeglut
 fi
 
-echo "All OK"
+echo "${SCRIPT_BASE}: All OK"

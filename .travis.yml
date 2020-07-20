@@ -46,10 +46,7 @@ addons:
 
 install:
   - export DEPS_DIR=$(pwd)/deps
-  - if [[ ${USE_FREEALUT} == ON ]]; then ./scripts/freealut.sh; fi
-  - if [[ ${USE_FREEGLUT} == ON || ${USE_FREEGLUT_FOR_TEXT} == ON ]]; then ./scripts/freeglut.sh; fi
-  - if [[ ${USE_GLFW} == ON ]]; then ./scripts/glfw.sh; fi
-  - if [[ ${USE_SDL2} == ON ]]; then ./scripts/sdl2.sh; fi
+  - ./bootstrap.sh
 
 script:
   - |
