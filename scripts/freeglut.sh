@@ -11,7 +11,6 @@ rm -rf freeglut
 
 git clone https://github.com/dcnieho/freeglut
 cd freeglut
-git checkout bbd69d6
 
 cd freeglut/freeglut
 cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \

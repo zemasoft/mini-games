@@ -11,7 +11,6 @@ rm -rf glfw
 
 git clone https://github.com/glfw/glfw
 cd glfw
-git checkout 76406c7
 
 cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
                 -DCMAKE_INSTALL_PREFIX=${EXTERNAL_DIR} \

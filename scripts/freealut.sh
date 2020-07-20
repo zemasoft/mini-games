@@ -11,7 +11,6 @@ rm -rf freealut
 
 git clone https://github.com/vancegroup/freealut
 cd freealut
-git checkout fc814e3
 
 cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
                 -DCMAKE_INSTALL_PREFIX=${EXTERNAL_DIR} \
