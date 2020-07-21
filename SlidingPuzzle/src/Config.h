@@ -3,7 +3,7 @@
 
 #include <stddef.h>  // size_t
 
-#define UPDATE_PERIOD_MS 10
+#define UPDATE_PERIOD_MS (1000.0f / 60.0f)
 
 #define MIN_SIZE 2
 #define MAX_SIZE 10

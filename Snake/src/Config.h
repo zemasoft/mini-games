@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define UPDATE_PERIOD_MS 10
+#define UPDATE_PERIOD_MS (1000.0f / 60.0f)
 
 #define MIN_X_SIZE 9
 #define MAX_X_SIZE 31

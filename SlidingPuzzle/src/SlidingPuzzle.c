@@ -244,7 +244,7 @@ void Start()
 void Update()
 {
   static unsigned before;
-  static unsigned lag;
+  static float lag;
 
 #if defined(USE_FREEGLUT)
   unsigned const now = (unsigned) glutGet(GLUT_ELAPSED_TIME);
@@ -260,7 +260,7 @@ void Update()
 
   unsigned const elapsed = now - before;
   before = now;
-  lag += elapsed;
+  lag += (float) elapsed;
 
   I_Update();
 

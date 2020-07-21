@@ -112,7 +112,7 @@ void L_Restart()
 
   g_world.snake.heading = SnakeHeading_Right;
 
-  g_world.max_move_time = 250;
+  g_world.max_move_time = 250.0f;
 
   g_world.score = 0;
 
@@ -128,7 +128,7 @@ void L_Restart()
 
 void L_Update()
 {
-  static unsigned move_time;
+  static float move_time;
 
   if (I_ResetKey())
   {
@@ -137,7 +137,7 @@ void L_Update()
     S_Restart();
     // G_Restart();
 
-    move_time = 0;
+    move_time = 0.0f;
     return;
   }
 
@@ -154,7 +154,7 @@ void L_Update()
 
         if (move_time >= g_world.max_move_time)
         {
-          move_time = 0;
+          move_time = 0.0f;
 
           switch (I_PopDirectionKey())
           {
@@ -284,12 +284,12 @@ void L_Update()
           switch (g_world.snake.state)
           {
             case SnakeState_Normal:
-              g_world.snake.head_offset = (float) move_time / (float) g_world.max_move_time;
-              g_world.snake.tail_offset = (float) move_time / (float) g_world.max_move_time;
+              g_world.snake.head_offset = move_time / g_world.max_move_time;
+              g_world.snake.tail_offset = move_time / g_world.max_move_time;
               break;
 
             case SnakeState_Growing:
-              g_world.snake.head_offset = (float) move_time / (float) g_world.max_move_time;
+              g_world.snake.head_offset = move_time / g_world.max_move_time;
               break;
           }
         }

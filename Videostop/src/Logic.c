@@ -62,9 +62,9 @@ void L_Restart()
 
 void L_Update()
 {
-  static unsigned idle_time;
-  static unsigned stop_time;
-  static unsigned statusbar_time;
+  static float idle_time;
+  static float stop_time;
+  static float statusbar_time;
 
   if (g_world.dice_count != g_config.dice_count)
   {
@@ -73,9 +73,9 @@ void L_Update()
     S_Restart();
     G_Restart();
 
-    idle_time = 0;
-    stop_time = 0;
-    statusbar_time = 0;
+    idle_time = 0.0f;
+    stop_time = 0.0f;
+    statusbar_time = 0.0f;
     return;
   }
 
@@ -86,9 +86,9 @@ void L_Update()
     S_Restart();
     // G_Restart();
 
-    idle_time = 0;
-    stop_time = 0;
-    statusbar_time = 0;
+    idle_time = 0.0f;
+    stop_time = 0.0f;
+    statusbar_time = 0.0f;
     return;
   }
 
@@ -111,7 +111,7 @@ void L_Update()
         ShuffleDices(DiceState_Idle);
 
         g_world.state = WorldState_Idle;
-        idle_time = 0;
+        idle_time = 0.0f;
         break;
       }
 
@@ -158,7 +158,7 @@ void L_Update()
         S_PlaySound(Sound_Shuffle);
         ShuffleDices(DiceState_Setup);
 
-        idle_time = 0;
+        idle_time = 0.0f;
       }
 
       if (statusbar_time >= 1000.0f / STATUSBAR_FREQUENCY_HZ)
@@ -168,7 +168,7 @@ void L_Update()
           g_world.statusBar.state = 0;
         }
 
-        statusbar_time = 0;
+        statusbar_time = 0.0f;
       }
       break;
 
@@ -182,14 +182,14 @@ void L_Update()
           S_PlaySound(Sound_Success);
 
           g_world.state = WorldState_Success;
-          stop_time = 0;
+          stop_time = 0.0f;
         }
         else
         {
           S_PlaySound(Sound_Fail);
 
           g_world.state = WorldState_Fail;
-          stop_time = 0;
+          stop_time = 0.0f;
         }
         break;
       }
@@ -199,7 +199,7 @@ void L_Update()
         S_PlaySound(Sound_Shuffle);
         ShuffleDices(DiceState_Idle);
 
-        idle_time = 0;
+        idle_time = 0.0f;
       }
       break;
 
@@ -213,7 +213,7 @@ void L_Update()
         ShuffleDices(DiceState_Idle);
 
         g_world.state = WorldState_Idle;
-        idle_time = 0;
+        idle_time = 0.0f;
       }
       break;
   }

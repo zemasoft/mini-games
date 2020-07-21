@@ -96,7 +96,7 @@ void L_Restart()
 
 void L_Update()
 {
-  static unsigned statusbar_time;
+  static float statusbar_time;
 
   if (g_world.size.x != g_config.size.x || g_world.size.y != g_config.size.y)
   {
@@ -105,7 +105,7 @@ void L_Update()
     S_Restart();
     G_Restart();
 
-    statusbar_time = 0;
+    statusbar_time = 0.0f;
     return;
   }
 
@@ -116,7 +116,7 @@ void L_Update()
     S_Restart();
     G_Restart();
 
-    statusbar_time = 0;
+    statusbar_time = 0.0f;
     return;
   }
 
@@ -185,7 +185,7 @@ void L_Update()
           g_world.statusBar.state = 0;
         }
 
-        statusbar_time = 0;
+        statusbar_time = 0.0f;
       }
       break;
 

@@ -71,7 +71,7 @@ struct World
 
   struct Snake snake;
 
-  unsigned max_move_time;
+  float max_move_time;
 
   int score;
 };
