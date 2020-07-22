@@ -233,6 +233,11 @@ void Update()
   unsigned const now = SDL_GetTicks();
 #endif
 
+  if (before == 0)
+  {
+    before = now;
+  }
+
   unsigned const elapsed = now - before;
   before = now;
   lag += (float) elapsed;
