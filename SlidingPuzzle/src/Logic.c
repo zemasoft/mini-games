@@ -488,7 +488,7 @@ bool MovePieces()
 
     if (g_world.pieces[i].pos_w.x > g_world.pieces[i].pos.x)
     {
-      g_world.pieces[i].pos.x += MOVE_SPEED;
+      g_world.pieces[i].pos.x += MOVE_STEP;
 
       if (g_world.pieces[i].pos.x > g_world.pieces[i].pos_w.x)
       {
@@ -500,7 +500,7 @@ bool MovePieces()
     }
     else if (g_world.pieces[i].pos_w.x < g_world.pieces[i].pos.x)
     {
-      g_world.pieces[i].pos.x -= MOVE_SPEED;
+      g_world.pieces[i].pos.x -= MOVE_STEP;
 
       if (g_world.pieces[i].pos.x < g_world.pieces[i].pos_w.x)
       {
@@ -513,7 +513,7 @@ bool MovePieces()
 
     if (g_world.pieces[i].pos_w.y > g_world.pieces[i].pos.y)
     {
-      g_world.pieces[i].pos.y += MOVE_SPEED;
+      g_world.pieces[i].pos.y += MOVE_STEP;
 
       if (g_world.pieces[i].pos.y > g_world.pieces[i].pos_w.y)
       {
@@ -525,7 +525,7 @@ bool MovePieces()
     }
     else if (g_world.pieces[i].pos_w.y < g_world.pieces[i].pos.y)
     {
-      g_world.pieces[i].pos.y -= MOVE_SPEED;
+      g_world.pieces[i].pos.y -= MOVE_STEP;
 
       if (g_world.pieces[i].pos.y < g_world.pieces[i].pos_w.y)
       {
