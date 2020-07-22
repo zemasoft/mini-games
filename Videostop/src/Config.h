@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define UPDATE_PERIOD_MS (1000.0f / 60.0f)
+#define UPDATE_PERIOD_MS (1000.0f / 240.0f)
 
 #define MIN_DICE_COUNT 2
 #define MAX_DICE_COUNT 5

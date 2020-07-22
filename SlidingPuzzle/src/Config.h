@@ -3,7 +3,7 @@
 
 #include <stddef.h>  // size_t
 
-#define UPDATE_PERIOD_MS (1000.0f / 60.0f)
+#define UPDATE_PERIOD_MS (1000.0f / 240.0f)
 
 #define MIN_SIZE 2
 #define MAX_SIZE 10
@@ -13,7 +13,7 @@
 
 #define DIRECTION_KEYS_SIZE 4
 
-#define MOVE_STEP 0.1f
+#define MOVE_SPEED (0.14f / UPDATE_PERIOD_MS)
 #define STATUSBAR_FREQUENCY_HZ 2.0f
 
 #define PIECE_SIZE_PIXELS 100
