@@ -18,8 +18,8 @@ cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
                 -DCMAKE_INSTALL_PREFIX=${DEPS_DIR} \
                 -DOpenGL_GL_PREFERENCE=LEGACY \
                 -DFREEGLUT_BUILD_STATIC_LIBS=OFF \
-                -DFREEGLUT_PRINT_ERRORS=${print_errors} \
-                -DFREEGLUT_PRINT_WARNINGS=${print_warnings} \
+                -DFREEGLUT_PRINT_ERRORS=${FREEGLUT_PRINT_ERRORS} \
+                -DFREEGLUT_PRINT_WARNINGS=${FREEGLUT_PRINT_WARNINGS} \
                 -DFREEGLUT_REPLACE_GLUT=OFF \
                 -DFREEGLUT_BUILD_DEMOS=OFF
 cmake --build build

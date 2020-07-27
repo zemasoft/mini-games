@@ -10,13 +10,19 @@ fi
 
 if [[ ${BUILD_TYPE} == Debug ]]
 then
-  optimization=OFF
+  FREEALUT_OPTIMIZATION=OFF
+  FREEGLUT_PRINT_ERRORS=ON
+  FREEGLUT_PRINT_WARNINGS=ON
 elif [[ ${BUILD_TYPE} == RelWithDebInfo ]]
 then
-  optimization=ON
+  FREEALUT_OPTIMIZATION=ON
+  FREEGLUT_PRINT_ERRORS=OFF
+  FREEGLUT_PRINT_WARNINGS=OFF
 elif [[ ${BUILD_TYPE} == Release ]]
 then
-  optimization=ON
+  FREEALUT_OPTIMIZATION=ON
+  FREEGLUT_PRINT_ERRORS=OFF
+  FREEGLUT_PRINT_WARNINGS=OFF
 else
   echo "'BUILD_TYPE' set to unknown value '${BUILD_TYPE}'. Use 'Debug', 'RelWithDebInfo', or 'Release'" >&2
   exit 1

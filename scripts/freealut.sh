@@ -17,7 +17,7 @@ cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
                 -DCMAKE_INSTALL_PREFIX=${DEPS_DIR} \
                 -DBUILD_EXAMPLES=OFF \
                 -DBUILD_TESTS=OFF \
-                -DBUILD_OPTIMIZATION=${optimization}
+                -DBUILD_OPTIMIZATION=${FREEALUT_OPTIMIZATION}
 cmake --build build
 cmake --build build --target install
 
