@@ -23,7 +23,9 @@ if(SNAKE_USE_SDL2)
   find_package(SDL2 MODULE REQUIRED)
 endif()
 
-set(CMAKE_INSTALL_RPATH $ORIGIN/../../lib)
+if(UNIX)
+  set(CMAKE_INSTALL_RPATH $ORIGIN/../../lib)
+endif()
 
 add_executable(Snake
   src/Config.c
@@ -138,12 +140,21 @@ set_target_properties(Snake
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
 )
 
-install(
-  TARGETS
-    Snake
-  DESTINATION
-    mini-games/Snake/bin
-)
+if(WIN32)
+  install(
+    TARGETS
+      Snake
+    DESTINATION
+      mini-games/Snake
+  )
+elseif(UNIX)
+  install(
+    TARGETS
+      Snake
+    DESTINATION
+      mini-games/Snake/bin
+  )
+endif()
 
 install(
   DIRECTORY

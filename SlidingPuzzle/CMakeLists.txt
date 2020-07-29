@@ -24,7 +24,9 @@ if(SLIDINGPUZZLE_USE_SDL2)
   find_package(SDL2 MODULE REQUIRED)
 endif()
 
-set(CMAKE_INSTALL_RPATH $ORIGIN/../../lib)
+if(UNIX)
+  set(CMAKE_INSTALL_RPATH $ORIGIN/../../lib)
+endif()
 
 add_executable(SlidingPuzzle
   src/Config.c
@@ -141,12 +143,21 @@ set_target_properties(SlidingPuzzle
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
 )
 
-install(
-  TARGETS
-    SlidingPuzzle
-  DESTINATION
-    mini-games/SlidingPuzzle/bin
-)
+if(WIN32)
+  install(
+    TARGETS
+      SlidingPuzzle
+    DESTINATION
+      mini-games/SlidingPuzzle
+  )
+elseif(UNIX)
+  install(
+    TARGETS
+      SlidingPuzzle
+    DESTINATION
+      mini-games/SlidingPuzzle/bin
+  )
+endif()
 
 install(
   DIRECTORY

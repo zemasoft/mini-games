@@ -24,7 +24,9 @@ if(VIDEOSTOP_USE_SDL2)
   find_package(SDL2 MODULE REQUIRED)
 endif()
 
-set(CMAKE_INSTALL_RPATH $ORIGIN/../../lib)
+if(UNIX)
+  set(CMAKE_INSTALL_RPATH $ORIGIN/../../lib)
+endif()
 
 add_executable(Videostop
   src/Config.c
@@ -146,12 +148,21 @@ set_target_properties(Videostop
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
 )
 
-install(
-  TARGETS
-    Videostop
-  DESTINATION
-    mini-games/Videostop/bin
-)
+if(WIN32)
+  install(
+    TARGETS
+      Videostop
+    DESTINATION
+      mini-games/Videostop
+  )
+elseif(UNIX)
+  install(
+    TARGETS
+      Videostop
+    DESTINATION
+      mini-games/Videostop/bin
+  )
+endif()
 
 install(
   DIRECTORY
