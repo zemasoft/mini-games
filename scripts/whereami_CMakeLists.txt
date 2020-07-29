@@ -13,16 +13,16 @@ target_include_directories(whereami
     src
 )
 
-install(
-  TARGETS
-    whereami
-  DESTINATION
-    lib
+set_target_properties(whereami
+  PROPERTIES
+    PUBLIC_HEADER src/whereami.h
 )
 
 install(
-  FILES
-    src/whereami.h
-  DESTINATION
+  TARGETS
+    whereami
+  LIBRARY DESTINATION
+    lib
+  PUBLIC_HEADER DESTINATION
     include
 )
