@@ -8,6 +8,8 @@ option(SLIDINGPUZZLE_USE_SDL2 "Use SDL2" OFF)
 
 option(SLIDINGPUZZLE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 
+find_package(WhereAmI MODULE REQUIRED)
+
 if(SLIDINGPUZZLE_USE_FREEALUT)
   find_package(FreeALUT MODULE REQUIRED)
 endif()
@@ -79,6 +81,11 @@ endif()
 target_include_directories(SlidingPuzzle
   PRIVATE
     src
+)
+
+target_link_libraries(SlidingPuzzle
+  PRIVATE
+    WhereAmI::WhereAmI
 )
 
 if(SLIDINGPUZZLE_USE_FREEALUT)

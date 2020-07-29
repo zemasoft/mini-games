@@ -7,6 +7,8 @@ option(SNAKE_USE_SDL2 "Use SDL2" OFF)
 
 option(SNAKE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 
+find_package(WhereAmI MODULE REQUIRED)
+
 if(SNAKE_USE_FREEALUT)
   find_package(FreeALUT MODULE REQUIRED)
 endif()
@@ -84,6 +86,7 @@ target_include_directories(Snake
 
 target_link_libraries(Snake
   PRIVATE
+    WhereAmI::WhereAmI
     m
 )
 

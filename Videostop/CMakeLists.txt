@@ -8,6 +8,8 @@ option(VIDEOSTOP_USE_SDL2 "Use SDL2" OFF)
 
 option(VIDEOSTOP_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 
+find_package(WhereAmI MODULE REQUIRED)
+
 if(VIDEOSTOP_USE_FREEALUT)
   find_package(FreeALUT MODULE REQUIRED)
 endif()
@@ -83,6 +85,7 @@ target_include_directories(Videostop
 
 target_link_libraries(Videostop
   PRIVATE
+    WhereAmI::WhereAmI
     m
 )
 

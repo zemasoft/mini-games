@@ -1,5 +1,6 @@
 #include <stdbool.h>  // bool, false, true
-#include <stdlib.h>   // EXIT_FAILURE, EXIT_SUCCESS, strtol
+#include <stddef.h>   // size_t
+#include <stdlib.h>   // EXIT_FAILURE, EXIT_SUCCESS, free, malloc, strtol
 
 #if defined(USE_FREEALUT)
 #include <AL/alut.h>
@@ -17,6 +18,8 @@
 #include <SDL2/SDL.h>
 #endif
 
+#include <whereami.h>
+
 #include "Config.h"
 #include "Graphics.h"
 #include "Input.h"
@@ -31,6 +34,8 @@ GLFWwindow* g_window;
 SDL_Window* g_window;
 bool g_quit;
 #endif
+
+char* g_executable_path;
 
 static bool Init(int argc, char** argv);
 static void Start();
@@ -193,6 +198,16 @@ bool Init(int argc, char** argv)
   SDL_ShowWindow(g_window);
 #endif
 
+  int const buffer_length = wai_getExecutablePath(NULL, 0, NULL);
+  if (buffer_length >= 0)
+  {
+    g_executable_path = (char*) malloc((size_t)(buffer_length + 1));
+
+    int path_length;
+    wai_getExecutablePath(g_executable_path, buffer_length, &path_length);
+    g_executable_path[path_length] = '\0';
+  }
+
   return true;
 }
 
@@ -285,4 +300,9 @@ void Terminate()
 #if defined(USE_SDL2)
   SDL_DestroyWindow(g_window);
 #endif
+
+  if (g_executable_path != NULL)
+  {
+    free(g_executable_path);
+  }
 }
