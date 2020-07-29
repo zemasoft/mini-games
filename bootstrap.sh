@@ -5,6 +5,8 @@ set -e
 SCRIPT_BASE=$(basename $(readlink -f $0))
 SCRIPT_DIR=$(dirname $(readlink -f $0))
 
+${SCRIPT_DIR}/scripts/whereami.sh
+
 if [[ ! -v ${USE_FREEALUT} || ${USE_FREEALUT} == ON ]]
 then
   ${SCRIPT_DIR}/scripts/freealut.sh

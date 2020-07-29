@@ -1,0 +1,28 @@
+cmake_minimum_required(VERSION 3.12)
+
+project(WhereAmI LANGUAGES C)
+
+add_library(whereami
+  STATIC
+    src/whereami.c
+    src/whereami.h
+)
+
+target_include_directories(whereami
+  PRIVATE
+    src
+)
+
+install(
+  TARGETS
+    whereami
+  DESTINATION
+    lib
+)
+
+install(
+  FILES
+    src/whereami.h
+  DESTINATION
+    include
+)
