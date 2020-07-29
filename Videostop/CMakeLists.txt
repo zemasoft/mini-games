@@ -146,12 +146,14 @@ if(VIDEOSTOP_USE_SDL2)
   )
 endif()
 
-set_target_properties(Videostop
-  PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
-)
-
 if(WIN32)
+  add_custom_command(
+    TARGET
+      Videostop
+    PRE_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Videostop>/assets
+  )
+
   install(
     TARGETS
       Videostop
@@ -159,6 +161,18 @@ if(WIN32)
       mini-games/Videostop
   )
 elseif(UNIX)
+  set_target_properties(Videostop
+    PROPERTIES
+      RUNTIME_OUTPUT_DIRECTORY bin
+  )
+
+  add_custom_command(
+    TARGET
+      Videostop
+    PRE_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Videostop>/../assets
+  )
+
   install(
     TARGETS
       Videostop

@@ -145,12 +145,14 @@ if(SLIDINGPUZZLE_USE_SDL2)
   )
 endif()
 
-set_target_properties(SlidingPuzzle
-  PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
-)
-
 if(WIN32)
+  add_custom_command(
+    TARGET
+      SlidingPuzzle
+    PRE_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:SlidingPuzzle>/assets
+  )
+
   install(
     TARGETS
       SlidingPuzzle
@@ -158,6 +160,18 @@ if(WIN32)
       mini-games/SlidingPuzzle
   )
 elseif(UNIX)
+  set_target_properties(SlidingPuzzle
+    PROPERTIES
+      RUNTIME_OUTPUT_DIRECTORY bin
+  )
+
+  add_custom_command(
+    TARGET
+      SlidingPuzzle
+    PRE_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:SlidingPuzzle>/../assets
+  )
+
   install(
     TARGETS
       SlidingPuzzle
