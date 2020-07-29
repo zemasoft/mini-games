@@ -1,8 +1,12 @@
 #include "Sound.h"
 
+#include <string.h>  // strcat, strcpy
+
 #if defined(USE_FREEALUT)
 #include <AL/alut.h>
 #endif
+
+extern char* g_executable_path;
 
 #if defined(USE_FREEALUT)
 static char const* const s_sound_file_names[Sound_Count] = {"start.wav", "shuffle.wav",
@@ -18,7 +22,16 @@ void S_Start()
 #if defined(USE_FREEALUT)
   for (int i = 0; i < Sound_Count; ++i)
   {
-    ALuint buffer = alutCreateBufferFromFile(s_sound_file_names[i]);
+    char file_name[256];
+    strcpy(file_name, g_executable_path);
+#if defined(_WIN32)
+    strcat(file_name, "\\assets\\");
+#elif defined(__linux__)
+    strcat(file_name, "/../assets/");
+#endif
+    strcat(file_name, s_sound_file_names[i]);
+
+    ALuint buffer = alutCreateBufferFromFile(file_name);
     if (buffer != AL_NONE)
     {
       alGenSources(1, &s_sound_sources[i]);
