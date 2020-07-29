@@ -45,11 +45,7 @@ if(WhereAmI_FOUND AND NOT TARGET WhereAmI::WhereAmI)
   set_target_properties(WhereAmI::WhereAmI
     PROPERTIES
       IMPORTED_LINK_INTERFACE_LANGUAGES C
-      INTERFACE_INCLUDE_DIRECTORIES ${WhereAmI_INCLUDE_DIR}
-  )
-
-  set_target_properties(WhereAmI::WhereAmI
-    PROPERTIES
       IMPORTED_LOCATION ${WhereAmI_LIBRARY}
+      INTERFACE_INCLUDE_DIRECTORIES ${WhereAmI_INCLUDE_DIR}
   )
 endif()
