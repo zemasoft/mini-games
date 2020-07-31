@@ -99,6 +99,13 @@ if(VIDEOSTOP_USE_FREEALUT)
     PRIVATE
       FreeALUT::FreeALUT
   )
+
+  install(
+    FILES
+      ${FreeALUT_LIBRARY}
+    DESTINATION
+      mini-games/lib
+  )
 endif()
 
 if(VIDEOSTOP_USE_FREEGLUT)
@@ -120,6 +127,13 @@ if(VIDEOSTOP_USE_FREEGLUT OR VIDEOSTOP_USE_FREEGLUT_FOR_TEXT)
     PRIVATE
       FreeGLUT::FreeGLUT
   )
+
+  install(
+    FILES
+      ${FreeGLUT_LIBRARY}
+    DESTINATION
+      mini-games/lib
+  )
 endif()
 
 if(VIDEOSTOP_USE_GLFW)
@@ -132,6 +146,13 @@ if(VIDEOSTOP_USE_GLFW)
     PRIVATE
       GLFW::GLFW
   )
+
+  install(
+    FILES
+      ${GLFW_LIBRARY}
+    DESTINATION
+      mini-games/lib
+  )
 endif()
 
 if(VIDEOSTOP_USE_SDL2)
@@ -143,6 +164,13 @@ if(VIDEOSTOP_USE_SDL2)
   target_link_libraries(Videostop
     PRIVATE
       SDL2::SDL2
+  )
+
+  install(
+    FILES
+      ${SDL2_LIBRARY}
+    DESTINATION
+      mini-games/lib
   )
 endif()
 
