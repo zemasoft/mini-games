@@ -141,12 +141,23 @@ if(SLIDINGPUZZLE_USE_FREEALUT)
       FreeALUT::FreeALUT
   )
 
-  install(
-    FILES
-      ${FreeALUT_LIBRARY}
-    DESTINATION
-      mini-games/lib
-  )
+  if(WIN32)
+    install(
+      FILES
+        ${FreeALUT_LIBRARY}
+      DESTINATION
+        mini-games/SlidingPuzzle
+    )
+  elseif(UNIX)
+    file(GLOB FreeALUT_LIBRARY_AND_LINKS "${FreeALUT_LIBRARY}.*")
+
+    install(
+      FILES
+        ${FreeALUT_LIBRARY_AND_LINKS}
+      DESTINATION
+        mini-games/lib
+    )
+  endif()
 endif()
 
 if(SLIDINGPUZZLE_USE_FREEGLUT)
@@ -169,12 +180,23 @@ if(SLIDINGPUZZLE_USE_FREEGLUT OR SLIDINGPUZZLE_USE_FREEGLUT_FOR_TEXT)
       FreeGLUT::FreeGLUT
   )
 
-  install(
-    FILES
-      ${FreeGLUT_LIBRARY}
-    DESTINATION
-      mini-games/lib
-  )
+  if(WIN32)
+    install(
+      FILES
+        ${FreeGLUT_LIBRARY}
+      DESTINATION
+        mini-games/SlidingPuzzle
+    )
+  elseif(UNIX)
+    file(GLOB FreeGLUT_LIBRARY_AND_LINKS "${FreeGLUT_LIBRARY}.*")
+
+    install(
+      FILES
+        ${FreeGLUT_LIBRARY_AND_LINKS}
+      DESTINATION
+        mini-games/lib
+    )
+  endif()
 endif()
 
 if(SLIDINGPUZZLE_USE_GLFW)
@@ -188,12 +210,23 @@ if(SLIDINGPUZZLE_USE_GLFW)
       GLFW::GLFW
   )
 
-  install(
-    FILES
-      ${GLFW_LIBRARY}
-    DESTINATION
-      mini-games/lib
-  )
+  if(WIN32)
+    install(
+      FILES
+        ${GLFW_LIBRARY}
+      DESTINATION
+        mini-games/SlidingPuzzle
+    )
+  elseif(UNIX)
+    file(GLOB GLFW_LIBRARY_AND_LINKS "${GLFW_LIBRARY}.*")
+
+    install(
+      FILES
+        ${GLFW_LIBRARY_AND_LINKS}
+      DESTINATION
+        mini-games/lib
+    )
+  endif()
 endif()
 
 if(SLIDINGPUZZLE_USE_SDL2)
@@ -207,10 +240,21 @@ if(SLIDINGPUZZLE_USE_SDL2)
       SDL2::SDL2
   )
 
-  install(
-    FILES
-      ${SDL2_LIBRARY}
-    DESTINATION
-      mini-games/lib
-  )
+  if(WIN32)
+    install(
+      FILES
+        ${SDL2_LIBRARY}
+      DESTINATION
+        mini-games/SlidingPuzzle
+    )
+  elseif(UNIX)
+    file(GLOB SDL2_LIBRARY_AND_LINKS "${SDL2_LIBRARY}.*")
+
+    install(
+      FILES
+        ${SDL2_LIBRARY_AND_LINKS}
+      DESTINATION
+        mini-games/lib
+    )
+  endif()
 endif()
