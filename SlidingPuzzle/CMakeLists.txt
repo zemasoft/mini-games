@@ -88,6 +88,48 @@ target_link_libraries(SlidingPuzzle
     WhereAmI::WhereAmI
 )
 
+if(WIN32)
+  add_custom_command(
+    TARGET
+      SlidingPuzzle
+    PRE_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:SlidingPuzzle>/assets
+  )
+
+  install(
+    TARGETS
+      SlidingPuzzle
+    DESTINATION
+      mini-games/SlidingPuzzle
+  )
+elseif(UNIX)
+  set_target_properties(SlidingPuzzle
+    PROPERTIES
+      RUNTIME_OUTPUT_DIRECTORY bin
+  )
+
+  add_custom_command(
+    TARGET
+      SlidingPuzzle
+    PRE_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:SlidingPuzzle>/../assets
+  )
+
+  install(
+    TARGETS
+      SlidingPuzzle
+    DESTINATION
+      mini-games/SlidingPuzzle/bin
+  )
+endif()
+
+install(
+  DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/assets
+  DESTINATION
+    mini-games/SlidingPuzzle
+)
+
 if(SLIDINGPUZZLE_USE_FREEALUT)
   target_compile_definitions(SlidingPuzzle
     PRIVATE
@@ -172,45 +214,3 @@ if(SLIDINGPUZZLE_USE_SDL2)
       mini-games/lib
   )
 endif()
-
-if(WIN32)
-  add_custom_command(
-    TARGET
-      SlidingPuzzle
-    PRE_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:SlidingPuzzle>/assets
-  )
-
-  install(
-    TARGETS
-      SlidingPuzzle
-    DESTINATION
-      mini-games/SlidingPuzzle
-  )
-elseif(UNIX)
-  set_target_properties(SlidingPuzzle
-    PROPERTIES
-      RUNTIME_OUTPUT_DIRECTORY bin
-  )
-
-  add_custom_command(
-    TARGET
-      SlidingPuzzle
-    PRE_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:SlidingPuzzle>/../assets
-  )
-
-  install(
-    TARGETS
-      SlidingPuzzle
-    DESTINATION
-      mini-games/SlidingPuzzle/bin
-  )
-endif()
-
-install(
-  DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}/assets
-  DESTINATION
-    mini-games/SlidingPuzzle
-)

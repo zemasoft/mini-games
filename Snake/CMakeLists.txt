@@ -90,6 +90,48 @@ target_link_libraries(Snake
     m
 )
 
+if(WIN32)
+  add_custom_command(
+    TARGET
+      Snake
+    PRE_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Snake>/assets
+  )
+
+  install(
+    TARGETS
+      Snake
+    DESTINATION
+      mini-games/Snake
+  )
+elseif(UNIX)
+  set_target_properties(Snake
+    PROPERTIES
+      RUNTIME_OUTPUT_DIRECTORY bin
+  )
+
+  add_custom_command(
+    TARGET
+      Snake
+    PRE_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Snake>/../assets
+  )
+
+  install(
+    TARGETS
+      Snake
+    DESTINATION
+      mini-games/Snake/bin
+  )
+endif()
+
+install(
+  DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/assets
+  DESTINATION
+    mini-games/Snake
+)
+
 if(SNAKE_USE_FREEALUT)
   target_compile_definitions(Snake
     PRIVATE
@@ -165,45 +207,3 @@ if(SNAKE_USE_SDL2)
       mini-games/lib
   )
 endif()
-
-if(WIN32)
-  add_custom_command(
-    TARGET
-      Snake
-    PRE_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Snake>/assets
-  )
-
-  install(
-    TARGETS
-      Snake
-    DESTINATION
-      mini-games/Snake
-  )
-elseif(UNIX)
-  set_target_properties(Snake
-    PROPERTIES
-      RUNTIME_OUTPUT_DIRECTORY bin
-  )
-
-  add_custom_command(
-    TARGET
-      Snake
-    PRE_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Snake>/../assets
-  )
-
-  install(
-    TARGETS
-      Snake
-    DESTINATION
-      mini-games/Snake/bin
-  )
-endif()
-
-install(
-  DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}/assets
-  DESTINATION
-    mini-games/Snake
-)

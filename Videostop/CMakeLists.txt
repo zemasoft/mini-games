@@ -89,6 +89,48 @@ target_link_libraries(Videostop
     m
 )
 
+if(WIN32)
+  add_custom_command(
+    TARGET
+      Videostop
+    PRE_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Videostop>/assets
+  )
+
+  install(
+    TARGETS
+      Videostop
+    DESTINATION
+      mini-games/Videostop
+  )
+elseif(UNIX)
+  set_target_properties(Videostop
+    PROPERTIES
+      RUNTIME_OUTPUT_DIRECTORY bin
+  )
+
+  add_custom_command(
+    TARGET
+      Videostop
+    PRE_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Videostop>/../assets
+  )
+
+  install(
+    TARGETS
+      Videostop
+    DESTINATION
+      mini-games/Videostop/bin
+  )
+endif()
+
+install(
+  DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/assets
+  DESTINATION
+    mini-games/Videostop
+)
+
 if(VIDEOSTOP_USE_FREEALUT)
   target_compile_definitions(Videostop
     PRIVATE
@@ -173,45 +215,3 @@ if(VIDEOSTOP_USE_SDL2)
       mini-games/lib
   )
 endif()
-
-if(WIN32)
-  add_custom_command(
-    TARGET
-      Videostop
-    PRE_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Videostop>/assets
-  )
-
-  install(
-    TARGETS
-      Videostop
-    DESTINATION
-      mini-games/Videostop
-  )
-elseif(UNIX)
-  set_target_properties(Videostop
-    PROPERTIES
-      RUNTIME_OUTPUT_DIRECTORY bin
-  )
-
-  add_custom_command(
-    TARGET
-      Videostop
-    PRE_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Videostop>/../assets
-  )
-
-  install(
-    TARGETS
-      Videostop
-    DESTINATION
-      mini-games/Videostop/bin
-  )
-endif()
-
-install(
-  DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}/assets
-  DESTINATION
-    mini-games/Videostop
-)
