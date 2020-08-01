@@ -130,6 +130,13 @@ install(
     mini-games/SlidingPuzzle
 )
 
+install(
+  FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/README.md
+  DESTINATION
+    mini-games/SlidingPuzzle
+)
+
 if(SLIDINGPUZZLE_USE_FREEALUT)
   target_compile_definitions(SlidingPuzzle
     PRIVATE

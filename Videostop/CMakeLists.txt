@@ -131,6 +131,13 @@ install(
     mini-games/Videostop
 )
 
+install(
+  FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/README.md
+  DESTINATION
+    mini-games/Videostop
+)
+
 if(VIDEOSTOP_USE_FREEALUT)
   target_compile_definitions(Videostop
     PRIVATE

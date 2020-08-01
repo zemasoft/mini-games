@@ -132,6 +132,13 @@ install(
     mini-games/Snake
 )
 
+install(
+  FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/README.md
+  DESTINATION
+    mini-games/Snake
+)
+
 if(SNAKE_USE_FREEALUT)
   target_compile_definitions(Snake
     PRIVATE
