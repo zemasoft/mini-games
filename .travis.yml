@@ -69,3 +69,4 @@ script:
                     -DVIDEOSTOP_USE_SDL2=${USE_SDL2} \
                     -DVIDEOSTOP_WARNINGS_AS_ERRORS=ON
   - cmake --build build
+  - cmake --build build --target package
