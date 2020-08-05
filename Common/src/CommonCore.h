@@ -3,7 +3,7 @@
 
 #include <stdbool.h>  // bool
 
-bool CC_Init(int argc, char** argv);
+bool CC_Initialize(int argc, char** argv);
 void CC_Terminate();
 
 unsigned CC_GetElapsedTime();

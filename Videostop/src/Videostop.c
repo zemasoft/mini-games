@@ -39,7 +39,7 @@ bool g_quit;
 
 char* g_executable_path;
 
-static bool Init(int argc, char** argv);
+static bool Initialize(int argc, char** argv);
 static void Start();
 static void Update();
 static void Stop();
@@ -55,7 +55,7 @@ static int WindowResizedEventWatcher(void* data, SDL_Event* event);
 
 int main(int argc, char** argv)
 {
-  if (!Init(argc, argv))
+  if (!Initialize(argc, argv))
   {
     return EXIT_FAILURE;
   }
@@ -68,9 +68,9 @@ int main(int argc, char** argv)
   return EXIT_SUCCESS;
 }
 
-bool Init(int argc, char** argv)
+bool Initialize(int argc, char** argv)
 {
-  if (!CC_Init(argc, argv))
+  if (!CC_Initialize(argc, argv))
   {
     return false;
   }

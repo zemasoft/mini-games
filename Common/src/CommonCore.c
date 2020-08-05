@@ -32,7 +32,7 @@ static void Terminate();
 static void alutExitWrapper();
 #endif
 
-bool CC_Init(int argc, char** argv)
+bool CC_Initialize(int argc, char** argv)
 {
   if (s_initialized)
   {
