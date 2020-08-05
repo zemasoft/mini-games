@@ -2,6 +2,8 @@
 #include <stddef.h>   // size_t
 #include <stdlib.h>   // EXIT_FAILURE, EXIT_SUCCESS, free, malloc, strtol
 
+#include "CommonCore.h"
+
 #if defined(USE_FREEALUT)
 #include <AL/alut.h>
 #endif
@@ -53,40 +55,9 @@ static int WindowResizedEventWatcher(void* data, SDL_Event* event);
 
 int main(int argc, char** argv)
 {
-  int exit_code = EXIT_SUCCESS;
-
-#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
-  glutInit(&argc, argv);
-#endif
-
-#if defined(USE_GLFW)
-  if (!glfwInit())
-  {
-    exit_code = EXIT_FAILURE;
-    goto err1;
-  }
-#endif
-
-#if defined(USE_SDL2)
-  if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) != 0)
-  {
-    exit_code = EXIT_FAILURE;
-    goto err2;
-  }
-#endif
-
-#if defined(USE_FREEALUT)
-  if (!alutInit(&argc, argv))
-  {
-    exit_code = EXIT_FAILURE;
-    goto err3;
-  }
-#endif
-
   if (!Init(argc, argv))
   {
-    exit_code = EXIT_FAILURE;
-    goto err4;
+    return EXIT_FAILURE;
   }
 
   Start();
@@ -94,35 +65,16 @@ int main(int argc, char** argv)
 
   Terminate();
 
-err4:
-
-#if defined(USE_FREEALUT)
-  alutExit();
-
-err3:
-#endif
-
-#if defined(USE_SDL2)
-  SDL_Quit();
-
-err2:
-#endif
-
-#if defined(USE_GLFW)
-  glfwTerminate();
-
-err1:
-#endif
-
-#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
-  glutExit();
-#endif
-
-  return exit_code;
+  return EXIT_SUCCESS;
 }
 
 bool Init(int argc, char** argv)
 {
+  if (!CC_Init(argc, argv))
+  {
+    return false;
+  }
+
   g_config.size.x = DEFAULT_SIZE;
   g_config.size.y = DEFAULT_SIZE;
 
@@ -182,6 +134,7 @@ bool Init(int argc, char** argv)
                        (int) g_config.size.y * PIECE_SIZE_PIXELS, "Sliding Puzzle", NULL, NULL);
   if (g_window == NULL)
   {
+    CC_Terminate();
     return false;
   }
 
@@ -200,6 +153,7 @@ bool Init(int argc, char** argv)
                               SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
   if (g_window == NULL)
   {
+    CC_Terminate();
     return false;
   }
 
@@ -260,17 +214,7 @@ void Update()
   static unsigned before;
   static float lag;
 
-#if defined(USE_FREEGLUT)
-  unsigned const now = (unsigned) glutGet(GLUT_ELAPSED_TIME);
-#endif
-
-#if defined(USE_GLFW)
-  unsigned const now = (unsigned) (glfwGetTime() * 1000.0);
-#endif
-
-#if defined(USE_SDL2)
-  unsigned const now = SDL_GetTicks();
-#endif
+  unsigned const now = CC_GetElapsedTime();
 
   if (before == 0)
   {
@@ -320,6 +264,8 @@ void Terminate()
   {
     free(g_executable_path);
   }
+
+  CC_Terminate();
 }
 
 #if defined(USE_GLFW)

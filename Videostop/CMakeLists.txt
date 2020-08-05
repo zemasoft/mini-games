@@ -31,19 +31,20 @@ if(UNIX)
 endif()
 
 add_executable(Videostop
+  ../Common/src/CommonCore.c
+  ../Common/src/CommonCore.h
   src/Config.c
+  src/Config.h
   src/Graphics.c
+  src/Graphics.h
   src/Input.c
+  src/Input.h
   src/Logic.c
+  src/Logic.h
   src/Sound.c
+  src/Sound.h
   src/Videostop.c
   src/World.c
-
-  src/Config.h
-  src/Graphics.h
-  src/Input.h
-  src/Logic.h
-  src/Sound.h
   src/World.h
 )
 
@@ -80,6 +81,7 @@ endif()
 
 target_include_directories(Videostop
   PRIVATE
+    ../Common/src
     src
 )
 
