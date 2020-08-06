@@ -28,15 +28,6 @@
 #include "Logic.h"
 #include "Sound.h"
 
-#if defined(USE_GLFW)
-GLFWwindow* g_window;
-#endif
-
-#if defined(USE_SDL2)
-SDL_Window* g_window;
-bool g_quit;
-#endif
-
 char* g_executable_path;
 
 static bool Initialize(int argc, char** argv);
@@ -44,14 +35,6 @@ static void Start();
 static void Update();
 static void Stop();
 static void Terminate();
-
-#if defined(USE_GLFW)
-static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
-#endif
-
-#if defined(USE_SDL2)
-static int WindowResizedEventWatcher(void* data, SDL_Event* event);
-#endif
 
 int main(int argc, char** argv)
 {
@@ -98,48 +81,11 @@ bool Initialize(int argc, char** argv)
     }
   }
 
-#if defined(USE_FREEGLUT)
-  glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_MULTISAMPLE);
-  glutInitWindowSize(g_config.dice_count * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS);
-  glutCreateWindow("Videostop");
-#endif
-
-#if defined(USE_GLFW)
-  glfwWindowHint(GLFW_SAMPLES, 4);
-
-  g_window = glfwCreateWindow(g_config.dice_count * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS, "Videostop",
-                              NULL, NULL);
-  if (g_window == NULL)
+  if (!CC_CreateWindow(g_config.dice_count * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS, "Videostop"))
   {
     CC_Terminate();
     return false;
   }
-
-  glfwMakeContextCurrent(g_window);
-  glfwSwapInterval(1);
-
-  glfwSetFramebufferSizeCallback(g_window, FramebufferSizeCallback);
-
-  glfwShowWindow(g_window);
-#endif
-
-#if defined(USE_SDL2)
-  g_window = SDL_CreateWindow("Videostop", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                              g_config.dice_count * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS,
-                              SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-  if (g_window == NULL)
-  {
-    CC_Terminate();
-    return false;
-  }
-
-  SDL_GL_CreateContext(g_window);
-  SDL_GL_SetSwapInterval(1);
-
-  SDL_AddEventWatch(WindowResizedEventWatcher, g_window);
-
-  SDL_ShowWindow(g_window);
-#endif
 
   int const buffer_length = wai_getExecutablePath(NULL, 0, NULL);
   if (buffer_length >= 0)
@@ -228,49 +174,12 @@ void Stop()
 
 void Terminate()
 {
-#if defined(USE_GLFW)
-  glfwDestroyWindow(g_window);
-#endif
-
-#if defined(USE_SDL2)
-  SDL_DestroyWindow(g_window);
-#endif
-
   if (g_executable_path != NULL)
   {
     free(g_executable_path);
   }
 
+  CC_DestroyWindow();
+
   CC_Terminate();
 }
-
-#if defined(USE_GLFW)
-
-void FramebufferSizeCallback(GLFWwindow* const window, int const width, int const height)
-{
-  (void) window;
-
-  G_Resize(width, height);
-}
-
-#endif
-
-#if defined(USE_SDL2)
-
-int WindowResizedEventWatcher(void* const data, SDL_Event* const event)
-{
-  (void) data;
-
-  if (event->type == SDL_WINDOWEVENT && event->window.event == SDL_WINDOWEVENT_RESIZED)
-  {
-    int width;
-    int height;
-    SDL_GL_GetDrawableSize(g_window, &width, &height);
-
-    G_Resize(width, height);
-  }
-
-  return 0;
-}
-
-#endif
