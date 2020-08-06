@@ -16,7 +16,7 @@
 #include <GLFW/glfw3.h>
 #endif
 
-#if defined(USE_SDL2)
+#if defined(USE_SDL2) || defined(USE_SDL2_FOR_AUDIO)
 #include <SDL2/SDL.h>
 #endif
 
@@ -86,7 +86,15 @@ bool CC_Initialize(int argc, char** argv)
 #endif
 
 #if defined(USE_SDL2)
-  if (SDL_Init(SDL_INIT_VIDEO) != 0)
+  if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) != 0)
+  {
+    Terminate();
+    return false;
+  }
+
+  AtTerminate(SDL_Quit);
+#elif defined(USE_SDL2_FOR_AUDIO)
+  if (SDL_Init(SDL_INIT_AUDIO) != 0)
   {
     Terminate();
     return false;

@@ -5,6 +5,7 @@ option(VIDEOSTOP_USE_FREEGLUT "Use FreeGLUT" ON)
 option(VIDEOSTOP_USE_FREEGLUT_FOR_TEXT "Use FreeGLUT for text" OFF)
 option(VIDEOSTOP_USE_GLFW "Use GLFW" OFF)
 option(VIDEOSTOP_USE_SDL2 "Use SDL2" OFF)
+option(VIDEOSTOP_USE_SDL2_FOR_AUDIO "Use SDL2 for audio" OFF)
 
 option(VIDEOSTOP_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 
@@ -22,7 +23,7 @@ if(VIDEOSTOP_USE_GLFW)
   find_package(GLFW MODULE REQUIRED)
 endif()
 
-if(VIDEOSTOP_USE_SDL2)
+if(VIDEOSTOP_USE_SDL2 OR VIDEOSTOP_USE_SDL2_FOR_AUDIO)
   find_package(SDL2 MODULE REQUIRED)
 endif()
 
@@ -244,7 +245,16 @@ if(VIDEOSTOP_USE_SDL2)
     PRIVATE
       USE_SDL2
   )
+endif()
 
+if(VIDEOSTOP_USE_SDL2_FOR_AUDIO)
+  target_compile_definitions(Videostop
+    PRIVATE
+      USE_SDL2_FOR_AUDIO
+  )
+endif()
+
+if(VIDEOSTOP_USE_SDL2 OR VIDEOSTOP_USE_SDL2_FOR_AUDIO)
   target_link_libraries(Videostop
     PRIVATE
       SDL2::SDL2

@@ -4,6 +4,7 @@ option(SNAKE_USE_FREEALUT_FOR_AUDIO "Use FreeALUT for audio" ON)
 option(SNAKE_USE_FREEGLUT "Use FreeGLUT" OFF)
 option(SNAKE_USE_GLFW "Use GLFW" ON)
 option(SNAKE_USE_SDL2 "Use SDL2" OFF)
+option(SNAKE_USE_SDL2_FOR_AUDIO "Use SDL2 for audio" OFF)
 
 option(SNAKE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 
@@ -21,7 +22,7 @@ if(SNAKE_USE_GLFW)
   find_package(GLFW MODULE REQUIRED)
 endif()
 
-if(SNAKE_USE_SDL2)
+if(SNAKE_USE_SDL2 OR SNAKE_USE_SDL2_FOR_AUDIO)
   find_package(SDL2 MODULE REQUIRED)
 endif()
 
@@ -236,7 +237,16 @@ if(SNAKE_USE_SDL2)
     PRIVATE
       USE_SDL2
   )
+endif()
 
+if(SNAKE_USE_SDL2_FOR_AUDIO)
+  target_compile_definitions(Snake
+    PRIVATE
+      USE_SDL2_FOR_AUDIO
+  )
+endif()
+
+if(SNAKE_USE_SDL2 OR SNAKE_USE_SDL2_FOR_AUDIO)
   target_link_libraries(Snake
     PRIVATE
       SDL2::SDL2
