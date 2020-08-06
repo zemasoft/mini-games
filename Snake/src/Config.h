@@ -11,7 +11,7 @@
 #define MAX_Y_SIZE 31
 #define DEFAULT_Y_SIZE 15
 
-#define DIRECTION_KEYS_SIZE 4
+#define DIRECTION_KEYA_SIZE 4
 
 #define FIELD_SIZE_PIXELS 32
 

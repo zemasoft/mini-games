@@ -18,10 +18,10 @@
 #include <SDL2/SDL.h>
 #endif
 
+#include "Audio.h"
 #include "Config.h"
 #include "Graphics.h"
 #include "Input.h"
-#include "Sound.h"
 #include "World.h"
 
 #if defined(USE_GLFW)
@@ -102,7 +102,7 @@ void L_Update()
   {
     I_Restart();
     L_Restart();
-    S_Restart();
+    A_Restart();
     G_Restart();
 
     statusbar_time = 0.0f;
@@ -113,7 +113,7 @@ void L_Update()
   {
     I_Restart();
     L_Restart();
-    S_Restart();
+    A_Restart();
     G_Restart();
 
     statusbar_time = 0.0f;
@@ -132,7 +132,7 @@ void L_Update()
 
       if (control_key || control_button)
       {
-        S_PlaySound(Sound_Start);
+        A_PlaySound(Sound_Start);
         SetPieceStates(PieceState_Idle);
 
         g_world.state = WorldState_Idle;
@@ -195,56 +195,56 @@ void L_Update()
         case KEY_LEFT:
           if (g_world.blank % g_world.size.x != g_world.size.x - 1)
           {
-            S_PlaySound(Sound_Move);
+            A_PlaySound(Sound_Move);
             MovePieceLeft();
 
             g_world.state = WorldState_Moving;
           }
           else
           {
-            S_PlaySound(Sound_CannotMove);
+            A_PlaySound(Sound_CannotMove);
           }
           break;
 
         case KEY_RIGHT:
           if (g_world.blank % g_world.size.x != 0)
           {
-            S_PlaySound(Sound_Move);
+            A_PlaySound(Sound_Move);
             MovePieceRight();
 
             g_world.state = WorldState_Moving;
           }
           else
           {
-            S_PlaySound(Sound_CannotMove);
+            A_PlaySound(Sound_CannotMove);
           }
           break;
 
         case KEY_DOWN:
           if (g_world.blank >= g_world.size.x)
           {
-            S_PlaySound(Sound_Move);
+            A_PlaySound(Sound_Move);
             MovePieceDown();
 
             g_world.state = WorldState_Moving;
           }
           else
           {
-            S_PlaySound(Sound_CannotMove);
+            A_PlaySound(Sound_CannotMove);
           }
           break;
 
         case KEY_UP:
           if (g_world.blank + g_world.size.x < g_world.size.x * g_world.size.y)
           {
-            S_PlaySound(Sound_Move);
+            A_PlaySound(Sound_Move);
             MovePieceUp();
 
             g_world.state = WorldState_Moving;
           }
           else
           {
-            S_PlaySound(Sound_CannotMove);
+            A_PlaySound(Sound_CannotMove);
           }
           break;
 
@@ -290,12 +290,12 @@ void L_Update()
               {
                 if (y < blank_y)
                 {
-                  S_PlaySound(Sound_Move);
+                  A_PlaySound(Sound_Move);
                   MovePiecesDown(blank_y - y);
                 }
                 else if (y > blank_y)
                 {
-                  S_PlaySound(Sound_Move);
+                  A_PlaySound(Sound_Move);
                   MovePiecesUp(y - blank_y);
                 }
 
@@ -305,12 +305,12 @@ void L_Update()
               {
                 if (x < blank_x)
                 {
-                  S_PlaySound(Sound_Move);
+                  A_PlaySound(Sound_Move);
                   MovePiecesRight(blank_x - x);
                 }
                 else if (x > blank_x)
                 {
-                  S_PlaySound(Sound_Move);
+                  A_PlaySound(Sound_Move);
                   MovePiecesLeft(x - blank_x);
                 }
 
@@ -318,7 +318,7 @@ void L_Update()
               }
               else
               {
-                S_PlaySound(Sound_CannotMove);
+                A_PlaySound(Sound_CannotMove);
               }
             }
           }
@@ -330,7 +330,7 @@ void L_Update()
       {
         if (IsResolved())
         {
-          S_PlaySound(Sound_Success);
+          A_PlaySound(Sound_Success);
           SetPieceStates(PieceState_Success);
 
           g_world.state = WorldState_Success;

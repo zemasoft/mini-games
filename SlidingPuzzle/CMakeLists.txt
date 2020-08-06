@@ -33,6 +33,8 @@ endif()
 add_executable(SlidingPuzzle
   ../Common/src/CommonCore.c
   ../Common/src/CommonCore.h
+  src/Audio.c
+  src/Audio.h
   src/Config.c
   src/Config.h
   src/Graphics.c
@@ -42,8 +44,6 @@ add_executable(SlidingPuzzle
   src/Logic.c
   src/Logic.h
   src/SlidingPuzzle.c
-  src/Sound.c
-  src/Sound.h
   src/World.c
   src/World.h
 )

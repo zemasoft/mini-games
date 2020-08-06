@@ -17,9 +17,9 @@
 #include <SDL2/SDL.h>
 #endif
 
+#include "Audio.h"
 #include "Config.h"
 #include "Input.h"
-#include "Sound.h"
 #include "Tools.h"
 #include "World.h"
 
@@ -134,7 +134,7 @@ void L_Update()
   {
     I_Restart();
     L_Restart();
-    S_Restart();
+    A_Restart();
     // G_Restart();
 
     move_time = 0.0f;
@@ -250,7 +250,7 @@ void L_Update()
               break;
 
             case MoveSnake_Food:
-              S_PlaySound(Sound_Food);
+              A_PlaySound(Sound_Food);
 
               ++g_world.score;
 
@@ -260,19 +260,19 @@ void L_Update()
               break;
 
             case MoveSnake_Wall:
-              S_PlaySound(Sound_Wall);
+              A_PlaySound(Sound_Wall);
 
               g_world.state = WorldState_Fail;
               break;
 
             case MoveSnake_Body:
-              S_PlaySound(Sound_Body);
+              A_PlaySound(Sound_Body);
 
               g_world.state = WorldState_Fail;
               break;
 
             case MoveSnake_NoSpace:
-              S_PlaySound(Sound_Success);
+              A_PlaySound(Sound_Success);
 
               g_world.state = WorldState_Success;
               break;
@@ -432,14 +432,14 @@ struct Field* GetField(int const x, int const y)
 
 void PlayTurnLeftSound()
 {
-  S_PlaySound(Sound_Turn1 + (enum Sound) s_turn_sound_index);
+  A_PlaySound(Sound_Turn1 + (enum Sound) s_turn_sound_index);
 
   s_turn_sound_index = (s_turn_sound_index + 1) % 4;
 }
 
 void PlayTurnRightSound()
 {
-  S_PlaySound(Sound_Turn1 + (enum Sound) s_turn_sound_index);
+  A_PlaySound(Sound_Turn1 + (enum Sound) s_turn_sound_index);
 
   s_turn_sound_index = (s_turn_sound_index - 1 + 4) % 4;
 }

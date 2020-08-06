@@ -30,7 +30,7 @@ static bool s_control_button;
 static int s_control_x;
 static int s_control_y;
 
-static int s_direction_keys[DIRECTION_KEYS_SIZE];
+static int s_direction_keys[DIRECTION_KEYA_SIZE];
 static size_t s_top;
 static size_t s_bot;
 
@@ -167,7 +167,7 @@ int I_PopDirectionKey()
 
   int const key = s_direction_keys[s_bot++];
 
-  if (s_bot > DIRECTION_KEYS_SIZE - 1)
+  if (s_bot > DIRECTION_KEYA_SIZE - 1)
   {
     s_bot = 0;
   }
@@ -220,7 +220,7 @@ void Special(int const key, int const x, int const y)
       break;
   }
 
-  if (s_top > DIRECTION_KEYS_SIZE - 1)
+  if (s_top > DIRECTION_KEYA_SIZE - 1)
   {
     s_top = 0;
   }
@@ -280,7 +280,7 @@ void KeyCallback(GLFWwindow* const window, int const key, int const scancode, in
         break;
     }
 
-    if (s_top > DIRECTION_KEYS_SIZE - 1)
+    if (s_top > DIRECTION_KEYA_SIZE - 1)
     {
       s_top = 0;
     }
@@ -348,7 +348,7 @@ void ProcessKeyEvent(SDL_Event const* const e)
       s_direction_keys[s_top++] = KEY_UP;
     }
 
-    if (s_top > DIRECTION_KEYS_SIZE - 1)
+    if (s_top > DIRECTION_KEYA_SIZE - 1)
     {
       s_top = 0;
     }

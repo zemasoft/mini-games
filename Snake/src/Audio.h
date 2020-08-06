@@ -1,5 +1,5 @@
-#ifndef SOUND_H
-#define SOUND_H
+#ifndef AUDIO_H
+#define AUDIO_H
 
 enum Sound
 {
@@ -15,10 +15,10 @@ enum Sound
   Sound_Count
 };
 
-void S_Start();
-void S_Restart();
-void S_Stop();
+void A_Start();
+void A_Restart();
+void A_Stop();
 
-void S_PlaySound(enum Sound sound);
+void A_PlaySound(enum Sound sound);
 
-#endif  // SOUND_H
+#endif  // AUDIO_H

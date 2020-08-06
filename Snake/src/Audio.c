@@ -1,4 +1,4 @@
-#include "Sound.h"
+#include "Audio.h"
 
 #include <string.h>  // strcat, strcpy
 
@@ -18,7 +18,7 @@ static char const* const s_sound_file_names[Sound_Count] = {"turn1.wav", "turn2.
 static ALuint s_sound_sources[Sound_Count];
 #endif
 
-void S_Start()
+void A_Start()
 {
 #if defined(USE_FREEALUT)
   for (int i = 0; i < Sound_Count; ++i)
@@ -42,15 +42,15 @@ void S_Start()
 #endif
 }
 
-void S_Restart()
+void A_Restart()
 {
 }
 
-void S_Stop()
+void A_Stop()
 {
 }
 
-void S_PlaySound(enum Sound const sound)
+void A_PlaySound(enum Sound const sound)
 {
 #if !defined(USE_FREEALUT)
   (void) sound;

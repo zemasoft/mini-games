@@ -7,10 +7,10 @@
 
 #include "CommonCore.h"
 
+#include "Audio.h"
 #include "Config.h"
 #include "Graphics.h"
 #include "Input.h"
-#include "Sound.h"
 #include "World.h"
 
 static void UpdateWindowTitle();
@@ -52,7 +52,7 @@ void L_Update()
   {
     I_Restart();
     L_Restart();
-    S_Restart();
+    A_Restart();
     G_Restart();
 
     idle_time = 0.0f;
@@ -65,7 +65,7 @@ void L_Update()
   {
     I_Restart();
     L_Restart();
-    S_Restart();
+    A_Restart();
     // G_Restart();
 
     idle_time = 0.0f;
@@ -89,7 +89,7 @@ void L_Update()
 
       if (control_key || control_button)
       {
-        S_PlaySound(Sound_Start);
+        A_PlaySound(Sound_Start);
         ShuffleDices(DiceState_Idle);
 
         g_world.state = WorldState_Idle;
@@ -137,7 +137,7 @@ void L_Update()
 
       if (idle_time >= 1000.0f / g_config.shuffle_frequency)
       {
-        S_PlaySound(Sound_Shuffle);
+        A_PlaySound(Sound_Shuffle);
         ShuffleDices(DiceState_Setup);
 
         idle_time = 0.0f;
@@ -161,14 +161,14 @@ void L_Update()
       {
         if (CountScore())
         {
-          S_PlaySound(Sound_Success);
+          A_PlaySound(Sound_Success);
 
           g_world.state = WorldState_Success;
           stop_time = 0.0f;
         }
         else
         {
-          S_PlaySound(Sound_Fail);
+          A_PlaySound(Sound_Fail);
 
           g_world.state = WorldState_Fail;
           stop_time = 0.0f;
@@ -178,7 +178,7 @@ void L_Update()
 
       if (idle_time >= 1000.0f / g_config.shuffle_frequency)
       {
-        S_PlaySound(Sound_Shuffle);
+        A_PlaySound(Sound_Shuffle);
         ShuffleDices(DiceState_Idle);
 
         idle_time = 0.0f;
@@ -191,7 +191,7 @@ void L_Update()
 
       if (stop_time >= STOP_TIME_MS)
       {
-        S_PlaySound(Sound_Shuffle);
+        A_PlaySound(Sound_Shuffle);
         ShuffleDices(DiceState_Idle);
 
         g_world.state = WorldState_Idle;

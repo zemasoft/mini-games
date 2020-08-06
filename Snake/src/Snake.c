@@ -22,11 +22,11 @@
 
 #include <whereami.h>
 
+#include "Audio.h"
 #include "Config.h"
 #include "Graphics.h"
 #include "Input.h"
 #include "Logic.h"
-#include "Sound.h"
 
 #if defined(USE_GLFW)
 GLFWwindow* g_window;
@@ -169,7 +169,7 @@ void Start()
 {
   I_Start();
   L_Start();
-  S_Start();
+  A_Start();
   G_Start();
 
 #if defined(USE_FREEGLUT)
@@ -226,7 +226,7 @@ void Stop()
 {
   I_Stop();
   L_Stop();
-  S_Stop();
+  A_Stop();
   G_Stop();
 
 #if defined(USE_FREEGLUT)

@@ -11,7 +11,7 @@
 
 #define STRING_SIZE 3  // floor(log10(MAX_SIZE^2 - 1)) + 1 + 1
 
-#define DIRECTION_KEYS_SIZE 4
+#define DIRECTION_KEYA_SIZE 4
 
 #define MOVE_STEP (0.1f * 60.0f / 1000.0f * UPDATE_PERIOD_MS)
 #define STATUSBAR_FREQUENCY_HZ 2.0f

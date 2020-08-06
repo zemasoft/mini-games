@@ -32,6 +32,8 @@ endif()
 add_executable(Snake
   ../Common/src/CommonCore.c
   ../Common/src/CommonCore.h
+  src/Audio.c
+  src/Audio.h
   src/Config.c
   src/Config.h
   src/Graphics.c
@@ -41,8 +43,6 @@ add_executable(Snake
   src/Logic.c
   src/Logic.h
   src/Snake.c
-  src/Sound.c
-  src/Sound.h
   src/Tools.c
   src/Tools.h
   src/World.c

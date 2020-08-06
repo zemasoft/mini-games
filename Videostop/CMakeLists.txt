@@ -33,6 +33,8 @@ endif()
 add_executable(Videostop
   ../Common/src/CommonCore.c
   ../Common/src/CommonCore.h
+  src/Audio.c
+  src/Audio.h
   src/Config.c
   src/Config.h
   src/Graphics.c
@@ -41,8 +43,6 @@ add_executable(Videostop
   src/Input.h
   src/Logic.c
   src/Logic.h
-  src/Sound.c
-  src/Sound.h
   src/Videostop.c
   src/World.c
   src/World.h
