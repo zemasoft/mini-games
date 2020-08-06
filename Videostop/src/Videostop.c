@@ -4,22 +4,6 @@
 
 #include "CommonCore.h"
 
-#if defined(USE_FREEALUT)
-#include <AL/alut.h>
-#endif
-
-#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
-#include <GL/freeglut.h>
-#endif
-
-#if defined(USE_GLFW)
-#include <GLFW/glfw3.h>
-#endif
-
-#if defined(USE_SDL2)
-#include <SDL2/SDL.h>
-#endif
-
 #include <whereami.h>
 
 #include "Config.h"
@@ -107,28 +91,10 @@ void Start()
   S_Start();
   G_Start();
 
-#if defined(USE_FREEGLUT)
-  glutDisplayFunc(&G_Update);
-  glutReshapeFunc(&G_Resize);
-  glutIdleFunc(&Update);
+  CC_SetResizeFnc(G_Resize);
+  CC_SetUpdateFnc(Update);
 
-  glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
-  glutMainLoop();
-#endif
-
-#if defined(USE_GLFW)
-  while (!glfwWindowShouldClose(g_window))
-  {
-    Update();
-  }
-#endif
-
-#if defined(USE_SDL2)
-  while (!g_quit)
-  {
-    Update();
-  }
-#endif
+  CC_EnterMainLoop();
 }
 
 void Update()
@@ -164,12 +130,6 @@ void Stop()
   L_Stop();
   S_Stop();
   G_Stop();
-
-#if defined(USE_FREEGLUT)
-  glutDisplayFunc(NULL);
-  glutReshapeFunc(NULL);
-  glutIdleFunc(NULL);
-#endif
 }
 
 void Terminate()

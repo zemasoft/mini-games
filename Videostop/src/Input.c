@@ -1,5 +1,7 @@
 #include "Input.h"
 
+#include "CommonCore.h"
+
 #if defined(USE_FREEGLUT)
 #include <GL/freeglut.h>
 #endif
@@ -14,10 +16,6 @@
 
 #if defined(USE_GLFW)
 extern GLFWwindow* g_window;
-#endif
-
-#if defined(USE_SDL2)
-extern bool g_quit;
 #endif
 
 static bool s_reset_key;
@@ -84,7 +82,7 @@ void I_Update()
     switch (e.type)
     {
       case SDL_QUIT:
-        g_quit = true;
+        CC_LeaveMainLoop();
         break;
       case SDL_KEYDOWN:
       case SDL_KEYUP:
@@ -189,7 +187,7 @@ void Keyboard(unsigned char const key, int const x, int const y)
       s_control_key = true;
       break;
     case 27:  // Escape
-      glutLeaveMainLoop();
+      CC_LeaveMainLoop();
       break;
     case 32:  // Space
       s_control_key = true;
@@ -258,7 +256,7 @@ void KeyCallback(GLFWwindow* const window, int const key, int const scancode, in
         s_control_key = true;
         break;
       case GLFW_KEY_ESCAPE:
-        glfwSetWindowShouldClose(g_window, GLFW_TRUE);
+        CC_LeaveMainLoop();
         break;
       case GLFW_KEY_R:
         s_reset_key = true;
@@ -309,7 +307,7 @@ void ProcessKeyEvent(SDL_Event const* const e)
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_ESCAPE)
     {
-      g_quit = true;
+      CC_LeaveMainLoop();
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_R)
     {

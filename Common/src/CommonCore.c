@@ -20,22 +20,19 @@
 #include <SDL2/SDL.h>
 #endif
 
-#if defined(USE_FREEGLUT)
-int g_window;
-#endif
-
 #if defined(USE_GLFW)
 GLFWwindow* g_window;
 #endif
 
 #if defined(USE_SDL2)
 SDL_Window* g_window;
-bool g_quit;
 #endif
 
-typedef void (*TerminateFnc)(void);
-
 static bool s_initialized;
+
+// Terminate
+
+typedef void (*TerminateFnc)(void);
 
 static TerminateFnc s_terminateFncs[4];
 static size_t s_terminateFncCount;
@@ -43,15 +40,28 @@ static size_t s_terminateFncCount;
 static void AtTerminate(TerminateFnc terminateFnc);
 static void Terminate();
 
+// Terminate end
+
 #if defined(USE_FREEALUT)
 static void alutExitWrapper();
 #endif
 
+#if defined(USE_FREEGLUT)
+static int s_window;
+#endif
+
 #if defined(USE_GLFW)
+static CC_ResizeFnc s_resizeFnc;
+static CC_UpdateFnc s_updateFnc;
+
 static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
 #endif
 
 #if defined(USE_SDL2)
+static CC_ResizeFnc s_resizeFnc;
+static CC_UpdateFnc s_updateFnc;
+static bool s_leaveMainLoop;
+
 static int WindowResizedEventWatcher(void* data, SDL_Event* event);
 #endif
 
@@ -118,7 +128,7 @@ void CC_Terminate()
 bool CC_CreateWindow(int const width, int const height, char const* const title)
 {
 #if defined(USE_FREEGLUT)
-  if (g_window != 0)
+  if (s_window != 0)
   {
     return false;
   }
@@ -126,8 +136,8 @@ bool CC_CreateWindow(int const width, int const height, char const* const title)
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_MULTISAMPLE);
   glutInitWindowSize(width, height);
 
-  g_window = glutCreateWindow(title);
-  if (g_window == 0)
+  s_window = glutCreateWindow(title);
+  if (s_window == 0)
   {
     return false;
   }
@@ -182,11 +192,11 @@ bool CC_CreateWindow(int const width, int const height, char const* const title)
 void CC_DestroyWindow()
 {
 #if defined(USE_FREEGLUT)
-  if (g_window != 0)
+  if (s_window != 0)
   {
-    glutDestroyWindow(g_window);
+    glutDestroyWindow(s_window);
 
-    g_window = 0;
+    s_window = 0;
   }
 #endif
 
@@ -209,6 +219,81 @@ void CC_DestroyWindow()
 #endif
 }
 
+void CC_SetResizeFnc(CC_ResizeFnc const resizeFnc)
+{
+#if defined(USE_FREEGLUT)
+  glutReshapeFunc(resizeFnc);
+#endif
+
+#if defined(USE_GLFW)
+  s_resizeFnc = resizeFnc;
+#endif
+
+#if defined(USE_SDL2)
+  s_resizeFnc = resizeFnc;
+#endif
+}
+
+void CC_SetUpdateFnc(CC_UpdateFnc const updateFnc)
+{
+#if defined(USE_FREEGLUT)
+  glutIdleFunc(updateFnc);
+#endif
+
+#if defined(USE_GLFW)
+  s_updateFnc = updateFnc;
+#endif
+
+#if defined(USE_SDL2)
+  s_updateFnc = updateFnc;
+#endif
+}
+
+void CC_EnterMainLoop()
+{
+#if defined(USE_FREEGLUT)
+  // TODO: glutDisplayFunc(&G_Update);
+
+  glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+  glutMainLoop();
+#endif
+
+#if defined(USE_GLFW)
+  while (!glfwWindowShouldClose(g_window))
+  {
+    if (s_updateFnc != NULL)
+    {
+      s_updateFnc();
+    }
+  }
+#endif
+
+#if defined(USE_SDL2)
+  while (!s_leaveMainLoop)
+  {
+    if (s_updateFnc != NULL)
+    {
+      s_updateFnc();
+    }
+  }
+#endif
+}
+
+void CC_LeaveMainLoop()
+{
+#if defined(USE_FREEGLUT)
+  glutLeaveMainLoop();
+#endif
+
+#if defined(USE_GLFW)
+  glfwSetWindowShouldClose(g_window, GLFW_TRUE);
+#endif
+
+#if defined(USE_SDL2)
+  s_leaveMainLoop = true;
+#endif
+}
+
 unsigned CC_GetElapsedTime()
 {
 #if defined(USE_FREEGLUT)
@@ -224,7 +309,7 @@ unsigned CC_GetElapsedTime()
 #endif
 }
 
-void AtTerminate(TerminateFnc terminateFnc)
+void AtTerminate(TerminateFnc const terminateFnc)
 {
   assert(s_terminateFncCount < 4);
 
@@ -254,7 +339,10 @@ void FramebufferSizeCallback(GLFWwindow* const window, int const width, int cons
 {
   (void) window;
 
-  G_Resize(width, height);
+  if (s_resizeFnc != NULL)
+  {
+    s_resizeFnc(width, height);
+  }
 }
 
 #endif
@@ -271,7 +359,10 @@ int WindowResizedEventWatcher(void* const data, SDL_Event* const event)
     int height;
     SDL_GL_GetDrawableSize(g_window, &width, &height);
 
-    G_Resize(width, height);
+    if (s_resizeFnc != NULL)
+    {
+      s_resizeFnc(width, height);
+    }
   }
 
   return 0;
