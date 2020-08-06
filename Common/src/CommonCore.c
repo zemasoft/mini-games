@@ -24,10 +24,6 @@
 GLFWwindow* g_window;
 #endif
 
-#if defined(USE_SDL2)
-SDL_Window* g_window;
-#endif
-
 static bool s_initialized;
 
 // Terminate
@@ -58,6 +54,7 @@ static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
 #endif
 
 #if defined(USE_SDL2)
+static SDL_Window* s_window;
 static CC_ResizeFnc s_resizeFnc;
 static CC_UpdateFnc s_updateFnc;
 static bool s_leaveMainLoop;
@@ -166,24 +163,24 @@ bool CC_CreateWindow(int const width, int const height, char const* const title)
 #endif
 
 #if defined(USE_SDL2)
-  if (g_window != NULL)
+  if (s_window != NULL)
   {
     return false;
   }
 
-  g_window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width,
+  s_window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width,
                               height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-  if (g_window == NULL)
+  if (s_window == NULL)
   {
     return false;
   }
 
-  SDL_GL_CreateContext(g_window);
+  SDL_GL_CreateContext(s_window);
   SDL_GL_SetSwapInterval(1);
 
-  SDL_AddEventWatch(WindowResizedEventWatcher, g_window);
+  SDL_AddEventWatch(WindowResizedEventWatcher, s_window);
 
-  SDL_ShowWindow(g_window);
+  SDL_ShowWindow(s_window);
 #endif
 
   return true;
@@ -210,11 +207,11 @@ void CC_DestroyWindow()
 #endif
 
 #if defined(USE_SDL2)
-  if (g_window != NULL)
+  if (s_window != NULL)
   {
-    SDL_DestroyWindow(g_window);
+    SDL_DestroyWindow(s_window);
 
-    g_window = NULL;
+    s_window = NULL;
   }
 #endif
 }
@@ -236,7 +233,7 @@ int CC_GetWindowWidth()
 #if defined(USE_SDL2)
   int width;
   int height;
-  SDL_GetWindowSize(g_window, &width, &height);
+  SDL_GetWindowSize(s_window, &width, &height);
 
   return width;
 #endif
@@ -259,7 +256,7 @@ int CC_GetWindowHeight()
 #if defined(USE_SDL2)
   int width;
   int height;
-  SDL_GetWindowSize(g_window, &width, &height);
+  SDL_GetWindowSize(s_window, &width, &height);
 
   return height;
 #endif
@@ -276,7 +273,7 @@ void CC_SetWindowTitle(char const* const title)
 #endif
 
 #if defined(USE_SDL2)
-  SDL_SetWindowTitle(g_window, title);
+  SDL_SetWindowTitle(s_window, title);
 #endif
 }
 
@@ -379,7 +376,7 @@ void CC_SwapBuffers()
 #endif
 
 #if defined(USE_SDL2)
-  SDL_GL_SwapWindow(g_window);
+  SDL_GL_SwapWindow(s_window);
 #endif
 }
 
@@ -446,7 +443,7 @@ int WindowResizedEventWatcher(void* const data, SDL_Event* const event)
   {
     int width;
     int height;
-    SDL_GL_GetDrawableSize(g_window, &width, &height);
+    SDL_GL_GetDrawableSize(s_window, &width, &height);
 
     if (s_resizeFnc != NULL)
     {
