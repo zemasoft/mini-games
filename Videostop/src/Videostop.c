@@ -91,6 +91,7 @@ void Start()
   S_Start();
   G_Start();
 
+  CC_SetDisplayFnc(G_Update);
   CC_SetResizeFnc(G_Resize);
   CC_SetUpdateFnc(Update);
 

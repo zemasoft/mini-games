@@ -133,7 +133,7 @@ bool CC_CreateWindow(int const width, int const height, char const* const title)
     return false;
   }
 
-  glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_MULTISAMPLE);
+  glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_MULTISAMPLE);  // TODO: verify
   glutInitWindowSize(width, height);
 
   s_window = glutCreateWindow(title);
@@ -149,7 +149,7 @@ bool CC_CreateWindow(int const width, int const height, char const* const title)
     return false;
   }
 
-  glfwWindowHint(GLFW_SAMPLES, 4);
+  glfwWindowHint(GLFW_SAMPLES, 4);  // TODO: verify
 
   g_window = glfwCreateWindow(width, height, title, NULL, NULL);
   if (g_window == NULL)
@@ -219,6 +219,82 @@ void CC_DestroyWindow()
 #endif
 }
 
+int CC_GetWindowWidth()
+{
+#if defined(USE_FREEGLUT)
+  return glutGet(GLUT_WINDOW_WIDTH);
+#endif
+
+#if defined(USE_GLFW)
+  int width;
+  int height;
+  glfwGetWindowSize(g_window, &width, &height);
+
+  return width;
+#endif
+
+#if defined(USE_SDL2)
+  int width;
+  int height;
+  SDL_GetWindowSize(g_window, &width, &height);
+
+  return width;
+#endif
+}
+
+int CC_GetWindowHeight()
+{
+#if defined(USE_FREEGLUT)
+  return glutGet(GLUT_WINDOW_HEIGHT);
+#endif
+
+#if defined(USE_GLFW)
+  int width;
+  int height;
+  glfwGetWindowSize(g_window, &width, &height);
+
+  return height;
+#endif
+
+#if defined(USE_SDL2)
+  int width;
+  int height;
+  SDL_GetWindowSize(g_window, &width, &height);
+
+  return height;
+#endif
+}
+
+void CC_SetWindowTitle(char const* const title)
+{
+#if defined(USE_FREEGLUT)
+  glutSetWindowTitle(title);
+#endif
+
+#if defined(USE_GLFW)
+  glfwSetWindowTitle(g_window, title);
+#endif
+
+#if defined(USE_SDL2)
+  SDL_SetWindowTitle(g_window, title);
+#endif
+}
+
+void CC_SetDisplayFnc(CC_DisplayFnc const displayFnc)
+{
+#if defined(USE_FREEGLUT)
+  glutDisplayFunc(displayFnc);
+#endif
+
+#if defined(USE_GLFW)
+  (void) displayFnc;
+#endif
+
+#if defined(USE_SDL2)
+  (void) displayFnc;
+#endif
+}
+
 void CC_SetResizeFnc(CC_ResizeFnc const resizeFnc)
 {
 #if defined(USE_FREEGLUT)
@@ -252,8 +328,6 @@ void CC_SetUpdateFnc(CC_UpdateFnc const updateFnc)
 void CC_EnterMainLoop()
 {
 #if defined(USE_FREEGLUT)
-  // TODO: glutDisplayFunc(&G_Update);
-
   glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
   glutMainLoop();
 #endif
@@ -291,6 +365,21 @@ void CC_LeaveMainLoop()
 
 #if defined(USE_SDL2)
   s_leaveMainLoop = true;
+#endif
+}
+
+void CC_SwapBuffers()
+{
+#if defined(USE_FREEGLUT)
+  glutSwapBuffers();
+#endif
+
+#if defined(USE_GLFW)
+  glfwSwapBuffers(g_window);
+#endif
+
+#if defined(USE_SDL2)
+  SDL_GL_SwapWindow(g_window);
 #endif
 }
 

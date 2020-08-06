@@ -5,31 +5,13 @@
 #include <stdlib.h>   // srand, rand
 #include <time.h>     // time
 
-#if defined(USE_FREEGLUT)
-#include <GL/freeglut.h>
-#endif
-
-#if defined(USE_GLFW)
-#include <GLFW/glfw3.h>
-#endif
-
-#if defined(USE_SDL2)
-#include <SDL2/SDL.h>
-#endif
+#include "CommonCore.h"
 
 #include "Config.h"
 #include "Graphics.h"
 #include "Input.h"
 #include "Sound.h"
 #include "World.h"
-
-#if defined(USE_GLFW)
-extern GLFWwindow* g_window;
-#endif
-
-#if defined(USE_SDL2)
-extern SDL_Window* g_window;
-#endif
 
 static void UpdateWindowTitle();
 
@@ -225,20 +207,10 @@ void L_Stop()
 
 void UpdateWindowTitle()
 {
-  char buf[30];
-  snprintf(buf, sizeof(buf), "Videostop @ %.2f Hz", g_config.shuffle_frequency);
+  char title[30];
+  snprintf(title, sizeof(title), "Videostop @ %.2f Hz", g_config.shuffle_frequency);
 
-#if defined(USE_FREEGLUT)
-  glutSetWindowTitle(buf);
-#endif
-
-#if defined(USE_GLFW)
-  glfwSetWindowTitle(g_window, buf);
-#endif
-
-#if defined(USE_SDL2)
-  SDL_SetWindowTitle(g_window, buf);
-#endif
+  CC_SetWindowTitle(title);
 }
 
 void ShuffleDices(enum DiceState const state)
