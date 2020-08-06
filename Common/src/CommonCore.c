@@ -4,7 +4,7 @@
 #include <stdbool.h>  // false, true
 #include <stddef.h>   // size_t
 
-#if defined(USE_FREEALUT)
+#if defined(USE_FREEALUT_FOR_AUDIO)
 #include <AL/alut.h>
 #endif
 
@@ -38,7 +38,7 @@ static void Terminate();
 
 // Terminate end
 
-#if defined(USE_FREEALUT)
+#if defined(USE_FREEALUT_FOR_AUDIO)
 static void alutExitWrapper();
 #endif
 
@@ -95,7 +95,7 @@ bool CC_Initialize(int argc, char** argv)
   AtTerminate(SDL_Quit);
 #endif
 
-#if defined(USE_FREEALUT)
+#if defined(USE_FREEALUT_FOR_AUDIO)
   if (!alutInit(&argc, argv))
   {
     Terminate();
@@ -410,7 +410,7 @@ void Terminate()
   }
 }
 
-#if defined(USE_FREEALUT)
+#if defined(USE_FREEALUT_FOR_AUDIO)
 
 void alutExitWrapper()
 {

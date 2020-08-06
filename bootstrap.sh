@@ -7,7 +7,7 @@ SCRIPT_DIR=$(dirname $(readlink -f $0))
 
 ${SCRIPT_DIR}/scripts/whereami.sh
 
-if [[ ! -v ${USE_FREEALUT} || ${USE_FREEALUT} == ON ]]
+if [[ ! -v ${USE_FREEALUT_FOR_AUDIO} || ${USE_FREEALUT_FOR_AUDIO} == ON ]]
 then
   ${SCRIPT_DIR}/scripts/freealut.sh
 fi

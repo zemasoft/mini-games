@@ -4,7 +4,7 @@
 
 #include "CommonCore.h"
 
-#if defined(USE_FREEALUT)
+#if defined(USE_FREEALUT_FOR_AUDIO)
 #include <AL/alut.h>
 #endif
 

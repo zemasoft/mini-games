@@ -1,6 +1,6 @@
 project(Snake VERSION 1.0.0 LANGUAGES C)
 
-option(SNAKE_USE_FREEALUT "Use FreeALUT" ON)
+option(SNAKE_USE_FREEALUT_FOR_AUDIO "Use FreeALUT for audio" ON)
 option(SNAKE_USE_FREEGLUT "Use FreeGLUT" OFF)
 option(SNAKE_USE_GLFW "Use GLFW" ON)
 option(SNAKE_USE_SDL2 "Use SDL2" OFF)
@@ -9,7 +9,7 @@ option(SNAKE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 
 find_package(WhereAmI MODULE REQUIRED)
 
-if(SNAKE_USE_FREEALUT)
+if(SNAKE_USE_FREEALUT_FOR_AUDIO)
   find_package(FreeALUT MODULE REQUIRED)
 endif()
 
@@ -141,10 +141,10 @@ install(
     mini-games/Snake
 )
 
-if(SNAKE_USE_FREEALUT)
+if(SNAKE_USE_FREEALUT_FOR_AUDIO)
   target_compile_definitions(Snake
     PRIVATE
-      USE_FREEALUT
+      USE_FREEALUT_FOR_AUDIO
   )
 
   target_link_libraries(Snake

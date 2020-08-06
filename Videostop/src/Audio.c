@@ -2,24 +2,24 @@
 
 #include <string.h>  // strcat, strcpy
 
-#if defined(USE_FREEALUT)
+#if defined(USE_FREEALUT_FOR_AUDIO)
 #include <AL/alut.h>
 #endif
 
 extern char* g_executable_path;
 
-#if defined(USE_FREEALUT)
+#if defined(USE_FREEALUT_FOR_AUDIO)
 static char const* const s_sound_file_names[Sound_Count] = {"start.wav", "shuffle.wav",
                                                             "success.wav", "fail.wav"};
 #endif
 
-#if defined(USE_FREEALUT)
+#if defined(USE_FREEALUT_FOR_AUDIO)
 static ALuint s_sound_sources[Sound_Count];
 #endif
 
 void A_Start()
 {
-#if defined(USE_FREEALUT)
+#if defined(USE_FREEALUT_FOR_AUDIO)
   for (int i = 0; i < Sound_Count; ++i)
   {
     char file_name[256];
@@ -51,11 +51,11 @@ void A_Stop()
 
 void A_PlaySound(enum Sound const sound)
 {
-#if !defined(USE_FREEALUT)
+#if !defined(USE_FREEALUT_FOR_AUDIO)
   (void) sound;
 #endif
 
-#if defined(USE_FREEALUT)
+#if defined(USE_FREEALUT_FOR_AUDIO)
   alSourcePlay(s_sound_sources[sound]);
 #endif
 }

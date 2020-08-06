@@ -1,6 +1,6 @@
 project(SlidingPuzzle VERSION 1.0.0 LANGUAGES C)
 
-option(SLIDINGPUZZLE_USE_FREEALUT "Use FreeALUT" ON)
+option(SLIDINGPUZZLE_USE_FREEALUT_FOR_AUDIO "Use FreeALUT for audio" ON)
 option(SLIDINGPUZZLE_USE_FREEGLUT "Use FreeGLUT" ON)
 option(SLIDINGPUZZLE_USE_FREEGLUT_FOR_TEXT "Use FreeGLUT for text" OFF)
 option(SLIDINGPUZZLE_USE_GLFW "Use GLFW" OFF)
@@ -10,7 +10,7 @@ option(SLIDINGPUZZLE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 
 find_package(WhereAmI MODULE REQUIRED)
 
-if(SLIDINGPUZZLE_USE_FREEALUT)
+if(SLIDINGPUZZLE_USE_FREEALUT_FOR_AUDIO)
   find_package(FreeALUT MODULE REQUIRED)
 endif()
 
@@ -139,10 +139,10 @@ install(
     mini-games/SlidingPuzzle
 )
 
-if(SLIDINGPUZZLE_USE_FREEALUT)
+if(SLIDINGPUZZLE_USE_FREEALUT_FOR_AUDIO)
   target_compile_definitions(SlidingPuzzle
     PRIVATE
-      USE_FREEALUT
+      USE_FREEALUT_FOR_AUDIO
   )
 
   target_link_libraries(SlidingPuzzle
