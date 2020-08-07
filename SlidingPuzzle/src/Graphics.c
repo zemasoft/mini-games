@@ -39,7 +39,7 @@ static struct
   float y;
 } s_scale;
 
-#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
+#if defined(USE_FREEGLUT_FOR_TEXT)
 static struct
 {
   float x;
@@ -83,7 +83,7 @@ void G_Start()
   s_init_width = GetRight() - GetLeft();
   s_init_height = GetTop() - GetBottom();
 
-#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
+#if defined(USE_FREEGLUT_FOR_TEXT)
   s_string_scale.x = s_init_width / (float) s_init_window_width;
   s_string_scale.y = s_init_height / (float) s_init_window_height;
 #endif
@@ -153,7 +153,7 @@ void RecountPieceStrings()
 
 void RecountStatusBarString()
 {
-#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
+#if defined(USE_FREEGLUT_FOR_TEXT)
   s_statusBar.string.height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * s_string_scale.y;
 #endif
 }
@@ -200,7 +200,7 @@ void DrawStatusBar()
   glEnd();
   // clang-format on
 
-#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
+#if defined(USE_FREEGLUT_FOR_TEXT)
   glTranslatef(
       GetLeft() + MARGIN * s_scale.x,
       GetBottom() + (STATUSBAR_SIZE - s_statusBar.string.height * 0.75f) / 2.0f * s_scale.y, 0.0f);
@@ -232,20 +232,12 @@ void DrawStatusBar()
   }
 #endif
 
-#if defined(USE_GLFW) && !defined(USE_FREEGLUT_FOR_TEXT)
-  // TODO
-#endif
-
-#if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
-  // TODO
-#endif
-
   glPopMatrix();
 }
 
 void RecountPieceString(struct Piece* const piece)
 {
-#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
+#if defined(USE_FREEGLUT_FOR_TEXT)
   snprintf(piece->string.value, sizeof(piece->string.value), "%d", piece->value);
 
   piece->string.width = glutStrokeLengthf(TEXT_FONT, (unsigned char*) &piece->string.value[0]) *
@@ -253,11 +245,7 @@ void RecountPieceString(struct Piece* const piece)
   piece->string.height = (float) glutStrokeHeight(TEXT_FONT) * VALUE_SIZE * s_string_scale.y;
 #endif
 
-#if defined(USE_GLFW) && !defined(USE_FREEGLUT_FOR_TEXT)
-  (void) piece;
-#endif
-
-#if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
+#if !defined(USE_FREEGLUT_FOR_TEXT)
   (void) piece;
 #endif
 }
@@ -344,7 +332,7 @@ void DrawPiece(struct Piece const* const piece)
 
 void DrawValue(struct Piece const* const piece)
 {
-#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
+#if defined(USE_FREEGLUT_FOR_TEXT)
   switch (piece->state)
   {
     case PieceState_Setup:
@@ -368,13 +356,7 @@ void DrawValue(struct Piece const* const piece)
   glutStrokeString(TEXT_FONT, (unsigned char*) &piece->string.value[0]);
 #endif
 
-#if defined(USE_GLFW) && !defined(USE_FREEGLUT_FOR_TEXT)
-  // TODO
-  (void) piece;
-#endif
-
-#if defined(USE_SDL2) && !defined(USE_FREEGLUT_FOR_TEXT)
-  // TODO
+#if !defined(USE_FREEGLUT_FOR_TEXT)
   (void) piece;
 #endif
 }

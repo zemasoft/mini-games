@@ -85,7 +85,7 @@ bool CC_Initialize(int argc, char** argv)
   AtTerminate(glfwTerminate);
 #endif
 
-#if defined(USE_SDL2)
+#if defined(USE_SDL2) && defined(USE_SDL2_FOR_AUDIO)
   if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) != 0)
   {
     Terminate();
@@ -93,7 +93,15 @@ bool CC_Initialize(int argc, char** argv)
   }
 
   AtTerminate(SDL_Quit);
-#elif defined(USE_SDL2_FOR_AUDIO)
+#elif defined(USE_SDL2) && !defined(USE_SDL2_FOR_AUDIO)
+  if (SDL_Init(SDL_INIT_VIDEO) != 0)
+  {
+    Terminate();
+    return false;
+  }
+
+  AtTerminate(SDL_Quit);
+#elif !defined(USE_SDL2) && defined(USE_SDL2_FOR_AUDIO)
   if (SDL_Init(SDL_INIT_AUDIO) != 0)
   {
     Terminate();
