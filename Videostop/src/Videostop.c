@@ -127,6 +127,10 @@ void Update()
 
 void Stop()
 {
+  CC_SetDisplayFnc(NULL);
+  CC_SetResizeFnc(NULL);
+  CC_SetUpdateFnc(NULL);
+
   I_Stop();
   L_Stop();
   A_Stop();

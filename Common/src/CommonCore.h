@@ -1,5 +1,5 @@
-#ifndef COMMON_CORE_H
-#define COMMON_CORE_H
+#ifndef COMMONCORE_H
+#define COMMONCORE_H
 
 #include <stdbool.h>  // bool
 
@@ -29,4 +29,4 @@ void CC_SwapBuffers();
 
 unsigned CC_GetElapsedTime();
 
-#endif  // COMMON_CORE_H
+#endif  // COMMONCORE_H

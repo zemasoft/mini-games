@@ -4,10 +4,6 @@
 #include <stdbool.h>  // false, true
 #include <stddef.h>   // size_t
 
-#if defined(USE_FREEALUT_FOR_AUDIO)
-#include <AL/alut.h>
-#endif
-
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
 #include <GL/freeglut.h>
 #endif
@@ -20,8 +16,12 @@
 #include <SDL2/SDL.h>
 #endif
 
+#if defined(USE_FREEALUT_FOR_AUDIO)
+#include <AL/alut.h>
+#endif
+
 #if defined(USE_GLFW)
-GLFWwindow* g_window;
+GLFWwindow* g_window;  // TODO: should be static
 #endif
 
 static bool s_initialized;
@@ -37,10 +37,6 @@ static void AtTerminate(TerminateFnc terminateFnc);
 static void Terminate();
 
 // Terminate end
-
-#if defined(USE_FREEALUT_FOR_AUDIO)
-static void alutExitWrapper();
-#endif
 
 #if defined(USE_FREEGLUT)
 static int s_window;
@@ -60,6 +56,10 @@ static CC_UpdateFnc s_updateFnc;
 static bool s_leaveMainLoop;
 
 static int WindowResizedEventWatcher(void* data, SDL_Event* event);
+#endif
+
+#if defined(USE_FREEALUT_FOR_AUDIO)
+static void alutExitWrapper();
 #endif
 
 bool CC_Initialize(int argc, char** argv)
@@ -418,15 +418,6 @@ void Terminate()
   }
 }
 
-#if defined(USE_FREEALUT_FOR_AUDIO)
-
-void alutExitWrapper()
-{
-  alutExit();
-}
-
-#endif
-
 #if defined(USE_GLFW)
 
 void FramebufferSizeCallback(GLFWwindow* const window, int const width, int const height)
@@ -460,6 +451,15 @@ int WindowResizedEventWatcher(void* const data, SDL_Event* const event)
   }
 
   return 0;
+}
+
+#endif
+
+#if defined(USE_FREEALUT_FOR_AUDIO)
+
+void alutExitWrapper()
+{
+  alutExit();
 }
 
 #endif
