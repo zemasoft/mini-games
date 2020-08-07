@@ -22,7 +22,7 @@ then
   ${SCRIPT_DIR}/scripts/glfw.sh
 fi
 
-if [[ ! -v ${USE_SDL2} || ${USE_SDL2} == ON ]]
+if [[ ! -v ${USE_SDL2} || ${USE_SDL2} == ON || ${USE_SDL2_FOR_AUDIO} == ON ]]
 then
   ${SCRIPT_DIR}/scripts/sdl2.sh
 fi
