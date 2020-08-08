@@ -8,6 +8,7 @@ SCRIPT_DIR=$(dirname $(readlink -f $0))
 source ${SCRIPT_DIR}/setenv.sh
 
 rm -rf build
+
 cmake -S ${SCRIPT_DIR}/../.. -Bbuild \
       -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
       -DSLIDINGPUZZLE_USE_FREEGLUT=${USE_FREEGLUT} \

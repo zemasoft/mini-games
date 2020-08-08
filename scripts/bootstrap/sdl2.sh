@@ -19,7 +19,8 @@ make
 make install
 
 cd ..
-if [[ ${CLEANUP} == true ]]
+
+if [[ ${CLEANUP} == TRUE ]]
 then
   rm -rf sdl2
 fi

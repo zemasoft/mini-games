@@ -23,7 +23,8 @@ cmake --build build
 cmake --build build --target install
 
 cd ..
-if [[ ${CLEANUP} == true ]]
+
+if [[ ${CLEANUP} == TRUE ]]
 then
   rm -rf freealut
 fi

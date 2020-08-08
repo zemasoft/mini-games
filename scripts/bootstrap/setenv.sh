@@ -40,7 +40,7 @@ echo "DEPS_DIR=${DEPS_DIR}"
 
 if [[ ! -v CLEANUP ]]
 then
-  export CLEANUP=false
+  export CLEANUP=TRUE
 fi
 
 echo "CLEANUP=${CLEANUP}"
