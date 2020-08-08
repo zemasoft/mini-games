@@ -5,7 +5,7 @@ set -e
 SCRIPT_BASE=$(basename $(readlink -f $0))
 SCRIPT_DIR=$(dirname $(readlink -f $0))
 
-${SCRIPT_DIR}/setenv.sh
+source ${SCRIPT_DIR}/setenv.sh
 mkdir -p ${DEPS_DIR}
 
 rm -rf sdl2
