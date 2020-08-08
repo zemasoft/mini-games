@@ -15,8 +15,9 @@ cd whereami
 
 cp ${SCRIPT_DIR}/whereami_CMakeLists.txt CMakeLists.txt
 
-cmake . -Bbuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-                -DCMAKE_INSTALL_PREFIX=${DEPS_DIR}
+cmake -S . -Bbuild \
+      -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+      -DCMAKE_INSTALL_PREFIX=${DEPS_DIR}
 cmake --build build
 cmake --build build --target install
 
