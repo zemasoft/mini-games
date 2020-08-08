@@ -1,10 +1,12 @@
 project(Videostop VERSION 1.0.0 LANGUAGES C)
 
-option(VIDEOSTOP_USE_FREEALUT_FOR_AUDIO "Use FreeALUT for audio" ON)
 option(VIDEOSTOP_USE_FREEGLUT "Use FreeGLUT" ON)
-option(VIDEOSTOP_USE_FREEGLUT_FOR_TEXT "Use FreeGLUT for text" OFF)
 option(VIDEOSTOP_USE_GLFW "Use GLFW" OFF)
 option(VIDEOSTOP_USE_SDL2 "Use SDL2" OFF)
+
+option(VIDEOSTOP_USE_FREEGLUT_FOR_TEXT "Use FreeGLUT for text" OFF)
+
+option(VIDEOSTOP_USE_FREEALUT_FOR_AUDIO "Use FreeALUT for audio" ON)
 option(VIDEOSTOP_USE_SDL2_FOR_AUDIO "Use SDL2 for audio" OFF)
 
 option(VIDEOSTOP_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)

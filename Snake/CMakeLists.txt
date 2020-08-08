@@ -1,9 +1,10 @@
 project(Snake VERSION 1.0.0 LANGUAGES C)
 
-option(SNAKE_USE_FREEALUT_FOR_AUDIO "Use FreeALUT for audio" ON)
 option(SNAKE_USE_FREEGLUT "Use FreeGLUT" OFF)
 option(SNAKE_USE_GLFW "Use GLFW" ON)
 option(SNAKE_USE_SDL2 "Use SDL2" OFF)
+
+option(SNAKE_USE_FREEALUT_FOR_AUDIO "Use FreeALUT for audio" ON)
 option(SNAKE_USE_SDL2_FOR_AUDIO "Use SDL2 for audio" OFF)
 
 option(SNAKE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
