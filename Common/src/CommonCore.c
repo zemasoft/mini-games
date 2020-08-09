@@ -62,7 +62,7 @@ static int WindowResizedEventWatcher(void* data, SDL_Event* event);
 static void alutExitWrapper();
 #endif
 
-bool CC_Initialize(int argc, char** argv)
+bool CC_Initialize(int* argcp, char** argv)
 {
   if (s_initialized)
   {
@@ -70,7 +70,7 @@ bool CC_Initialize(int argc, char** argv)
   }
 
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
-  glutInit(&argc, argv);
+  glutInit(argcp, argv);
 
   AtTerminate(glutExit);
 #endif
@@ -112,7 +112,7 @@ bool CC_Initialize(int argc, char** argv)
 #endif
 
 #if defined(USE_FREEALUT_FOR_AUDIO)
-  if (!alutInit(&argc, argv))
+  if (!alutInit(argcp, argv))
   {
     Terminate();
     return false;

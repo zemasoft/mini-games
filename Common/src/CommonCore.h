@@ -3,7 +3,7 @@
 
 #include <stdbool.h>  // bool
 
-bool CC_Initialize(int argc, char** argv);
+bool CC_Initialize(int* argcp, char** argv);
 void CC_Terminate();
 
 bool CC_CreateWindow(int width, int height, char const* title);

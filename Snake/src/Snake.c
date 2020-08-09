@@ -62,7 +62,7 @@ int main(int argc, char** argv)
 
 bool Initialize(int argc, char** argv)
 {
-  if (!CC_Initialize(argc, argv))
+  if (!CC_Initialize(&argc, argv))
   {
     return false;
   }
