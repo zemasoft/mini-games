@@ -13,9 +13,6 @@ int CC_GetWindowWidth();
 int CC_GetWindowHeight();
 void CC_SetWindowTitle(char const* title);
 
-typedef void (*CC_DisplayFnc)(void);
-void CC_SetDisplayFnc(CC_DisplayFnc displayFnc);
-
 typedef void (*CC_ResizeFnc)(int, int);
 void CC_SetResizeFnc(CC_ResizeFnc resizeFnc);
 

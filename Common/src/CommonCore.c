@@ -40,6 +40,8 @@ static void Terminate();
 
 #if defined(USE_FREEGLUT)
 static int s_window;
+
+static void DisplayCallback();
 #endif
 
 #if defined(USE_GLFW)
@@ -298,21 +300,6 @@ void CC_SetWindowTitle(char const* const title)
 #endif
 }
 
-void CC_SetDisplayFnc(CC_DisplayFnc const displayFnc)
-{
-#if defined(USE_FREEGLUT)
-  glutDisplayFunc(displayFnc);
-#endif
-
-#if defined(USE_GLFW)
-  (void) displayFnc;
-#endif
-
-#if defined(USE_SDL2)
-  (void) displayFnc;
-#endif
-}
-
 void CC_SetResizeFnc(CC_ResizeFnc const resizeFnc)
 {
 #if defined(USE_FREEGLUT)
@@ -346,8 +333,12 @@ void CC_SetUpdateFnc(CC_UpdateFnc const updateFnc)
 void CC_EnterMainLoop()
 {
 #if defined(USE_FREEGLUT)
+  glutDisplayFunc(DisplayCallback);
+
   glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
   glutMainLoop();
+
+  glutDisplayFunc(NULL);
 #endif
 
 #if defined(USE_GLFW)
@@ -430,6 +421,14 @@ void Terminate()
     s_terminateFncs[--s_terminateFncCount]();
   }
 }
+
+#if defined(USE_FREEGLUT)
+
+void DisplayCallback()
+{
+}
+
+#endif
 
 #if defined(USE_GLFW)
 
