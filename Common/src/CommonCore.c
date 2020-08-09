@@ -121,6 +121,11 @@ bool CC_Initialize(int* argcp, char** argv)
   AtTerminate(alutExitWrapper);
 #endif
 
+#if !defined(USE_FREEGLUT) && !defined(USE_FREEGLUT_FOR_TEXT) && !defined(USE_FREEALUT_FOR_AUDIO)
+  (void) argcp;
+  (void) argv;
+#endif
+
   s_initialized = true;
 
   return true;
