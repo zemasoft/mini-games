@@ -35,7 +35,6 @@ endif()
 
 add_executable(Videostop
   ../Common/src/CommonCore.c
-  ../Common/src/CommonCore.h
   src/Audio.c
   src/Audio.h
   src/Config.c
@@ -84,7 +83,7 @@ endif()
 
 target_include_directories(Videostop
   PRIVATE
-    ../Common/src
+    ../Common/include
     src
 )
 
