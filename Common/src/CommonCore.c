@@ -45,16 +45,16 @@ static void DisplayCallback();
 #endif
 
 #if defined(USE_GLFW)
-static CC_ResizeFnc s_resizeFnc;
-static CC_UpdateFnc s_updateFnc;
+static CC_ResizeCallback s_resizeCallback;
+static CC_UpdateCallback s_updateCallback;
 
 static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
 #endif
 
 #if defined(USE_SDL2)
 static SDL_Window* s_window;
-static CC_ResizeFnc s_resizeFnc;
-static CC_UpdateFnc s_updateFnc;
+static CC_ResizeCallback s_resizeCallback;
+static CC_UpdateCallback s_updateCallback;
 static bool s_leaveMainLoop;
 
 static int WindowResizedEventWatcher(void* data, SDL_Event* event);
@@ -300,33 +300,33 @@ void CC_SetWindowTitle(char const* const title)
 #endif
 }
 
-void CC_SetResizeFnc(CC_ResizeFnc const resizeFnc)
+void CC_SetResizeCallback(CC_ResizeCallback const resizeCallback)
 {
 #if defined(USE_FREEGLUT)
-  glutReshapeFunc(resizeFnc);
+  glutReshapeFunc(resizeCallback);
 #endif
 
 #if defined(USE_GLFW)
-  s_resizeFnc = resizeFnc;
+  s_resizeCallback = resizeCallback;
 #endif
 
 #if defined(USE_SDL2)
-  s_resizeFnc = resizeFnc;
+  s_resizeCallback = resizeCallback;
 #endif
 }
 
-void CC_SetUpdateFnc(CC_UpdateFnc const updateFnc)
+void CC_SetUpdateCallback(CC_UpdateCallback const updateCallback)
 {
 #if defined(USE_FREEGLUT)
-  glutIdleFunc(updateFnc);
+  glutIdleFunc(updateCallback);
 #endif
 
 #if defined(USE_GLFW)
-  s_updateFnc = updateFnc;
+  s_updateCallback = updateCallback;
 #endif
 
 #if defined(USE_SDL2)
-  s_updateFnc = updateFnc;
+  s_updateCallback = updateCallback;
 #endif
 }
 
@@ -344,9 +344,9 @@ void CC_EnterMainLoop()
 #if defined(USE_GLFW)
   while (!glfwWindowShouldClose(g_window))
   {
-    if (s_updateFnc != NULL)
+    if (s_updateCallback != NULL)
     {
-      s_updateFnc();
+      s_updateCallback();
     }
   }
 #endif
@@ -354,9 +354,9 @@ void CC_EnterMainLoop()
 #if defined(USE_SDL2)
   while (!s_leaveMainLoop)
   {
-    if (s_updateFnc != NULL)
+    if (s_updateCallback != NULL)
     {
-      s_updateFnc();
+      s_updateCallback();
     }
   }
 #endif
@@ -436,9 +436,9 @@ void FramebufferSizeCallback(GLFWwindow* const window, int const width, int cons
 {
   (void) window;
 
-  if (s_resizeFnc != NULL)
+  if (s_resizeCallback != NULL)
   {
-    s_resizeFnc(width, height);
+    s_resizeCallback(width, height);
   }
 }
 
@@ -456,9 +456,9 @@ int WindowResizedEventWatcher(void* const data, SDL_Event* const event)
     int height;
     SDL_GL_GetDrawableSize(s_window, &width, &height);
 
-    if (s_resizeFnc != NULL)
+    if (s_resizeCallback != NULL)
     {
-      s_resizeFnc(width, height);
+      s_resizeCallback(width, height);
     }
   }
 

@@ -13,11 +13,11 @@ int CC_GetWindowWidth();
 int CC_GetWindowHeight();
 void CC_SetWindowTitle(char const* title);
 
-typedef void (*CC_ResizeFnc)(int, int);
-void CC_SetResizeFnc(CC_ResizeFnc resizeFnc);
+typedef void (*CC_ResizeCallback)(int, int);
+void CC_SetResizeCallback(CC_ResizeCallback resizeCallback);
 
-typedef void (*CC_UpdateFnc)(void);
-void CC_SetUpdateFnc(CC_UpdateFnc updateFnc);
+typedef void (*CC_UpdateCallback)(void);
+void CC_SetUpdateCallback(CC_UpdateCallback updateCallback);
 
 void CC_EnterMainLoop();
 void CC_LeaveMainLoop();

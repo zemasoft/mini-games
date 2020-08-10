@@ -91,8 +91,8 @@ void Start()
   A_Start();
   G_Start();
 
-  CC_SetResizeFnc(G_Resize);
-  CC_SetUpdateFnc(Update);
+  CC_SetResizeCallback(G_Resize);
+  CC_SetUpdateCallback(Update);
 
   CC_EnterMainLoop();
 }
@@ -126,8 +126,8 @@ void Update()
 
 void Stop()
 {
-  CC_SetResizeFnc(NULL);
-  CC_SetUpdateFnc(NULL);
+  CC_SetResizeCallback(NULL);
+  CC_SetUpdateCallback(NULL);
 
   I_Stop();
   L_Stop();
