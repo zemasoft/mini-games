@@ -4,6 +4,8 @@
 #include <stddef.h>   // size_t
 #include <stdio.h>    // snprintf
 
+#include "CommonCore.h"
+
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
 #include <GL/freeglut.h>
 #endif
@@ -65,9 +67,6 @@ static void RecountPieceString(struct Piece* piece);
 static void DrawPiece(struct Piece const* piece);
 static void DrawValue(struct Piece const* piece);
 
-static int GetWindowWidth();
-static int GetWindowHeight();
-
 static float GetLeft();
 static float GetRight();
 static float GetBottom();
@@ -78,8 +77,8 @@ void G_Start()
   s_scale.x = 1.0f;
   s_scale.y = 1.0f;
 
-  s_init_window_width = GetWindowWidth();
-  s_init_window_height = GetWindowHeight();
+  s_init_window_width = CC_GetWindowWidth();
+  s_init_window_height = CC_GetWindowHeight();
   s_init_width = GetRight() - GetLeft();
   s_init_height = GetTop() - GetBottom();
 
@@ -96,10 +95,10 @@ void G_Start()
 
 void G_Restart()
 {
-  s_scale.x = (float) s_init_window_width / (float) GetWindowWidth() * (GetRight() - GetLeft()) /
+  s_scale.x = (float) s_init_window_width / (float) CC_GetWindowWidth() * (GetRight() - GetLeft()) /
               s_init_width;
-  s_scale.y = (float) s_init_window_height / (float) GetWindowHeight() * (GetTop() - GetBottom()) /
-              s_init_height;
+  s_scale.y = (float) s_init_window_height / (float) CC_GetWindowHeight() *
+              (GetTop() - GetBottom()) / s_init_height;
 
   RecountPieceStrings();
   RecountStatusBarString();
@@ -119,17 +118,7 @@ void G_Update()
   DrawPieces();
   DrawStatusBar();
 
-#if defined(USE_FREEGLUT)
-  glutSwapBuffers();
-#endif
-
-#if defined(USE_GLFW)
-  glfwSwapBuffers(g_window);
-#endif
-
-#if defined(USE_SDL2)
-  SDL_GL_SwapWindow(g_window);
-#endif
+  CC_SwapBuffers();
 }
 
 void G_Stop()
@@ -379,50 +368,4 @@ float GetBottom()
 float GetTop()
 {
   return (float) g_world.size.y * PIECE_SIZE + MARGIN / 2.0f;
-}
-
-int GetWindowWidth()
-{
-#if defined(USE_FREEGLUT)
-  return glutGet(GLUT_WINDOW_WIDTH);
-#endif
-
-#if defined(USE_GLFW)
-  int window_width;
-  int window_height;
-  glfwGetWindowSize(g_window, &window_width, &window_height);
-
-  return window_width;
-#endif
-
-#if defined(USE_SDL2)
-  int window_width;
-  int window_height;
-  SDL_GetWindowSize(g_window, &window_width, &window_height);
-
-  return window_width;
-#endif
-}
-
-int GetWindowHeight()
-{
-#if defined(USE_FREEGLUT)
-  return glutGet(GLUT_WINDOW_HEIGHT);
-#endif
-
-#if defined(USE_GLFW)
-  int window_width;
-  int window_height;
-  glfwGetWindowSize(g_window, &window_width, &window_height);
-
-  return window_height;
-#endif
-
-#if defined(USE_SDL2)
-  int window_width;
-  int window_height;
-  SDL_GetWindowSize(g_window, &window_width, &window_height);
-
-  return window_height;
-#endif
 }

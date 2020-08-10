@@ -6,31 +6,13 @@
 #include <stdlib.h>   // free, malloc, srand, rand
 #include <time.h>     // time
 
-#if defined(USE_FREEGLUT)
-#include <GL/freeglut.h>
-#endif
-
-#if defined(USE_GLFW)
-#include <GLFW/glfw3.h>
-#endif
-
-#if defined(USE_SDL2)
-#include <SDL2/SDL.h>
-#endif
+#include "CommonCore.h"
 
 #include "Audio.h"
 #include "Config.h"
 #include "Graphics.h"
 #include "Input.h"
 #include "World.h"
-
-#if defined(USE_GLFW)
-extern GLFWwindow* g_window;
-#endif
-
-#if defined(USE_SDL2)
-extern SDL_Window* g_window;
-#endif
 
 static void UpdateWindowTitle();
 
@@ -251,22 +233,8 @@ void L_Update()
         default:
           if (control_button)
           {
-#if defined(USE_FREEGLUT)
-            int const window_width = glutGet(GLUT_WINDOW_WIDTH);
-            int const window_height = glutGet(GLUT_WINDOW_HEIGHT);
-#endif
-
-#if defined(USE_GLFW)
-            int window_width;
-            int window_height;
-            glfwGetWindowSize(g_window, &window_width, &window_height);
-#endif
-
-#if defined(USE_SDL2)
-            int window_width;
-            int window_height;
-            SDL_GetWindowSize(g_window, &window_width, &window_height);
-#endif
+            int const window_width = CC_GetWindowWidth();
+            int const window_height = CC_GetWindowHeight();
 
             float const logical_width = (float) g_world.size.x * PIECE_SIZE + MARGIN;
             float const logical_height =
@@ -354,20 +322,10 @@ void L_Stop()
 
 void UpdateWindowTitle()
 {
-  char buf[30];
-  snprintf(buf, sizeof(buf), "Sliding Puzzle %ldx%ld", g_config.size.y, g_config.size.x);
+  char title[30];
+  snprintf(title, sizeof(title), "Sliding Puzzle %ldx%ld", g_config.size.y, g_config.size.x);
 
-#if defined(USE_FREEGLUT)
-  glutSetWindowTitle(buf);
-#endif
-
-#if defined(USE_GLFW)
-  glfwSetWindowTitle(g_window, buf);
-#endif
-
-#if defined(USE_SDL2)
-  SDL_SetWindowTitle(g_window, buf);
-#endif
+  CC_SetWindowTitle(title);
 }
 
 void MovePieceLeft()

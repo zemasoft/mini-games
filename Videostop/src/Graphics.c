@@ -5,6 +5,8 @@
 #include <stdbool.h>  // false
 #include <stdio.h>    // snprintf
 
+#include "CommonCore.h"
+
 #ifndef M_PI
 #define M_PI (3.14159265358979323846264338327950288)
 #endif
@@ -21,8 +23,6 @@
 #include <GL/gl.h>
 #include <SDL2/SDL.h>
 #endif
-
-#include "CommonCore.h"
 
 #include "Config.h"
 #include "World.h"

@@ -4,22 +4,6 @@
 
 #include "CommonCore.h"
 
-#if defined(USE_FREEALUT_FOR_AUDIO)
-#include <AL/alut.h>
-#endif
-
-#if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
-#include <GL/freeglut.h>
-#endif
-
-#if defined(USE_GLFW)
-#include <GLFW/glfw3.h>
-#endif
-
-#if defined(USE_SDL2)
-#include <SDL2/SDL.h>
-#endif
-
 #include <whereami.h>
 
 #include "Audio.h"
@@ -28,15 +12,6 @@
 #include "Input.h"
 #include "Logic.h"
 
-#if defined(USE_GLFW)
-GLFWwindow* g_window;
-#endif
-
-#if defined(USE_SDL2)
-SDL_Window* g_window;
-bool g_quit;
-#endif
-
 char* g_executable_path;
 
 static bool Initialize(int argc, char** argv);
@@ -44,14 +19,6 @@ static void Start();
 static void Update();
 static void Stop();
 static void Terminate();
-
-#if defined(USE_GLFW)
-static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
-#endif
-
-#if defined(USE_SDL2)
-static int WindowResizedEventWatcher(void* data, SDL_Event* event);
-#endif
 
 int main(int argc, char** argv)
 {
@@ -119,51 +86,12 @@ bool Initialize(int argc, char** argv)
     }
   }
 
-#if defined(USE_FREEGLUT)
-  glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_MULTISAMPLE);
-  glutInitWindowSize((int) g_config.size.x * PIECE_SIZE_PIXELS,
-                     (int) g_config.size.y * PIECE_SIZE_PIXELS);
-  glutCreateWindow("Sliding Puzzle");
-#endif
-
-#if defined(USE_GLFW)
-  glfwWindowHint(GLFW_SAMPLES, 4);
-
-  g_window =
-      glfwCreateWindow((int) g_config.size.x * PIECE_SIZE_PIXELS,
-                       (int) g_config.size.y * PIECE_SIZE_PIXELS, "Sliding Puzzle", NULL, NULL);
-  if (g_window == NULL)
+  if (!CC_CreateWindow((int) g_config.size.x * PIECE_SIZE_PIXELS,
+                       (int) g_config.size.y * PIECE_SIZE_PIXELS, "Sliding Puzzle"))
   {
     CC_Terminate();
     return false;
   }
-
-  glfwMakeContextCurrent(g_window);
-  glfwSwapInterval(1);
-
-  glfwSetFramebufferSizeCallback(g_window, FramebufferSizeCallback);
-
-  glfwShowWindow(g_window);
-#endif
-
-#if defined(USE_SDL2)
-  g_window = SDL_CreateWindow("Sliding Puzzle", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                              (int) g_config.size.x * PIECE_SIZE_PIXELS,
-                              (int) g_config.size.y * PIECE_SIZE_PIXELS,
-                              SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-  if (g_window == NULL)
-  {
-    CC_Terminate();
-    return false;
-  }
-
-  SDL_GL_CreateContext(g_window);
-  SDL_GL_SetSwapInterval(1);
-
-  SDL_AddEventWatch(WindowResizedEventWatcher, g_window);
-
-  SDL_ShowWindow(g_window);
-#endif
 
   int const buffer_length = wai_getExecutablePath(NULL, 0, NULL);
   if (buffer_length >= 0)
@@ -185,28 +113,10 @@ void Start()
   A_Start();
   G_Start();
 
-#if defined(USE_FREEGLUT)
-  glutDisplayFunc(&G_Update);
-  glutReshapeFunc(&G_Resize);
-  glutIdleFunc(&Update);
+  CC_SetResizeCallback(G_Resize);
+  CC_SetUpdateCallback(Update);
 
-  glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
-  glutMainLoop();
-#endif
-
-#if defined(USE_GLFW)
-  while (!glfwWindowShouldClose(g_window))
-  {
-    Update();
-  }
-#endif
-
-#if defined(USE_SDL2)
-  while (!g_quit)
-  {
-    Update();
-  }
-#endif
+  CC_EnterMainLoop();
 }
 
 void Update()
@@ -238,63 +148,23 @@ void Update()
 
 void Stop()
 {
+  CC_SetResizeCallback(NULL);
+  CC_SetUpdateCallback(NULL);
+
   I_Stop();
   L_Stop();
   A_Stop();
   G_Stop();
-
-#if defined(USE_FREEGLUT)
-  glutDisplayFunc(NULL);
-  glutReshapeFunc(NULL);
-  glutIdleFunc(NULL);
-#endif
 }
 
 void Terminate()
 {
-#if defined(USE_GLFW)
-  glfwDestroyWindow(g_window);
-#endif
-
-#if defined(USE_SDL2)
-  SDL_DestroyWindow(g_window);
-#endif
-
   if (g_executable_path != NULL)
   {
     free(g_executable_path);
   }
 
+  CC_DestroyWindow();
+
   CC_Terminate();
 }
-
-#if defined(USE_GLFW)
-
-void FramebufferSizeCallback(GLFWwindow* const window, int const width, int const height)
-{
-  (void) window;
-
-  G_Resize(width, height);
-}
-
-#endif
-
-#if defined(USE_SDL2)
-
-int WindowResizedEventWatcher(void* const data, SDL_Event* const event)
-{
-  (void) data;
-
-  if (event->type == SDL_WINDOWEVENT && event->window.event == SDL_WINDOWEVENT_RESIZED)
-  {
-    int width;
-    int height;
-    SDL_GL_GetDrawableSize(g_window, &width, &height);
-
-    G_Resize(width, height);
-  }
-
-  return 0;
-}
-
-#endif
