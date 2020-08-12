@@ -5,18 +5,6 @@
 #include <stdlib.h>  // free, malloc, srand, rand
 #include <time.h>    // time
 
-#if defined(USE_FREEGLUT)
-#include <GL/freeglut.h>
-#endif
-
-#if defined(USE_GLFW)
-#include <GLFW/glfw3.h>
-#endif
-
-#if defined(USE_SDL2)
-#include <SDL2/SDL.h>
-#endif
-
 #include "Audio.h"
 #include "Config.h"
 #include "Input.h"

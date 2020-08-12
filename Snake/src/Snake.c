@@ -4,22 +4,6 @@
 
 #include "CommonCore.h"
 
-#if defined(USE_FREEALUT_FOR_AUDIO)
-#include <AL/alut.h>
-#endif
-
-#if defined(USE_FREEGLUT)
-#include <GL/freeglut.h>
-#endif
-
-#if defined(USE_GLFW)
-#include <GLFW/glfw3.h>
-#endif
-
-#if defined(USE_SDL2)
-#include <SDL2/SDL.h>
-#endif
-
 #include <whereami.h>
 
 #include "Audio.h"
@@ -28,20 +12,11 @@
 #include "Input.h"
 #include "Logic.h"
 
-#if defined(USE_GLFW)
-GLFWwindow* g_window;
-#endif
-
-#if defined(USE_SDL2)
-SDL_Window* g_window;
-bool g_quit;
-#endif
-
 char* g_executable_path;
 
 static bool Initialize(int argc, char** argv);
 static void Start();
-static void Update();
+static void Update(unsigned elapsed);
 static void Stop();
 static void Terminate();
 
@@ -111,46 +86,12 @@ bool Initialize(int argc, char** argv)
     }
   }
 
-#if defined(USE_FREEGLUT)
-  glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_MULTISAMPLE);
-  glutInitWindowSize((int) g_config.ground.size.x * FIELD_SIZE_PIXELS,
-                     (int) g_config.ground.size.y * FIELD_SIZE_PIXELS);
-  glutCreateWindow("Snake");
-#endif
-
-#if defined(USE_GLFW)
-  glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
-  g_window =
-      glfwCreateWindow((int) g_config.ground.size.x * FIELD_SIZE_PIXELS,
-                       (int) g_config.ground.size.y * FIELD_SIZE_PIXELS, "Snake", NULL, NULL);
-  if (g_window == NULL)
+  if (!CC_CreateWindow((int) g_config.ground.size.x * FIELD_SIZE_PIXELS,
+                       (int) g_config.ground.size.y * FIELD_SIZE_PIXELS, "Snake"))
   {
     CC_Terminate();
     return false;
   }
-
-  glfwMakeContextCurrent(g_window);
-  glfwSwapInterval(1);
-
-  glfwShowWindow(g_window);
-#endif
-
-#if defined(USE_SDL2)
-  g_window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                              (int) g_config.ground.size.x * FIELD_SIZE_PIXELS,
-                              (int) g_config.ground.size.y * FIELD_SIZE_PIXELS, SDL_WINDOW_OPENGL);
-  if (g_window == NULL)
-  {
-    CC_Terminate();
-    return false;
-  }
-
-  SDL_GL_CreateContext(g_window);
-  SDL_GL_SetSwapInterval(1);
-
-  SDL_ShowWindow(g_window);
-#endif
 
   int const buffer_length = wai_getExecutablePath(NULL, 0, NULL);
   if (buffer_length >= 0)
@@ -172,43 +113,15 @@ void Start()
   A_Start();
   G_Start();
 
-#if defined(USE_FREEGLUT)
-  glutDisplayFunc(&G_Update);
-  glutIdleFunc(&Update);
+  CC_SetUpdateCallback(Update);
 
-  glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
-  glutMainLoop();
-#endif
-
-#if defined(USE_GLFW)
-  while (!glfwWindowShouldClose(g_window))
-  {
-    Update();
-  }
-#endif
-
-#if defined(USE_SDL2)
-  while (!g_quit)
-  {
-    Update();
-  }
-#endif
+  CC_EnterMainLoop();
 }
 
-void Update()
+void Update(unsigned const elapsed)
 {
-  static unsigned before;
   static float lag;
 
-  unsigned const now = CC_GetElapsedTime();
-
-  if (before == 0)
-  {
-    before = now;
-  }
-
-  unsigned const elapsed = now - before;
-  before = now;
   lag += (float) elapsed;
 
   I_Update();
@@ -224,31 +137,22 @@ void Update()
 
 void Stop()
 {
+  CC_SetUpdateCallback(NULL);
+
   I_Stop();
   L_Stop();
   A_Stop();
   G_Stop();
-
-#if defined(USE_FREEGLUT)
-  glutDisplayFunc(NULL);
-  glutIdleFunc(NULL);
-#endif
 }
 
 void Terminate()
 {
-#if defined(USE_GLFW)
-  glfwDestroyWindow(g_window);
-#endif
-
-#if defined(USE_SDL2)
-  SDL_DestroyWindow(g_window);
-#endif
-
   if (g_executable_path != NULL)
   {
     free(g_executable_path);
   }
+
+  CC_DestroyWindow();
 
   CC_Terminate();
 }

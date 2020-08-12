@@ -4,6 +4,8 @@
 #include <math.h>    // M_PI, cos, sin
 #include <stddef.h>  // size_t
 
+#include "CommonCore.h"
+
 #ifndef M_PI
 #define M_PI (3.14159265358979323846264338327950288)
 #endif
@@ -24,14 +26,6 @@
 #include "Config.h"
 #include "Tools.h"
 #include "World.h"
-
-#if defined(USE_GLFW)
-extern GLFWwindow* g_window;
-#endif
-
-#if defined(USE_SDL2)
-extern SDL_Window* g_window;
-#endif
 
 static void DrawStatusBar();
 static void DrawMargin();
@@ -80,17 +74,7 @@ void G_Update()
   DrawGround();
   DrawSnake();
 
-#if defined(USE_FREEGLUT)
-  glutSwapBuffers();
-#endif
-
-#if defined(USE_GLFW)
-  glfwSwapBuffers(g_window);
-#endif
-
-#if defined(USE_SDL2)
-  SDL_GL_SwapWindow(g_window);
-#endif
+  CC_SwapBuffers();
 }
 
 void G_Stop()
