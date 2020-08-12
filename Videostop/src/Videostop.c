@@ -16,7 +16,7 @@ char* g_executable_path;
 
 static bool Initialize(int argc, char** argv);
 static void Start();
-static void Update();
+static void Update(unsigned elapsed);
 static void Stop();
 static void Terminate();
 
@@ -97,20 +97,10 @@ void Start()
   CC_EnterMainLoop();
 }
 
-void Update()
+void Update(unsigned const elapsed)
 {
-  static unsigned before;
   static float lag;
 
-  unsigned const now = CC_GetElapsedTime();
-
-  if (before == 0)
-  {
-    before = now;
-  }
-
-  unsigned const elapsed = now - before;
-  before = now;
   lag += (float) elapsed;
 
   I_Update();

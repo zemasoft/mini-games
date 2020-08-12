@@ -16,7 +16,7 @@ void CC_SetWindowTitle(char const* title);
 typedef void (*CC_ResizeCallback)(int, int);
 void CC_SetResizeCallback(CC_ResizeCallback resizeCallback);
 
-typedef void (*CC_UpdateCallback)(void);
+typedef void (*CC_UpdateCallback)(unsigned);
 void CC_SetUpdateCallback(CC_UpdateCallback updateCallback);
 
 void CC_EnterMainLoop();

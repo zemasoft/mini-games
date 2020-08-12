@@ -25,6 +25,7 @@ GLFWwindow* g_window;  // TODO: should be static
 #endif
 
 static bool s_initialized;
+static unsigned s_lastElapsedTime;
 
 // Terminate
 
@@ -38,9 +39,13 @@ static void Terminate();
 
 // Terminate end
 
+static unsigned GetElapsedTimeDelta();
+
 #if defined(USE_FREEGLUT)
 static int s_window;
+static CC_UpdateCallback s_updateCallback;
 
+static void UpdateCallback();
 static void DisplayCallback();
 #endif
 
@@ -318,7 +323,7 @@ void CC_SetResizeCallback(CC_ResizeCallback const resizeCallback)
 void CC_SetUpdateCallback(CC_UpdateCallback const updateCallback)
 {
 #if defined(USE_FREEGLUT)
-  glutIdleFunc(updateCallback);
+  s_updateCallback = updateCallback;
 #endif
 
 #if defined(USE_GLFW)
@@ -332,12 +337,16 @@ void CC_SetUpdateCallback(CC_UpdateCallback const updateCallback)
 
 void CC_EnterMainLoop()
 {
+  s_lastElapsedTime = CC_GetElapsedTime();
+
 #if defined(USE_FREEGLUT)
+  glutIdleFunc(UpdateCallback);
   glutDisplayFunc(DisplayCallback);
 
   glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
   glutMainLoop();
 
+  glutIdleFunc(NULL);
   glutDisplayFunc(NULL);
 #endif
 
@@ -346,7 +355,7 @@ void CC_EnterMainLoop()
   {
     if (s_updateCallback != NULL)
     {
-      s_updateCallback();
+      s_updateCallback(GetElapsedTimeDelta());
     }
   }
 #endif
@@ -356,7 +365,7 @@ void CC_EnterMainLoop()
   {
     if (s_updateCallback != NULL)
     {
-      s_updateCallback();
+      s_updateCallback(GetElapsedTimeDelta());
     }
   }
 #endif
@@ -422,7 +431,26 @@ void Terminate()
   }
 }
 
+unsigned GetElapsedTimeDelta()
+{
+  unsigned const elapsedTime = CC_GetElapsedTime();
+
+  unsigned const elapsedTimeDelta = elapsedTime - s_lastElapsedTime;
+
+  s_lastElapsedTime = elapsedTime;
+
+  return elapsedTimeDelta;
+}
+
 #if defined(USE_FREEGLUT)
+
+void UpdateCallback()
+{
+  if (s_updateCallback != NULL)
+  {
+    s_updateCallback(GetElapsedTimeDelta());
+  }
+}
 
 void DisplayCallback()
 {
