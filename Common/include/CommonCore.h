@@ -26,4 +26,7 @@ void CC_SwapBuffers();
 
 unsigned CC_GetElapsedTime();
 
+int CC_LoadSound(char const* fileName);
+void CC_PlaySound(int soundId);
+
 #endif  // COMMONCORE_H
