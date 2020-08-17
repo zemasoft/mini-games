@@ -116,7 +116,7 @@ void Start()
   zgeSetResizeCallback(G_Resize);
   zgeSetUpdateCallback(Update);
 
-  zgeEnterMainLoop();
+  zgeEnterGameLoop();
 }
 
 void Update(unsigned const elapsed)

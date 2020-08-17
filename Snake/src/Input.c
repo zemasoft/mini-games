@@ -76,7 +76,7 @@ void I_Update()
     switch (e.type)
     {
       case SDL_QUIT:
-        zgeLeaveMainLoop();
+        zgeLeaveGameLoop();
         break;
       case SDL_KEYDOWN:
       case SDL_KEYUP:
@@ -154,7 +154,7 @@ void Keyboard(unsigned char const key, int const x, int const y)
   switch (key)
   {
     case 27:  // Escape
-      zgeLeaveMainLoop();
+      zgeLeaveGameLoop();
       break;
     case 112:  // p
       s_pause_key = true;
@@ -213,7 +213,7 @@ void KeyCallback(GLFWwindow* const window, int const key, int const scancode, in
     switch (key)
     {
       case GLFW_KEY_ESCAPE:
-        zgeLeaveMainLoop();
+        zgeLeaveGameLoop();
         break;
       case GLFW_KEY_P:
         s_pause_key = true;
@@ -252,7 +252,7 @@ void ProcessKeyEvent(SDL_Event const* const e)
   {
     if (e->key.keysym.scancode == SDL_SCANCODE_ESCAPE)
     {
-      zgeLeaveMainLoop();
+      zgeLeaveGameLoop();
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_P)
     {

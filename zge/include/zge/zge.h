@@ -19,8 +19,8 @@ void zgeSetResizeCallback(zgeResizeCallback resizeCallback);
 typedef void (*zgeUpdateCallback)(unsigned);
 void zgeSetUpdateCallback(zgeUpdateCallback updateCallback);
 
-void zgeEnterMainLoop();
-void zgeLeaveMainLoop();
+void zgeEnterGameLoop();
+void zgeLeaveGameLoop();
 
 void zgeSwapBuffers();
 

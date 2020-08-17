@@ -338,7 +338,7 @@ void zgeSetUpdateCallback(zgeUpdateCallback const updateCallback)
 #endif
 }
 
-void zgeEnterMainLoop()
+void zgeEnterGameLoop()
 {
   s_lastElapsedTime = zgeGetElapsedTime();
 
@@ -374,7 +374,7 @@ void zgeEnterMainLoop()
 #endif
 }
 
-void zgeLeaveMainLoop()
+void zgeLeaveGameLoop()
 {
 #if defined(USE_FREEGLUT)
   glutLeaveMainLoop();
