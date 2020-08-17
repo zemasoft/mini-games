@@ -1,4 +1,4 @@
-#include "CommonCore.h"
+#include "zge/zge.h"
 
 #include <assert.h>   // assert
 #include <stdbool.h>  // false, true
@@ -44,23 +44,23 @@ static unsigned GetElapsedTimeDelta();
 
 #if defined(USE_FREEGLUT)
 static int s_window;
-static CC_UpdateCallback s_updateCallback;
+static zgeUpdateCallback s_updateCallback;
 
 static void UpdateCallback();
 static void DisplayCallback();
 #endif
 
 #if defined(USE_GLFW)
-static CC_ResizeCallback s_resizeCallback;
-static CC_UpdateCallback s_updateCallback;
+static zgeResizeCallback s_resizeCallback;
+static zgeUpdateCallback s_updateCallback;
 
 static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
 #endif
 
 #if defined(USE_SDL2)
 static SDL_Window* s_window;
-static CC_ResizeCallback s_resizeCallback;
-static CC_UpdateCallback s_updateCallback;
+static zgeResizeCallback s_resizeCallback;
+static zgeUpdateCallback s_updateCallback;
 static bool s_leaveMainLoop;
 
 static int WindowResizedEventWatcher(void* data, SDL_Event* event);
@@ -72,7 +72,7 @@ static ALuint s_soundSourceId[256];
 static void alutExitWrapper();
 #endif
 
-bool CC_Initialize(int* argcp, char** argv)
+bool zgeInitialize(int* argcp, char** argv)
 {
 #if !defined(USE_FREEGLUT) && !defined(USE_FREEGLUT_FOR_TEXT) && !defined(USE_FREEALUT_FOR_AUDIO)
   (void) argcp;
@@ -141,7 +141,7 @@ bool CC_Initialize(int* argcp, char** argv)
   return true;
 }
 
-void CC_Terminate()
+void zgeTerminate()
 {
   if (!s_initialized)
   {
@@ -153,7 +153,7 @@ void CC_Terminate()
   s_initialized = false;
 }
 
-bool CC_CreateWindow(int const width, int const height, char const* const title)
+bool zgeCreateWindow(int const width, int const height, char const* const title)
 {
 #if defined(USE_FREEGLUT)
   if (s_window != 0)
@@ -217,7 +217,7 @@ bool CC_CreateWindow(int const width, int const height, char const* const title)
   return true;
 }
 
-void CC_DestroyWindow()
+void zgeDestroyWindow()
 {
 #if defined(USE_FREEGLUT)
   if (s_window != 0)
@@ -247,7 +247,7 @@ void CC_DestroyWindow()
 #endif
 }
 
-int CC_GetWindowWidth()
+int zgeGetWindowWidth()
 {
 #if defined(USE_FREEGLUT)
   return glutGet(GLUT_WINDOW_WIDTH);
@@ -270,7 +270,7 @@ int CC_GetWindowWidth()
 #endif
 }
 
-int CC_GetWindowHeight()
+int zgeGetWindowHeight()
 {
 #if defined(USE_FREEGLUT)
   return glutGet(GLUT_WINDOW_HEIGHT);
@@ -293,7 +293,7 @@ int CC_GetWindowHeight()
 #endif
 }
 
-void CC_SetWindowTitle(char const* const title)
+void zgeSetWindowTitle(char const* const title)
 {
 #if defined(USE_FREEGLUT)
   glutSetWindowTitle(title);
@@ -308,7 +308,7 @@ void CC_SetWindowTitle(char const* const title)
 #endif
 }
 
-void CC_SetResizeCallback(CC_ResizeCallback const resizeCallback)
+void zgeSetResizeCallback(zgeResizeCallback const resizeCallback)
 {
 #if defined(USE_FREEGLUT)
   glutReshapeFunc(resizeCallback);
@@ -323,7 +323,7 @@ void CC_SetResizeCallback(CC_ResizeCallback const resizeCallback)
 #endif
 }
 
-void CC_SetUpdateCallback(CC_UpdateCallback const updateCallback)
+void zgeSetUpdateCallback(zgeUpdateCallback const updateCallback)
 {
 #if defined(USE_FREEGLUT)
   s_updateCallback = updateCallback;
@@ -338,9 +338,9 @@ void CC_SetUpdateCallback(CC_UpdateCallback const updateCallback)
 #endif
 }
 
-void CC_EnterMainLoop()
+void zgeEnterMainLoop()
 {
-  s_lastElapsedTime = CC_GetElapsedTime();
+  s_lastElapsedTime = zgeGetElapsedTime();
 
 #if defined(USE_FREEGLUT)
   glutIdleFunc(UpdateCallback);
@@ -374,7 +374,7 @@ void CC_EnterMainLoop()
 #endif
 }
 
-void CC_LeaveMainLoop()
+void zgeLeaveMainLoop()
 {
 #if defined(USE_FREEGLUT)
   glutLeaveMainLoop();
@@ -389,7 +389,7 @@ void CC_LeaveMainLoop()
 #endif
 }
 
-void CC_SwapBuffers()
+void zgeSwapBuffers()
 {
 #if defined(USE_FREEGLUT)
   glutSwapBuffers();
@@ -404,7 +404,7 @@ void CC_SwapBuffers()
 #endif
 }
 
-unsigned CC_GetElapsedTime()
+unsigned zgeGetElapsedTime()
 {
 #if defined(USE_FREEGLUT)
   return (unsigned) glutGet(GLUT_ELAPSED_TIME);
@@ -419,7 +419,7 @@ unsigned CC_GetElapsedTime()
 #endif
 }
 
-int CC_LoadSound(char const* const fileName)
+int zgeLoadSound(char const* const fileName)
 {
 #if !defined(USE_FREEALUT_FOR_AUDIO)
   (void) fileName;
@@ -444,7 +444,7 @@ int CC_LoadSound(char const* const fileName)
   return -1;
 }
 
-void CC_PlaySound(int const soundId)
+void zgePlaySound(int const soundId)
 {
   if (soundId < 0 || soundId >= s_nextSoundId)
   {
@@ -473,7 +473,7 @@ void Terminate()
 
 unsigned GetElapsedTimeDelta()
 {
-  unsigned const elapsedTime = CC_GetElapsedTime();
+  unsigned const elapsedTime = zgeGetElapsedTime();
 
   unsigned const elapsedTimeDelta = elapsedTime - s_lastElapsedTime;
 

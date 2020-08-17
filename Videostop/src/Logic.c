@@ -5,7 +5,7 @@
 #include <stdlib.h>   // srand, rand
 #include <time.h>     // time
 
-#include "CommonCore.h"
+#include "zge/zge.h"
 
 #include "Audio.h"
 #include "Config.h"
@@ -210,7 +210,7 @@ void UpdateWindowTitle()
   char title[30];
   snprintf(title, sizeof(title), "Videostop @ %.2f Hz", g_config.shuffle_frequency);
 
-  CC_SetWindowTitle(title);
+  zgeSetWindowTitle(title);
 }
 
 void ShuffleDices(enum DiceState const state)

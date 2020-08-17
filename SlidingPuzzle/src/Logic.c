@@ -6,7 +6,7 @@
 #include <stdlib.h>   // free, malloc, srand, rand
 #include <time.h>     // time
 
-#include "CommonCore.h"
+#include "zge/zge.h"
 
 #include "Audio.h"
 #include "Config.h"
@@ -233,8 +233,8 @@ void L_Update()
         default:
           if (control_button)
           {
-            int const window_width = CC_GetWindowWidth();
-            int const window_height = CC_GetWindowHeight();
+            int const window_width = zgeGetWindowWidth();
+            int const window_height = zgeGetWindowHeight();
 
             float const logical_width = (float) g_world.size.x * PIECE_SIZE + MARGIN;
             float const logical_height =
@@ -325,7 +325,7 @@ void UpdateWindowTitle()
   char title[30];
   snprintf(title, sizeof(title), "Sliding Puzzle %ldx%ld", g_config.size.y, g_config.size.x);
 
-  CC_SetWindowTitle(title);
+  zgeSetWindowTitle(title);
 }
 
 void MovePieceLeft()

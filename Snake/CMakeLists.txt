@@ -32,7 +32,7 @@ if(UNIX)
 endif()
 
 add_executable(Snake
-  ../Common/src/CommonCore.c
+  ../zge/src/zge.c
   src/Audio.c
   src/Audio.h
   src/Config.c
@@ -83,7 +83,7 @@ endif()
 
 target_include_directories(Snake
   PRIVATE
-    ../Common/include
+    ../zge/include
     src
 )
 

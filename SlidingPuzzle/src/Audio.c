@@ -2,7 +2,7 @@
 
 #include <string.h>  // strcat, strcpy
 
-#include "CommonCore.h"
+#include "zge/zge.h"
 
 extern char* g_executable_path;
 
@@ -23,7 +23,7 @@ void A_Start()
 #endif
     strcat(fileName, s_soundFileNames[sound]);
 
-    s_soundIds[sound] = CC_LoadSound(fileName);
+    s_soundIds[sound] = zgeLoadSound(fileName);
   }
 }
 
@@ -37,5 +37,5 @@ void A_Stop()
 
 void A_PlaySound(enum Sound const sound)
 {
-  CC_PlaySound(s_soundIds[sound]);
+  zgePlaySound(s_soundIds[sound]);
 }

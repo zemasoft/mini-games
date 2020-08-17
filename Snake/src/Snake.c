@@ -2,7 +2,7 @@
 #include <stddef.h>   // size_t
 #include <stdlib.h>   // EXIT_FAILURE, EXIT_SUCCESS, free, malloc, strtol
 
-#include "CommonCore.h"
+#include "zge/zge.h"
 
 #include <whereami.h>
 
@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 
 bool Initialize(int argc, char** argv)
 {
-  if (!CC_Initialize(&argc, argv))
+  if (!zgeInitialize(&argc, argv))
   {
     return false;
   }
@@ -86,10 +86,10 @@ bool Initialize(int argc, char** argv)
     }
   }
 
-  if (!CC_CreateWindow((int) g_config.ground.size.x * FIELD_SIZE_PIXELS,
+  if (!zgeCreateWindow((int) g_config.ground.size.x * FIELD_SIZE_PIXELS,
                        (int) g_config.ground.size.y * FIELD_SIZE_PIXELS, "Snake"))
   {
-    CC_Terminate();
+    zgeTerminate();
     return false;
   }
 
@@ -113,9 +113,9 @@ void Start()
   A_Start();
   G_Start();
 
-  CC_SetUpdateCallback(Update);
+  zgeSetUpdateCallback(Update);
 
-  CC_EnterMainLoop();
+  zgeEnterMainLoop();
 }
 
 void Update(unsigned const elapsed)
@@ -137,7 +137,7 @@ void Update(unsigned const elapsed)
 
 void Stop()
 {
-  CC_SetUpdateCallback(NULL);
+  zgeSetUpdateCallback(NULL);
 
   I_Stop();
   L_Stop();
@@ -152,7 +152,7 @@ void Terminate()
     free(g_executable_path);
   }
 
-  CC_DestroyWindow();
+  zgeDestroyWindow();
 
-  CC_Terminate();
+  zgeTerminate();
 }

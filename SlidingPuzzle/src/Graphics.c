@@ -4,7 +4,7 @@
 #include <stddef.h>   // size_t
 #include <stdio.h>    // snprintf
 
-#include "CommonCore.h"
+#include "zge/zge.h"
 
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
 #include <GL/freeglut.h>
@@ -77,8 +77,8 @@ void G_Start()
   s_scale.x = 1.0f;
   s_scale.y = 1.0f;
 
-  s_init_window_width = CC_GetWindowWidth();
-  s_init_window_height = CC_GetWindowHeight();
+  s_init_window_width = zgeGetWindowWidth();
+  s_init_window_height = zgeGetWindowHeight();
   s_init_width = GetRight() - GetLeft();
   s_init_height = GetTop() - GetBottom();
 
@@ -95,9 +95,9 @@ void G_Start()
 
 void G_Restart()
 {
-  s_scale.x = (float) s_init_window_width / (float) CC_GetWindowWidth() * (GetRight() - GetLeft()) /
+  s_scale.x = (float) s_init_window_width / (float) zgeGetWindowWidth() * (GetRight() - GetLeft()) /
               s_init_width;
-  s_scale.y = (float) s_init_window_height / (float) CC_GetWindowHeight() *
+  s_scale.y = (float) s_init_window_height / (float) zgeGetWindowHeight() *
               (GetTop() - GetBottom()) / s_init_height;
 
   RecountPieceStrings();
@@ -118,7 +118,7 @@ void G_Update()
   DrawPieces();
   DrawStatusBar();
 
-  CC_SwapBuffers();
+  zgeSwapBuffers();
 }
 
 void G_Stop()

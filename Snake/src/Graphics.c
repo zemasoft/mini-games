@@ -4,7 +4,7 @@
 #include <math.h>    // M_PI, cos, sin
 #include <stddef.h>  // size_t
 
-#include "CommonCore.h"
+#include "zge/zge.h"
 
 #ifndef M_PI
 #define M_PI (3.14159265358979323846264338327950288)
@@ -74,7 +74,7 @@ void G_Update()
   DrawGround();
   DrawSnake();
 
-  CC_SwapBuffers();
+  zgeSwapBuffers();
 }
 
 void G_Stop()
