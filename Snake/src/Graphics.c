@@ -74,7 +74,7 @@ void G_Update()
   DrawGround();
   DrawSnake();
 
-  zgeSwapBuffers();
+  ZGE_SwapBuffers();
 }
 
 void G_Stop()

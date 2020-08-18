@@ -44,23 +44,23 @@ static unsigned GetElapsedTimeDelta();
 
 #if defined(USE_FREEGLUT)
 static int s_window;
-static zgeUpdateCallback s_updateCallback;
+static ZGE_UpdateCallback s_updateCallback;
 
 static void UpdateCallback();
 static void DisplayCallback();
 #endif
 
 #if defined(USE_GLFW)
-static zgeResizeCallback s_resizeCallback;
-static zgeUpdateCallback s_updateCallback;
+static ZGE_ResizeCallback s_resizeCallback;
+static ZGE_UpdateCallback s_updateCallback;
 
 static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
 #endif
 
 #if defined(USE_SDL2)
 static SDL_Window* s_window;
-static zgeResizeCallback s_resizeCallback;
-static zgeUpdateCallback s_updateCallback;
+static ZGE_ResizeCallback s_resizeCallback;
+static ZGE_UpdateCallback s_updateCallback;
 static bool s_leaveMainLoop;
 
 static int WindowResizedEventWatcher(void* data, SDL_Event* event);
@@ -72,7 +72,7 @@ static ALuint s_soundSourceId[256];
 static void alutExitWrapper();
 #endif
 
-bool zgeInitialize(int* argcp, char** argv)
+bool ZGE_Initialize(int* argcp, char** argv)
 {
 #if !defined(USE_FREEGLUT) && !defined(USE_FREEGLUT_FOR_TEXT) && !defined(USE_FREEALUT_FOR_AUDIO)
   (void) argcp;
@@ -141,7 +141,7 @@ bool zgeInitialize(int* argcp, char** argv)
   return true;
 }
 
-void zgeTerminate()
+void ZGE_Terminate()
 {
   if (!s_initialized)
   {
@@ -153,7 +153,7 @@ void zgeTerminate()
   s_initialized = false;
 }
 
-bool zgeCreateWindow(int const width, int const height, char const* const title)
+bool ZGE_CreateWindow(int const width, int const height, char const* const title)
 {
 #if defined(USE_FREEGLUT)
   if (s_window != 0)
@@ -217,7 +217,7 @@ bool zgeCreateWindow(int const width, int const height, char const* const title)
   return true;
 }
 
-void zgeDestroyWindow()
+void ZGE_DestroyWindow()
 {
 #if defined(USE_FREEGLUT)
   if (s_window != 0)
@@ -247,7 +247,7 @@ void zgeDestroyWindow()
 #endif
 }
 
-int zgeGetWindowWidth()
+int ZGE_GetWindowWidth()
 {
 #if defined(USE_FREEGLUT)
   return glutGet(GLUT_WINDOW_WIDTH);
@@ -270,7 +270,7 @@ int zgeGetWindowWidth()
 #endif
 }
 
-int zgeGetWindowHeight()
+int ZGE_GetWindowHeight()
 {
 #if defined(USE_FREEGLUT)
   return glutGet(GLUT_WINDOW_HEIGHT);
@@ -293,7 +293,7 @@ int zgeGetWindowHeight()
 #endif
 }
 
-void zgeSetWindowTitle(char const* const title)
+void ZGE_SetWindowTitle(char const* const title)
 {
 #if defined(USE_FREEGLUT)
   glutSetWindowTitle(title);
@@ -308,7 +308,7 @@ void zgeSetWindowTitle(char const* const title)
 #endif
 }
 
-void zgeSetResizeCallback(zgeResizeCallback const resizeCallback)
+void ZGE_SetResizeCallback(ZGE_ResizeCallback const resizeCallback)
 {
 #if defined(USE_FREEGLUT)
   glutReshapeFunc(resizeCallback);
@@ -323,7 +323,7 @@ void zgeSetResizeCallback(zgeResizeCallback const resizeCallback)
 #endif
 }
 
-void zgeSetUpdateCallback(zgeUpdateCallback const updateCallback)
+void ZGE_SetUpdateCallback(ZGE_UpdateCallback const updateCallback)
 {
 #if defined(USE_FREEGLUT)
   s_updateCallback = updateCallback;
@@ -338,9 +338,9 @@ void zgeSetUpdateCallback(zgeUpdateCallback const updateCallback)
 #endif
 }
 
-void zgeEnterGameLoop()
+void ZGE_EnterGameLoop()
 {
-  s_lastElapsedTime = zgeGetElapsedTime();
+  s_lastElapsedTime = ZGE_GetElapsedTime();
 
 #if defined(USE_FREEGLUT)
   glutIdleFunc(UpdateCallback);
@@ -374,7 +374,7 @@ void zgeEnterGameLoop()
 #endif
 }
 
-void zgeLeaveGameLoop()
+void ZGE_LeaveGameLoop()
 {
 #if defined(USE_FREEGLUT)
   glutLeaveMainLoop();
@@ -389,7 +389,7 @@ void zgeLeaveGameLoop()
 #endif
 }
 
-void zgeSwapBuffers()
+void ZGE_SwapBuffers()
 {
 #if defined(USE_FREEGLUT)
   glutSwapBuffers();
@@ -404,7 +404,7 @@ void zgeSwapBuffers()
 #endif
 }
 
-unsigned zgeGetElapsedTime()
+unsigned ZGE_GetElapsedTime()
 {
 #if defined(USE_FREEGLUT)
   return (unsigned) glutGet(GLUT_ELAPSED_TIME);
@@ -419,7 +419,7 @@ unsigned zgeGetElapsedTime()
 #endif
 }
 
-int zgeLoadSound(char const* const fileName)
+int ZGE_LoadSound(char const* const fileName)
 {
 #if !defined(USE_FREEALUT_FOR_AUDIO)
   (void) fileName;
@@ -444,7 +444,7 @@ int zgeLoadSound(char const* const fileName)
   return -1;
 }
 
-void zgePlaySound(int const soundId)
+void ZGE_PlaySound(int const soundId)
 {
   if (soundId < 0 || soundId >= s_nextSoundId)
   {
@@ -473,7 +473,7 @@ void Terminate()
 
 unsigned GetElapsedTimeDelta()
 {
-  unsigned const elapsedTime = zgeGetElapsedTime();
+  unsigned const elapsedTime = ZGE_GetElapsedTime();
 
   unsigned const elapsedTimeDelta = elapsedTime - s_lastElapsedTime;
 

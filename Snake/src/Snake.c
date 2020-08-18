@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 
 bool Initialize(int argc, char** argv)
 {
-  if (!zgeInitialize(&argc, argv))
+  if (!ZGE_Initialize(&argc, argv))
   {
     return false;
   }
@@ -86,10 +86,10 @@ bool Initialize(int argc, char** argv)
     }
   }
 
-  if (!zgeCreateWindow((int) g_config.ground.size.x * FIELD_SIZE_PIXELS,
-                       (int) g_config.ground.size.y * FIELD_SIZE_PIXELS, "Snake"))
+  if (!ZGE_CreateWindow((int) g_config.ground.size.x * FIELD_SIZE_PIXELS,
+                        (int) g_config.ground.size.y * FIELD_SIZE_PIXELS, "Snake"))
   {
-    zgeTerminate();
+    ZGE_Terminate();
     return false;
   }
 
@@ -113,9 +113,9 @@ void Start()
   A_Start();
   G_Start();
 
-  zgeSetUpdateCallback(Update);
+  ZGE_SetUpdateCallback(Update);
 
-  zgeEnterGameLoop();
+  ZGE_EnterGameLoop();
 }
 
 void Update(unsigned const elapsed)
@@ -137,7 +137,7 @@ void Update(unsigned const elapsed)
 
 void Stop()
 {
-  zgeSetUpdateCallback(NULL);
+  ZGE_SetUpdateCallback(NULL);
 
   I_Stop();
   L_Stop();
@@ -152,7 +152,7 @@ void Terminate()
     free(g_executable_path);
   }
 
-  zgeDestroyWindow();
+  ZGE_DestroyWindow();
 
-  zgeTerminate();
+  ZGE_Terminate();
 }

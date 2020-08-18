@@ -3,30 +3,30 @@
 
 #include <stdbool.h>  // bool
 
-bool zgeInitialize(int* argcp, char** argv);
-void zgeTerminate();
+bool ZGE_Initialize(int* argcp, char** argv);
+void ZGE_Terminate();
 
-bool zgeCreateWindow(int width, int height, char const* title);
-void zgeDestroyWindow();
+bool ZGE_CreateWindow(int width, int height, char const* title);
+void ZGE_DestroyWindow();
 
-int zgeGetWindowWidth();
-int zgeGetWindowHeight();
-void zgeSetWindowTitle(char const* title);
+int ZGE_GetWindowWidth();
+int ZGE_GetWindowHeight();
+void ZGE_SetWindowTitle(char const* title);
 
-typedef void (*zgeResizeCallback)(int, int);
-void zgeSetResizeCallback(zgeResizeCallback resizeCallback);
+typedef void (*ZGE_ResizeCallback)(int, int);
+void ZGE_SetResizeCallback(ZGE_ResizeCallback resizeCallback);
 
-typedef void (*zgeUpdateCallback)(unsigned);
-void zgeSetUpdateCallback(zgeUpdateCallback updateCallback);
+typedef void (*ZGE_UpdateCallback)(unsigned);
+void ZGE_SetUpdateCallback(ZGE_UpdateCallback updateCallback);
 
-void zgeEnterGameLoop();
-void zgeLeaveGameLoop();
+void ZGE_EnterGameLoop();
+void ZGE_LeaveGameLoop();
 
-void zgeSwapBuffers();
+void ZGE_SwapBuffers();
 
-unsigned zgeGetElapsedTime();
+unsigned ZGE_GetElapsedTime();
 
-int zgeLoadSound(char const* fileName);
-void zgePlaySound(int soundId);
+int ZGE_LoadSound(char const* fileName);
+void ZGE_PlaySound(int soundId);
 
 #endif  // ZGE_H

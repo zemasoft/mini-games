@@ -24,7 +24,7 @@ void A_Start()
 #endif
     strcat(fileName, s_soundFileNames[sound]);
 
-    s_soundIds[sound] = zgeLoadSound(fileName);
+    s_soundIds[sound] = ZGE_LoadSound(fileName);
   }
 }
 
@@ -38,5 +38,5 @@ void A_Stop()
 
 void A_PlaySound(enum Sound const sound)
 {
-  zgePlaySound(s_soundIds[sound]);
+  ZGE_PlaySound(s_soundIds[sound]);
 }

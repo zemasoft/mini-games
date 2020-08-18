@@ -210,7 +210,7 @@ void UpdateWindowTitle()
   char title[30];
   snprintf(title, sizeof(title), "Videostop @ %.2f Hz", g_config.shuffle_frequency);
 
-  zgeSetWindowTitle(title);
+  ZGE_SetWindowTitle(title);
 }
 
 void ShuffleDices(enum DiceState const state)

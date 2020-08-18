@@ -233,8 +233,8 @@ void L_Update()
         default:
           if (control_button)
           {
-            int const window_width = zgeGetWindowWidth();
-            int const window_height = zgeGetWindowHeight();
+            int const window_width = ZGE_GetWindowWidth();
+            int const window_height = ZGE_GetWindowHeight();
 
             float const logical_width = (float) g_world.size.x * PIECE_SIZE + MARGIN;
             float const logical_height =
@@ -325,7 +325,7 @@ void UpdateWindowTitle()
   char title[30];
   snprintf(title, sizeof(title), "Sliding Puzzle %ldx%ld", g_config.size.y, g_config.size.x);
 
-  zgeSetWindowTitle(title);
+  ZGE_SetWindowTitle(title);
 }
 
 void MovePieceLeft()

@@ -77,8 +77,8 @@ void G_Start()
   s_scale.x = 1.0f;
   s_scale.y = 1.0f;
 
-  s_init_window_width = zgeGetWindowWidth();
-  s_init_window_height = zgeGetWindowHeight();
+  s_init_window_width = ZGE_GetWindowWidth();
+  s_init_window_height = ZGE_GetWindowHeight();
   s_init_width = GetRight() - GetLeft();
   s_init_height = GetTop() - GetBottom();
 
@@ -95,9 +95,9 @@ void G_Start()
 
 void G_Restart()
 {
-  s_scale.x = (float) s_init_window_width / (float) zgeGetWindowWidth() * (GetRight() - GetLeft()) /
-              s_init_width;
-  s_scale.y = (float) s_init_window_height / (float) zgeGetWindowHeight() *
+  s_scale.x = (float) s_init_window_width / (float) ZGE_GetWindowWidth() *
+              (GetRight() - GetLeft()) / s_init_width;
+  s_scale.y = (float) s_init_window_height / (float) ZGE_GetWindowHeight() *
               (GetTop() - GetBottom()) / s_init_height;
 
   RecountPieceStrings();
@@ -118,7 +118,7 @@ void G_Update()
   DrawPieces();
   DrawStatusBar();
 
-  zgeSwapBuffers();
+  ZGE_SwapBuffers();
 }
 
 void G_Stop()

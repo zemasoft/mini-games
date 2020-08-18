@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 
 bool Initialize(int argc, char** argv)
 {
-  if (!zgeInitialize(&argc, argv))
+  if (!ZGE_Initialize(&argc, argv))
   {
     return false;
   }
@@ -65,9 +65,9 @@ bool Initialize(int argc, char** argv)
     }
   }
 
-  if (!zgeCreateWindow(g_config.dice_count * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS, "Videostop"))
+  if (!ZGE_CreateWindow(g_config.dice_count * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS, "Videostop"))
   {
-    zgeTerminate();
+    ZGE_Terminate();
     return false;
   }
 
@@ -91,10 +91,10 @@ void Start()
   A_Start();
   G_Start();
 
-  zgeSetResizeCallback(G_Resize);
-  zgeSetUpdateCallback(Update);
+  ZGE_SetResizeCallback(G_Resize);
+  ZGE_SetUpdateCallback(Update);
 
-  zgeEnterGameLoop();
+  ZGE_EnterGameLoop();
 }
 
 void Update(unsigned const elapsed)
@@ -116,8 +116,8 @@ void Update(unsigned const elapsed)
 
 void Stop()
 {
-  zgeSetResizeCallback(NULL);
-  zgeSetUpdateCallback(NULL);
+  ZGE_SetResizeCallback(NULL);
+  ZGE_SetUpdateCallback(NULL);
 
   I_Stop();
   L_Stop();
@@ -132,7 +132,7 @@ void Terminate()
     free(g_executable_path);
   }
 
-  zgeDestroyWindow();
+  ZGE_DestroyWindow();
 
-  zgeTerminate();
+  ZGE_Terminate();
 }
