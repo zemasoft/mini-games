@@ -1,6 +1,6 @@
 #include <stdbool.h>  // bool, false, true
 #include <stddef.h>   // size_t
-#include <stdlib.h>   // EXIT_FAILURE, EXIT_SUCCESS, free, malloc, strtol
+#include <stdlib.h>   // EXIT_FAILURE, EXIT_SUCCESS, atexit, free, malloc, strtol
 
 #include "zge/zge.h"
 
@@ -27,10 +27,10 @@ int main(int argc, char** argv)
     return EXIT_FAILURE;
   }
 
+  atexit(Terminate);
+
   Start();
   Stop();
-
-  Terminate();
 
   return EXIT_SUCCESS;
 }
