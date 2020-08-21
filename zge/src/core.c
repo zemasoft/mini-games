@@ -1,8 +1,7 @@
 #include "zge/core.h"
 
-#include <assert.h>   // assert
 #include <stdbool.h>  // false, true
-#include <stddef.h>   // size_t
+#include <stddef.h>   // NULL, size_t
 
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
 #include <GL/freeglut.h>
@@ -19,6 +18,8 @@
 #if defined(USE_FREEALUT_FOR_AUDIO)
 #include <AL/alut.h>
 #endif
+
+#include "zge/assert.h"
 
 #if defined(USE_GLFW)
 GLFWwindow* g_window;  // TODO: should be static
@@ -418,9 +419,11 @@ unsigned ZGE_GetElapsedTime()
 
 void AtTerminate(TerminateFnc const terminateFnc)
 {
-  assert(s_terminateFncCount < 4);
-
-  s_terminateFncs[s_terminateFncCount++] = terminateFnc;
+  if (terminateFnc != NULL)
+  {
+    ZGE_AssertDebug(s_terminateFncCount < 4);
+    s_terminateFncs[s_terminateFncCount++] = terminateFnc;
+  }
 }
 
 void Terminate()

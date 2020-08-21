@@ -1,8 +1,12 @@
 #include "zge/audio.h"
 
+#include <stddef.h>  // NULL
+
 #if defined(USE_FREEALUT_FOR_AUDIO)
 #include <AL/alut.h>
 #endif
+
+#include "zge/assert.h"
 
 static int s_nextSoundId;
 
@@ -12,9 +16,9 @@ static ALuint s_soundSourceId[256];
 
 int ZGE_LoadSound(char const* const fileName)
 {
-#if !defined(USE_FREEALUT_FOR_AUDIO)
-  (void) fileName;
-#endif
+  ZGE_AssertDebug(fileName != NULL);
+
+  ZGE_AssertDebug(s_nextSoundId < 256);
 
 #if defined(USE_FREEALUT_FOR_AUDIO)
   ALuint const buffer = alutCreateBufferFromFile(fileName);
@@ -37,7 +41,9 @@ int ZGE_LoadSound(char const* const fileName)
 
 void ZGE_PlaySound(int const soundId)
 {
-  if (soundId < 0 || soundId >= s_nextSoundId)
+  ZGE_AssertDebug(soundId < s_nextSoundId);
+
+  if (soundId < 0)
   {
     return;
   }

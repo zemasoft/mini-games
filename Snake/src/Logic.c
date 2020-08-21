@@ -1,9 +1,10 @@
 #include "Logic.h"
 
-#include <assert.h>  // assert
-#include <stddef.h>  // size_t
+#include <stddef.h>  // NULL, size_t
 #include <stdlib.h>  // free, malloc, srand, rand
 #include <time.h>    // time
+
+#include "zge/assert.h"
 
 #include "Audio.h"
 #include "Config.h"
@@ -412,8 +413,8 @@ void PlaceFood()
 
 struct Field* GetField(int const x, int const y)
 {
-  assert(x >= 0 && x < g_world.ground.size.x);
-  assert(y >= 0 && y < g_world.ground.size.y);
+  ZGE_AssertDebug(x >= 0 && x < g_world.ground.size.x);
+  ZGE_AssertDebug(y >= 0 && y < g_world.ground.size.y);
 
   return &g_world.ground.fields[x + y * g_world.ground.size.x];
 }

@@ -1,9 +1,9 @@
 #include "Graphics.h"
 
-#include <assert.h>  // assert
 #include <math.h>    // M_PI, cos, sin
-#include <stddef.h>  // size_t
+#include <stddef.h>  // NULL, size_t
 
+#include "zge/assert.h"
 #include "zge/core.h"
 
 #ifndef M_PI
@@ -217,17 +217,17 @@ void DrawSnakeElement(size_t const index)
 {
   struct Field const* const e = GetSnakeElement(index);
 
-  assert(e != NULL);
+  ZGE_AssertDebug(e != NULL);
 
   struct Field const* const prev_e = GetPrevSnakeElement(index);
   struct Field const* const next_e = GetNextSnakeElement(index);
 
-  assert(prev_e != NULL || next_e != NULL);
+  ZGE_AssertDebug(prev_e != NULL || next_e != NULL);
 
   if (prev_e == NULL)
   {
-    assert((next_e->pos.x == e->pos.x && next_e->pos.y != e->pos.y) ||
-           (next_e->pos.x != e->pos.x && next_e->pos.y == e->pos.y));
+    ZGE_AssertDebug((next_e->pos.x == e->pos.x && next_e->pos.y != e->pos.y) ||
+                    (next_e->pos.x != e->pos.x && next_e->pos.y == e->pos.y));
 
     if (next_e->pos.x == e->pos.x)
     {
@@ -254,8 +254,8 @@ void DrawSnakeElement(size_t const index)
   }
   else if (next_e == NULL)
   {
-    assert((prev_e->pos.x == e->pos.x && prev_e->pos.y != e->pos.y) ||
-           (prev_e->pos.x != e->pos.x && prev_e->pos.y == e->pos.y));
+    ZGE_AssertDebug((prev_e->pos.x == e->pos.x && prev_e->pos.y != e->pos.y) ||
+                    (prev_e->pos.x != e->pos.x && prev_e->pos.y == e->pos.y));
 
     if (prev_e->pos.x == e->pos.x)
     {
@@ -282,11 +282,11 @@ void DrawSnakeElement(size_t const index)
   }
   else
   {
-    assert((prev_e->pos.x == e->pos.x && prev_e->pos.y != e->pos.y) ||
-           (prev_e->pos.x != e->pos.x && prev_e->pos.y == e->pos.y));
-    assert((next_e->pos.x == e->pos.x && next_e->pos.y != e->pos.y) ||
-           (next_e->pos.x != e->pos.x && next_e->pos.y == e->pos.y));
-    assert(prev_e->pos.x != next_e->pos.x || prev_e->pos.y != next_e->pos.y);
+    ZGE_AssertDebug((prev_e->pos.x == e->pos.x && prev_e->pos.y != e->pos.y) ||
+                    (prev_e->pos.x != e->pos.x && prev_e->pos.y == e->pos.y));
+    ZGE_AssertDebug((next_e->pos.x == e->pos.x && next_e->pos.y != e->pos.y) ||
+                    (next_e->pos.x != e->pos.x && next_e->pos.y == e->pos.y));
+    ZGE_AssertDebug(prev_e->pos.x != next_e->pos.x || prev_e->pos.y != next_e->pos.y);
 
     DrawSnakeBody(e);
   }

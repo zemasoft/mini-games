@@ -1,5 +1,7 @@
 #include "Input.h"
 
+#include <stddef.h>  // NULL
+
 #include "zge/core.h"
 
 #if defined(USE_FREEGLUT)

@@ -1,6 +1,7 @@
 #include "Logic.h"
 
 #include <stdbool.h>  // bool, false, true
+#include <stddef.h>   // NULL
 #include <stdio.h>    // snprintf
 #include <stdlib.h>   // srand, rand
 #include <time.h>     // time

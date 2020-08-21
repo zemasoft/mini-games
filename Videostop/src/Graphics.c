@@ -1,10 +1,10 @@
 #include "Graphics.h"
 
-#include <assert.h>   // assert
 #include <math.h>     // M_PI, cos, sin
 #include <stdbool.h>  // false
 #include <stdio.h>    // snprintf
 
+#include "zge/assert.h"
 #include "zge/core.h"
 
 #ifndef M_PI
@@ -372,7 +372,7 @@ void DrawDots(int const value)
       break;
 
     default:
-      assert(false);
+      ZGE_AssertDebug(false);
   }
 }
 
