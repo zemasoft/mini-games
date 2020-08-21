@@ -1,5 +1,5 @@
-#ifndef ZGE_H
-#define ZGE_H
+#ifndef ZGE_CORE_H
+#define ZGE_CORE_H
 
 #include <stdbool.h>  // bool
 
@@ -26,7 +26,4 @@ void ZGE_SwapBuffers();
 
 unsigned ZGE_GetElapsedTime();
 
-int ZGE_LoadSound(char const* fileName);
-void ZGE_PlaySound(int soundId);
-
-#endif  // ZGE_H
+#endif  // ZGE_CORE_H

@@ -1,4 +1,4 @@
-#include "zge/zge.h"
+#include "zge/core.h"
 
 #include <assert.h>   // assert
 #include <stdbool.h>  // false, true
@@ -26,7 +26,6 @@ GLFWwindow* g_window;  // TODO: should be static
 
 static bool s_initialized;
 static unsigned s_lastElapsedTime;
-static int s_nextSoundId;
 
 // Terminate
 
@@ -67,8 +66,6 @@ static int WindowResizedEventWatcher(void* data, SDL_Event* event);
 #endif
 
 #if defined(USE_FREEALUT_FOR_AUDIO)
-static ALuint s_soundSourceId[256];
-
 static void alutExitWrapper();
 #endif
 
@@ -416,43 +413,6 @@ unsigned ZGE_GetElapsedTime()
 
 #if defined(USE_SDL2)
   return SDL_GetTicks();
-#endif
-}
-
-int ZGE_LoadSound(char const* const fileName)
-{
-#if !defined(USE_FREEALUT_FOR_AUDIO)
-  (void) fileName;
-#endif
-
-#if defined(USE_FREEALUT_FOR_AUDIO)
-  ALuint const buffer = alutCreateBufferFromFile(fileName);
-  if (buffer != AL_NONE)
-  {
-    ALuint sourceId;
-    alGenSources(1, &sourceId);
-    alSourcei(sourceId, AL_BUFFER, (ALint) buffer);
-
-    int soundId = s_nextSoundId++;
-
-    s_soundSourceId[soundId] = sourceId;
-
-    return soundId;
-  }
-#endif
-
-  return -1;
-}
-
-void ZGE_PlaySound(int const soundId)
-{
-  if (soundId < 0 || soundId >= s_nextSoundId)
-  {
-    return;
-  }
-
-#if defined(USE_FREEALUT_FOR_AUDIO)
-  alSourcePlay(s_soundSourceId[soundId]);
 #endif
 }
 

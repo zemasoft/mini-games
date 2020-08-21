@@ -5,7 +5,7 @@
 #include <stdlib.h>   // srand, rand
 #include <time.h>     // time
 
-#include "zge/zge.h"
+#include "zge/core.h"
 
 #include "Audio.h"
 #include "Config.h"

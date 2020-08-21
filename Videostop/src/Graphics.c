@@ -5,7 +5,7 @@
 #include <stdbool.h>  // false
 #include <stdio.h>    // snprintf
 
-#include "zge/zge.h"
+#include "zge/core.h"
 
 #ifndef M_PI
 #define M_PI (3.14159265358979323846264338327950288)

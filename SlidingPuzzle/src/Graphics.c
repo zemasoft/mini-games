@@ -4,7 +4,7 @@
 #include <stddef.h>   // size_t
 #include <stdio.h>    // snprintf
 
-#include "zge/zge.h"
+#include "zge/core.h"
 
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
 #include <GL/freeglut.h>

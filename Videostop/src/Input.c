@@ -1,6 +1,6 @@
 #include "Input.h"
 
-#include "zge/zge.h"
+#include "zge/core.h"
 
 #if defined(USE_FREEGLUT)
 #include <GL/freeglut.h>

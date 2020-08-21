@@ -2,7 +2,7 @@
 
 #include <string.h>  // strcat, strcpy
 
-#include "zge/zge.h"
+#include "zge/audio.h"
 
 extern char* g_executable_path;
 

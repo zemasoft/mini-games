@@ -2,7 +2,7 @@
 #include <stddef.h>   // size_t
 #include <stdlib.h>   // EXIT_FAILURE, EXIT_SUCCESS, atexit, free, malloc, strtol
 
-#include "zge/zge.h"
+#include "zge/core.h"
 
 #include <whereami.h>
 

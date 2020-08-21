@@ -2,7 +2,7 @@
 
 #include <stddef.h>  // size_t
 
-#include "zge/zge.h"
+#include "zge/core.h"
 
 #if defined(USE_FREEGLUT)
 #include <GL/freeglut.h>
