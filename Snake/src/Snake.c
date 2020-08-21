@@ -1,8 +1,9 @@
 #include <stdbool.h>  // bool, false, true
 #include <stddef.h>   // NULL, size_t
-#include <stdlib.h>   // EXIT_FAILURE, EXIT_SUCCESS, atexit, free, malloc, strtol
+#include <stdlib.h>   // EXIT_FAILURE, EXIT_SUCCESS, atexit, strtol
 
 #include "zge/core.h"
+#include "zge/memory.h"
 
 #include <whereami.h>
 
@@ -96,7 +97,7 @@ bool Initialize(int argc, char** argv)
   int const buffer_length = wai_getExecutablePath(NULL, 0, NULL);
   if (buffer_length >= 0)
   {
-    g_executable_path = (char*) malloc((size_t)(buffer_length + 1));
+    g_executable_path = (char*) ZGE_Allocate((size_t)(buffer_length + 1));
 
     int path_length;
     wai_getExecutablePath(g_executable_path, buffer_length, &path_length);
@@ -147,10 +148,7 @@ void Stop()
 
 void Terminate()
 {
-  if (g_executable_path != NULL)
-  {
-    free(g_executable_path);
-  }
+  ZGE_FreeIfAllocated(g_executable_path);
 
   ZGE_DestroyWindow();
 

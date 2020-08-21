@@ -3,10 +3,11 @@
 #include <stdbool.h>  // bool, false, true
 #include <stddef.h>   // NULL, size_t
 #include <stdio.h>    // snprintf
-#include <stdlib.h>   // free, malloc, srand, rand
+#include <stdlib.h>   // srand, rand
 #include <time.h>     // time
 
 #include "zge/core.h"
+#include "zge/memory.h"
 
 #include "Audio.h"
 #include "Config.h"
@@ -56,12 +57,8 @@ void L_Restart()
 
   g_world.piece_count = (size_t)(g_world.size.x * g_world.size.y);
 
-  if (g_world.pieces != NULL)
-  {
-    free(g_world.pieces);
-  }
-
-  g_world.pieces = malloc(g_world.piece_count * sizeof(struct Piece));
+  ZGE_FreeIfAllocated(g_world.pieces);
+  g_world.pieces = ZGE_Allocate(g_world.piece_count * sizeof(struct Piece));
 
   SetPieceStates(PieceState_Setup);
   SetupPieceValues();
@@ -317,7 +314,7 @@ void L_Update()
 
 void L_Stop()
 {
-  free(g_world.pieces);
+  ZGE_Free(g_world.pieces);
 }
 
 void UpdateWindowTitle()

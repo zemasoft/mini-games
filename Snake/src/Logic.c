@@ -1,10 +1,11 @@
 #include "Logic.h"
 
 #include <stddef.h>  // NULL, size_t
-#include <stdlib.h>  // free, malloc, srand, rand
+#include <stdlib.h>  // srand, rand
 #include <time.h>    // time
 
 #include "zge/assert.h"
+#include "zge/memory.h"
 
 #include "Audio.h"
 #include "Config.h"
@@ -48,12 +49,8 @@ void L_Restart()
 
   g_world.ground.field_count = (size_t)(g_world.ground.size.x * g_world.ground.size.y);
 
-  if (g_world.ground.fields != NULL)
-  {
-    free(g_world.ground.fields);
-  }
-
-  g_world.ground.fields = malloc(g_world.ground.field_count * sizeof(struct Field));
+  ZGE_FreeIfAllocated(g_world.ground.fields);
+  g_world.ground.fields = ZGE_Allocate(g_world.ground.field_count * sizeof(struct Field));
 
   for (int y = 0; y < g_world.ground.size.y; ++y)
   {
@@ -69,14 +66,9 @@ void L_Restart()
 
   g_world.snake.state = SnakeState_Normal;
 
-  if (g_world.snake.fields != NULL)
-  {
-    free(g_world.snake.fields);
-  }
-
   g_world.snake.field_count = g_world.ground.field_count;
-
-  g_world.snake.fields = malloc(g_world.snake.field_count * sizeof(struct Field*));
+  ZGE_FreeIfAllocated(g_world.snake.fields);
+  g_world.snake.fields = ZGE_Allocate(g_world.snake.field_count * sizeof(struct Field*));
 
   int const init_y_pos = g_world.ground.size.y / 2;
 
@@ -105,12 +97,8 @@ void L_Restart()
 
   g_world.score = 0;
 
-  if (s_empty_fields != NULL)
-  {
-    free(s_empty_fields);
-  }
-
-  s_empty_fields = malloc(g_world.ground.field_count * sizeof(struct Field*));
+  ZGE_FreeIfAllocated(s_empty_fields);
+  s_empty_fields = ZGE_Allocate(g_world.ground.field_count * sizeof(struct Field*));
 
   s_turn_sound_index = 0;
 }
@@ -307,9 +295,9 @@ void L_Update()
 
 void L_Stop()
 {
-  free(g_world.ground.fields);
-  free(g_world.snake.fields);
-  free(s_empty_fields);
+  ZGE_Free(g_world.ground.fields);
+  ZGE_Free(g_world.snake.fields);
+  ZGE_Free(s_empty_fields);
 }
 
 enum MoveSnake MoveSnake()
