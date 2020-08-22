@@ -9,7 +9,7 @@ void* ZGE_Allocate(size_t const size)
 {
   ZGE_AssertDebug(size > 0);
 
-  void* ptr = malloc(size);
+  void* const ptr = malloc(size);
   ZGE_Assert(ptr != NULL);
 
   return ptr;
@@ -20,7 +20,7 @@ void* ZGE_Reallocate(void* const ptr, size_t const size)
   ZGE_AssertDebug(ptr != NULL);
   ZGE_AssertDebug(size > 0);
 
-  void* newPtr = realloc(ptr, size);
+  void* const newPtr = realloc(ptr, size);
   ZGE_Assert(newPtr != NULL);
 
   return newPtr;

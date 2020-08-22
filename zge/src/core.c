@@ -153,6 +153,8 @@ void ZGE_Terminate()
 
 bool ZGE_CreateWindow(int const width, int const height, char const* const title)
 {
+  ZGE_AssertDebug(title != NULL);
+
 #if defined(USE_FREEGLUT)
   if (s_window != 0)
   {
@@ -293,6 +295,8 @@ int ZGE_GetWindowHeight()
 
 void ZGE_SetWindowTitle(char const* const title)
 {
+  ZGE_AssertDebug(title != NULL);
+
 #if defined(USE_FREEGLUT)
   glutSetWindowTitle(title);
 #endif
@@ -419,11 +423,11 @@ unsigned ZGE_GetElapsedTime()
 
 void AtTerminate(TerminateFnc const terminateFnc)
 {
-  if (terminateFnc != NULL)
-  {
-    ZGE_AssertDebug(s_terminateFncCount < 4);
-    s_terminateFncs[s_terminateFncCount++] = terminateFnc;
-  }
+  ZGE_AssertDebug(terminateFnc != NULL);
+
+  ZGE_AssertDebug(s_terminateFncCount < sizeof(s_terminateFncs) / sizeof(s_terminateFncs[0]));
+
+  s_terminateFncs[s_terminateFncCount++] = terminateFnc;
 }
 
 void Terminate()

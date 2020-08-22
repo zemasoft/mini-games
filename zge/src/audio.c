@@ -11,16 +11,16 @@
 static int s_nextSoundId;
 
 #if defined(USE_FREEALUT_FOR_AUDIO)
-static ALuint s_soundSourceId[256];
+static ALuint s_sourceIds[256];
 #endif
 
 int ZGE_LoadSound(char const* const fileName)
 {
   ZGE_AssertDebug(fileName != NULL);
 
-  ZGE_AssertDebug(s_nextSoundId < 256);
-
 #if defined(USE_FREEALUT_FOR_AUDIO)
+  ZGE_AssertDebug(s_nextSoundId < (int) (sizeof(s_sourceIds) / sizeof(s_sourceIds[0])));
+
   ALuint const buffer = alutCreateBufferFromFile(fileName);
   if (buffer != AL_NONE)
   {
@@ -28,9 +28,9 @@ int ZGE_LoadSound(char const* const fileName)
     alGenSources(1, &sourceId);
     alSourcei(sourceId, AL_BUFFER, (ALint) buffer);
 
-    int soundId = s_nextSoundId++;
+    int const soundId = s_nextSoundId++;
 
-    s_soundSourceId[soundId] = sourceId;
+    s_sourceIds[soundId] = sourceId;
 
     return soundId;
   }
@@ -49,6 +49,6 @@ void ZGE_PlaySound(int const soundId)
   }
 
 #if defined(USE_FREEALUT_FOR_AUDIO)
-  alSourcePlay(s_soundSourceId[soundId]);
+  alSourcePlay(s_sourceIds[soundId]);
 #endif
 }
