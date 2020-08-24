@@ -32,6 +32,7 @@ if(UNIX)
 endif()
 
 add_executable(Snake
+  ../zge/src/assert.c
   ../zge/src/audio.c
   ../zge/src/core.c
   ../zge/src/memory.c

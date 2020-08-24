@@ -1,15 +1,9 @@
 #ifndef ZGE_ASSERT_H
 #define ZGE_ASSERT_H
 
-#ifdef NDEBUG
-#undef NDEBUG
-#include <assert.h>  // assert
-#define NDEBUG
-#else
-#include <assert.h>  // assert
-#endif
+void _ZGE_Abort(char const* fileName, unsigned lineNumber, char const* failedAssertion);
 
-#define ZGE_Assert(expr) assert(expr)
+#define ZGE_Assert(expr) ((expr) ? (void) 0 : _ZGE_Abort(__FILE__, __LINE__, #expr))
 
 #ifdef NDEBUG
 #define ZGE_AssertDebug(expr) ((void) (0 && (expr)))

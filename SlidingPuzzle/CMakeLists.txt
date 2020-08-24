@@ -34,6 +34,7 @@ if(UNIX)
 endif()
 
 add_executable(SlidingPuzzle
+  ../zge/src/assert.c
   ../zge/src/audio.c
   ../zge/src/core.c
   ../zge/src/memory.c

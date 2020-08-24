@@ -34,6 +34,7 @@ if(UNIX)
 endif()
 
 add_executable(Videostop
+  ../zge/src/assert.c
   ../zge/src/audio.c
   ../zge/src/core.c
   ../zge/src/memory.c
