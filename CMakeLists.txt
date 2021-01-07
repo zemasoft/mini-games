@@ -6,6 +6,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 include(gitversion)
 
+add_subdirectory(zge)
 add_subdirectory(Videostop)
 add_subdirectory(SlidingPuzzle)
 add_subdirectory(Snake)

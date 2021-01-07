@@ -1,41 +1,14 @@
 project(Snake VERSION 1.0.0 LANGUAGES C)
 
-option(SNAKE_USE_FREEGLUT "Use FreeGLUT" OFF)
-option(SNAKE_USE_GLFW "Use GLFW" ON)
-option(SNAKE_USE_SDL2 "Use SDL2" OFF)
-
-option(SNAKE_USE_FREEALUT_FOR_AUDIO "Use FreeALUT for audio" ON)
-option(SNAKE_USE_SDL2_FOR_AUDIO "Use SDL2 for audio" OFF)
-
 option(SNAKE_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 
 find_package(WhereAmI MODULE REQUIRED)
-
-if(SNAKE_USE_FREEALUT_FOR_AUDIO)
-  find_package(FreeALUT MODULE REQUIRED)
-endif()
-
-if(SNAKE_USE_FREEGLUT)
-  find_package(FreeGLUT MODULE REQUIRED)
-endif()
-
-if(SNAKE_USE_GLFW)
-  find_package(GLFW MODULE REQUIRED)
-endif()
-
-if(SNAKE_USE_SDL2 OR SNAKE_USE_SDL2_FOR_AUDIO)
-  find_package(SDL2 MODULE REQUIRED)
-endif()
 
 if(UNIX AND NOT APPLE)
   set(CMAKE_INSTALL_RPATH $ORIGIN/../../lib)
 endif()
 
 add_executable(Snake
-  ../zge/src/assert.c
-  ../zge/src/audio.c
-  ../zge/src/core.c
-  ../zge/src/memory.c
   src/Audio.c
   src/Audio.h
   src/Config.c
@@ -86,7 +59,6 @@ endif()
 
 target_include_directories(Snake
   PRIVATE
-    ../zge/include
     src
 )
 
@@ -94,6 +66,7 @@ target_link_libraries(Snake
   PRIVATE
     WhereAmI::WhereAmI
     m
+    zge
 )
 
 if(WIN32)
@@ -146,132 +119,3 @@ install(
   DESTINATION
     mini-games/Snake
 )
-
-if(SNAKE_USE_FREEALUT_FOR_AUDIO)
-  target_compile_definitions(Snake
-    PRIVATE
-      USE_FREEALUT_FOR_AUDIO
-  )
-
-  target_link_libraries(Snake
-    PRIVATE
-      FreeALUT::FreeALUT
-  )
-
-  if(WIN32)
-    install(
-      FILES
-        ${FreeALUT_LIBRARY}
-      DESTINATION
-        mini-games/Snake
-    )
-  elseif(UNIX)
-    file(GLOB FreeALUT_LIBRARY_AND_LINKS "${FreeALUT_LIBRARY}.*")
-
-    install(
-      FILES
-        ${FreeALUT_LIBRARY_AND_LINKS}
-      DESTINATION
-        mini-games/lib
-    )
-  endif()
-endif()
-
-if(SNAKE_USE_FREEGLUT)
-  target_compile_definitions(Snake
-    PRIVATE
-      USE_FREEGLUT
-  )
-
-  target_link_libraries(Snake
-    PRIVATE
-      FreeGLUT::FreeGLUT
-  )
-
-  if(WIN32)
-    install(
-      FILES
-        ${FreeGLUT_LIBRARY}
-      DESTINATION
-        mini-games/Snake
-    )
-  elseif(UNIX)
-    file(GLOB FreeGLUT_LIBRARY_AND_LINKS "${FreeGLUT_LIBRARY}.*")
-
-    install(
-      FILES
-        ${FreeGLUT_LIBRARY_AND_LINKS}
-      DESTINATION
-        mini-games/lib
-    )
-  endif()
-endif()
-
-if(SNAKE_USE_GLFW)
-  target_compile_definitions(Snake
-    PRIVATE
-      USE_GLFW
-  )
-
-  target_link_libraries(Snake
-    PRIVATE
-      GLFW::GLFW
-  )
-
-  if(WIN32)
-    install(
-      FILES
-        ${GLFW_LIBRARY}
-      DESTINATION
-        mini-games/Snake
-    )
-  elseif(UNIX)
-    file(GLOB GLFW_LIBRARY_AND_LINKS "${GLFW_LIBRARY}.*")
-
-    install(
-      FILES
-        ${GLFW_LIBRARY_AND_LINKS}
-      DESTINATION
-        mini-games/lib
-    )
-  endif()
-endif()
-
-if(SNAKE_USE_SDL2)
-  target_compile_definitions(Snake
-    PRIVATE
-      USE_SDL2
-  )
-endif()
-
-if(SNAKE_USE_SDL2_FOR_AUDIO)
-  target_compile_definitions(Snake
-    PRIVATE
-      USE_SDL2_FOR_AUDIO
-  )
-endif()
-
-if(SNAKE_USE_SDL2 OR SNAKE_USE_SDL2_FOR_AUDIO)
-  target_link_libraries(Snake
-    PRIVATE
-      SDL2::SDL2
-  )
-
-  if(WIN32)
-    install(
-      FILES
-        ${SDL2_LIBRARY}
-      DESTINATION
-        mini-games/Snake
-    )
-  elseif(UNIX)
-    file(GLOB SDL2_LIBRARY_AND_LINKS "${SDL2_LIBRARY}.*")
-
-    install(
-      FILES
-        ${SDL2_LIBRARY_AND_LINKS}
-      DESTINATION
-        mini-games/lib
-    )
-  endif()
-endif()
