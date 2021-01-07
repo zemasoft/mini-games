@@ -29,7 +29,7 @@ if(SLIDINGPUZZLE_USE_SDL2 OR SLIDINGPUZZLE_USE_SDL2_FOR_AUDIO)
   find_package(SDL2 MODULE REQUIRED)
 endif()
 
-if(UNIX)
+if(UNIX AND NOT APPLE)
   set(CMAKE_INSTALL_RPATH $ORIGIN/../../lib)
 endif()
 
@@ -99,8 +99,9 @@ if(WIN32)
   add_custom_command(
     TARGET
       SlidingPuzzle
-    PRE_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:SlidingPuzzle>/assets
+    POST_BUILD
+    COMMAND
+      ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:SlidingPuzzle>/assets
   )
 
   install(
@@ -118,8 +119,9 @@ elseif(UNIX)
   add_custom_command(
     TARGET
       SlidingPuzzle
-    PRE_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:SlidingPuzzle>/../assets
+    POST_BUILD
+    COMMAND
+      ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:SlidingPuzzle>/../assets
   )
 
   install(
