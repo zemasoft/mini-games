@@ -80,6 +80,8 @@ if(WIN32)
       SlidingPuzzle
     DESTINATION
       mini-games/SlidingPuzzle
+    COMPONENT
+      SlidingPuzzle
   )
 elseif(UNIX)
   set_target_properties(SlidingPuzzle
@@ -100,6 +102,8 @@ elseif(UNIX)
       SlidingPuzzle
     DESTINATION
       mini-games/SlidingPuzzle/bin
+    COMPONENT
+      SlidingPuzzle
   )
 endif()
 
@@ -108,6 +112,8 @@ install(
     ${CMAKE_CURRENT_SOURCE_DIR}/assets
   DESTINATION
     mini-games/SlidingPuzzle
+  COMPONENT
+    SlidingPuzzle
 )
 
 install(
@@ -115,4 +121,6 @@ install(
     ${CMAKE_CURRENT_SOURCE_DIR}/README.md
   DESTINATION
     mini-games/SlidingPuzzle
+  COMPONENT
+    SlidingPuzzle
 )

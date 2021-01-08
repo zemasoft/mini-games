@@ -81,6 +81,8 @@ if(WIN32)
       Videostop
     DESTINATION
       mini-games/Videostop
+    COMPONENT
+      Videostop
   )
 elseif(UNIX)
   set_target_properties(Videostop
@@ -101,6 +103,8 @@ elseif(UNIX)
       Videostop
     DESTINATION
       mini-games/Videostop/bin
+    COMPONENT
+      Videostop
   )
 endif()
 
@@ -109,6 +113,8 @@ install(
     ${CMAKE_CURRENT_SOURCE_DIR}/assets
   DESTINATION
     mini-games/Videostop
+  COMPONENT
+    Videostop
 )
 
 install(
@@ -116,4 +122,6 @@ install(
     ${CMAKE_CURRENT_SOURCE_DIR}/README.md
   DESTINATION
     mini-games/Videostop
+  COMPONENT
+    Videostop
 )

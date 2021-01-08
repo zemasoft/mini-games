@@ -4,7 +4,7 @@ option(ZGE_USE_FREEGLUT "Use FreeGLUT" ON)
 option(ZGE_USE_GLFW "Use GLFW" OFF)
 option(ZGE_USE_SDL2 "Use SDL2" OFF)
 
-option(ZGE_USE_FREEGLUT_FOR_TEXT "Use FreeGLUT for text" OFF)
+option(ZGE_USE_FREEGLUT_FOR_TEXT "Use FreeGLUT for text" ON)
 
 option(ZGE_USE_FREEALUT_FOR_AUDIO "Use FreeALUT for audio" ON)
 option(ZGE_USE_SDL2_FOR_AUDIO "Use SDL2 for audio" OFF)
@@ -94,11 +94,14 @@ if(ZGE_USE_FREEALUT_FOR_AUDIO)
         mini-games
     )
   elseif(UNIX)
-    file(GLOB FreeALUT_LIBRARY_AND_LINKS "${FreeALUT_LIBRARY}.*")
+    get_filename_component(FreeALUT_LIBRARY_REALPATH ${FreeALUT_LIBRARY} REALPATH)
+    file(READ_SYMLINK ${FreeALUT_LIBRARY} FreeALUT_LIBRARY_LINKED)
 
     install(
       FILES
-        ${FreeALUT_LIBRARY_AND_LINKS}
+        ${FreeALUT_LIBRARY_REALPATH}
+      RENAME
+        ${FreeALUT_LIBRARY_LINKED}
       DESTINATION
         mini-games/lib
     )
@@ -133,11 +136,14 @@ if(ZGE_USE_FREEGLUT OR ZGE_USE_FREEGLUT_FOR_TEXT)
         mini-games
     )
   elseif(UNIX)
-    file(GLOB FreeGLUT_LIBRARY_AND_LINKS "${FreeGLUT_LIBRARY}.*")
+    get_filename_component(FreeGLUT_LIBRARY_REALPATH ${FreeGLUT_LIBRARY} REALPATH)
+    file(READ_SYMLINK ${FreeGLUT_LIBRARY} FreeGLUT_LIBRARY_LINKED)
 
     install(
       FILES
-        ${FreeGLUT_LIBRARY_AND_LINKS}
+        ${FreeGLUT_LIBRARY_REALPATH}
+      RENAME
+        ${FreeGLUT_LIBRARY_LINKED}
       DESTINATION
         mini-games/lib
     )
@@ -163,11 +169,14 @@ if(ZGE_USE_GLFW)
         mini-games
     )
   elseif(UNIX)
-    file(GLOB GLFW_LIBRARY_AND_LINKS "${GLFW_LIBRARY}.*")
+    get_filename_component(GLFW_LIBRARY_REALPATH ${GLFW_LIBRARY} REALPATH)
+    file(READ_SYMLINK ${GLFW_LIBRARY} GLFW_LIBRARY_LINKED)
 
     install(
       FILES
-        ${GLFW_LIBRARY_AND_LINKS}
+        ${GLFW_LIBRARY_REALPATH}
+      RENAME
+        ${GLFW_LIBRARY_LINKED}
       DESTINATION
         mini-games/lib
     )
@@ -202,11 +211,14 @@ if(ZGE_USE_SDL2 OR ZGE_USE_SDL2_FOR_AUDIO)
         mini-games
     )
   elseif(UNIX)
-    file(GLOB SDL2_LIBRARY_AND_LINKS "${SDL2_LIBRARY}.*")
+    get_filename_component(SDL2_LIBRARY_REALPATH ${SDL2_LIBRARY} REALPATH)
+    file(READ_SYMLINK ${SDL2_LIBRARY} SDL2_LIBRARY_LINKED)
 
     install(
       FILES
-        ${SDL2_LIBRARY_AND_LINKS}
+        ${SDL2_LIBRARY_REALPATH}
+      RENAME
+        ${SDL2_LIBRARY_LINKED}
       DESTINATION
         mini-games/lib
     )

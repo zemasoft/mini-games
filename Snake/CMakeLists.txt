@@ -83,6 +83,8 @@ if(WIN32)
       Snake
     DESTINATION
       mini-games/Snake
+    COMPONENT
+      Snake
   )
 elseif(UNIX)
   set_target_properties(Snake
@@ -103,6 +105,8 @@ elseif(UNIX)
       Snake
     DESTINATION
       mini-games/Snake/bin
+    COMPONENT
+      Snake
   )
 endif()
 
@@ -111,6 +115,8 @@ install(
     ${CMAKE_CURRENT_SOURCE_DIR}/assets
   DESTINATION
     mini-games/Snake
+  COMPONENT
+    Snake
 )
 
 install(
@@ -118,4 +124,6 @@ install(
     ${CMAKE_CURRENT_SOURCE_DIR}/README.md
   DESTINATION
     mini-games/Snake
+  COMPONENT
+    Snake
 )
