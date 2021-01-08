@@ -27,10 +27,10 @@
 #include "Config.h"
 #include "World.h"
 
-static int s_init_window_width;
-static int s_init_window_height;
-static float s_init_width;
-static float s_init_height;
+static int s_initWindowWidth;
+static int s_initWindowHeight;
+static float s_initWidth;
+static float s_initHeight;
 
 static struct
 {
@@ -43,7 +43,7 @@ static struct
 {
   float x;
   float y;
-} s_string_scale;
+} s_stringScale;
 
 static struct
 {
@@ -79,14 +79,14 @@ void G_Start()
   s_scale.x = 1.0f;
   s_scale.y = 1.0f;
 
-  s_init_window_width = ZGE_GetWindowWidth();
-  s_init_window_height = ZGE_GetWindowHeight();
-  s_init_width = GetRight() - GetLeft();
-  s_init_height = GetTop() - GetBottom();
+  s_initWindowWidth = ZGE_GetWindowWidth();
+  s_initWindowHeight = ZGE_GetWindowHeight();
+  s_initWidth = GetRight() - GetLeft();
+  s_initHeight = GetTop() - GetBottom();
 
 #if defined(USE_FREEGLUT_FOR_TEXT)
-  s_string_scale.x = s_init_width / (float) s_init_window_width;
-  s_string_scale.y = s_init_height / (float) s_init_window_height;
+  s_stringScale.x = s_initWidth / (float) s_initWindowWidth;
+  s_stringScale.y = s_initHeight / (float) s_initWindowHeight;
 #endif
 
   glEnable(GL_MULTISAMPLE);
@@ -97,10 +97,10 @@ void G_Start()
 
 void G_Restart()
 {
-  s_scale.x = (float) s_init_window_width / (float) ZGE_GetWindowWidth() *
-              (GetRight() - GetLeft()) / s_init_width;
-  s_scale.y = (float) s_init_window_height / (float) ZGE_GetWindowHeight() *
-              (GetTop() - GetBottom()) / s_init_height;
+  s_scale.x = (float) s_initWindowWidth / (float) ZGE_GetWindowWidth() * (GetRight() - GetLeft()) /
+              s_initWidth;
+  s_scale.y = (float) s_initWindowHeight / (float) ZGE_GetWindowHeight() *
+              (GetTop() - GetBottom()) / s_initHeight;
 
   RecountStatusBarString();
 
@@ -136,7 +136,7 @@ void G_Resize(int const width, int const height)
 void RecountStatusBarString()
 {
 #if defined(USE_FREEGLUT_FOR_TEXT)
-  s_statusBar.string.height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * s_string_scale.y;
+  s_statusBar.string.height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * s_stringScale.y;
 #endif
 }
 
@@ -144,7 +144,7 @@ void DrawDices()
 {
   glPushMatrix();
 
-  for (int i = 0; i < g_world.dice_count; ++i)
+  for (int i = 0; i < g_world.diceCount; ++i)
   {
     DrawDice(i);
 
@@ -214,10 +214,10 @@ void DrawStatusBar()
   {
     {
       char buf1[10];
-      snprintf(buf1, sizeof(buf1), "%d", g_world.successful_attempts);
+      snprintf(buf1, sizeof(buf1), "%d", g_world.successfulAttempts);
 
       char buf2[10];
-      snprintf(buf2, sizeof(buf2), "%d", g_world.failed_attempts);
+      snprintf(buf2, sizeof(buf2), "%d", g_world.failedAttempts);
 
       glColor3f(STATUSBAR_DEFAULT_TEXT_COLOR);
       glutStrokeString(TEXT_FONT, (unsigned char*) "Attempts: ");
@@ -466,7 +466,7 @@ float GetLeft()
 
 float GetRight()
 {
-  return (float) g_world.dice_count * DICE_SIZE + MARGIN / 2.0f;
+  return (float) g_world.diceCount * DICE_SIZE + MARGIN / 2.0f;
 }
 
 float GetBottom()

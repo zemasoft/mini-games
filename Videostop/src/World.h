@@ -38,12 +38,12 @@ struct World
   } state;
 
   struct Dice dices[MAX_DICE_COUNT];
-  int dice_count;
+  int diceCount;
 
   struct StatusBar statusBar;
 
-  int successful_attempts;
-  int failed_attempts;
+  int successfulAttempts;
+  int failedAttempts;
   int score;
 };
 

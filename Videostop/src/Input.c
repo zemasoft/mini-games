@@ -20,13 +20,13 @@
 extern GLFWwindow* g_window;
 #endif
 
-static bool s_reset_key;
-static bool s_control_key;
-static bool s_control_button;
-static bool s_size_up_key;
-static bool s_size_down_key;
-static bool s_speed_up_key;
-static bool s_speed_down_key;
+static bool s_resetKey;
+static bool s_controlKey;
+static bool s_controlButton;
+static bool s_sizeUpKey;
+static bool s_sizeDownKey;
+static bool s_speedUpKey;
+static bool s_speedDownKey;
 
 #if defined(USE_FREEGLUT)
 static void Keyboard(unsigned char key, int x, int y);
@@ -62,13 +62,13 @@ void I_Start()
 
 void I_Restart()
 {
-  s_reset_key = false;
-  s_control_key = false;
-  s_control_button = false;
-  s_size_up_key = false;
-  s_size_down_key = false;
-  s_speed_up_key = false;
-  s_speed_down_key = false;
+  s_resetKey = false;
+  s_controlKey = false;
+  s_controlButton = false;
+  s_sizeUpKey = false;
+  s_sizeDownKey = false;
+  s_speedUpKey = false;
+  s_speedDownKey = false;
 }
 
 void I_Update()
@@ -115,63 +115,63 @@ void I_Stop()
 
 bool I_ResetKey()
 {
-  bool const res = s_reset_key;
+  bool const res = s_resetKey;
 
-  s_reset_key = false;
+  s_resetKey = false;
 
   return res;
 }
 
 bool I_ControlKey()
 {
-  bool const res = s_control_key;
+  bool const res = s_controlKey;
 
-  s_control_key = false;
+  s_controlKey = false;
 
   return res;
 }
 
 bool I_ControlButton()
 {
-  bool const res = s_control_button;
+  bool const res = s_controlButton;
 
-  s_control_button = false;
+  s_controlButton = false;
 
   return res;
 }
 
 bool I_SizeUpKey()
 {
-  bool const res = s_size_up_key;
+  bool const res = s_sizeUpKey;
 
-  s_size_up_key = false;
+  s_sizeUpKey = false;
 
   return res;
 }
 
 bool I_SizeDownKey()
 {
-  bool const res = s_size_down_key;
+  bool const res = s_sizeDownKey;
 
-  s_size_down_key = false;
+  s_sizeDownKey = false;
 
   return res;
 }
 
 bool I_SpeedUpKey()
 {
-  bool const res = s_speed_up_key;
+  bool const res = s_speedUpKey;
 
-  s_speed_up_key = false;
+  s_speedUpKey = false;
 
   return res;
 }
 
 bool I_SpeedDownKey()
 {
-  bool const res = s_speed_down_key;
+  bool const res = s_speedDownKey;
 
-  s_speed_down_key = false;
+  s_speedDownKey = false;
 
   return res;
 }
@@ -186,16 +186,16 @@ void Keyboard(unsigned char const key, int const x, int const y)
   switch (key)
   {
     case 13:  // Enter
-      s_control_key = true;
+      s_controlKey = true;
       break;
     case 27:  // Escape
       ZGE_LeaveGameLoop();
       break;
     case 32:  // Space
-      s_control_key = true;
+      s_controlKey = true;
       break;
     case 114:  // r
-      s_reset_key = true;
+      s_resetKey = true;
       break;
   }
 }
@@ -208,16 +208,16 @@ void Special(int const key, int const x, int const y)
   switch (key)
   {
     case GLUT_KEY_RIGHT:
-      s_size_up_key = true;
+      s_sizeUpKey = true;
       break;
     case GLUT_KEY_LEFT:
-      s_size_down_key = true;
+      s_sizeDownKey = true;
       break;
     case GLUT_KEY_UP:
-      s_speed_up_key = true;
+      s_speedUpKey = true;
       break;
     case GLUT_KEY_DOWN:
-      s_speed_down_key = true;
+      s_speedDownKey = true;
       break;
   }
 }
@@ -229,7 +229,7 @@ void Mouse(int const button, int const state, int const x, int const y)
 
   if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
   {
-    s_control_button = true;
+    s_controlButton = true;
   }
 }
 
@@ -255,25 +255,25 @@ void KeyCallback(GLFWwindow* const window, int const key, int const scancode, in
     {
       case GLFW_KEY_ENTER:
       case GLFW_KEY_SPACE:
-        s_control_key = true;
+        s_controlKey = true;
         break;
       case GLFW_KEY_ESCAPE:
         ZGE_LeaveGameLoop();
         break;
       case GLFW_KEY_R:
-        s_reset_key = true;
+        s_resetKey = true;
         break;
       case GLFW_KEY_RIGHT:
-        s_size_up_key = true;
+        s_sizeUpKey = true;
         break;
       case GLFW_KEY_LEFT:
-        s_size_down_key = true;
+        s_sizeDownKey = true;
         break;
       case GLFW_KEY_UP:
-        s_speed_up_key = true;
+        s_speedUpKey = true;
         break;
       case GLFW_KEY_DOWN:
-        s_speed_down_key = true;
+        s_speedDownKey = true;
         break;
     }
   }
@@ -287,7 +287,7 @@ void MouseButtonCallback(GLFWwindow* const window, int const button, int const a
 
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
   {
-    s_control_button = true;
+    s_controlButton = true;
   }
 }
 
@@ -301,11 +301,11 @@ void ProcessKeyEvent(SDL_Event const* const e)
   {
     if (e->key.keysym.scancode == SDL_SCANCODE_RETURN)
     {
-      s_control_key = true;
+      s_controlKey = true;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_SPACE)
     {
-      s_control_key = true;
+      s_controlKey = true;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_ESCAPE)
     {
@@ -313,23 +313,23 @@ void ProcessKeyEvent(SDL_Event const* const e)
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_R)
     {
-      s_reset_key = true;
+      s_resetKey = true;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_RIGHT)
     {
-      s_size_up_key = true;
+      s_sizeUpKey = true;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_LEFT)
     {
-      s_size_down_key = true;
+      s_sizeDownKey = true;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_UP)
     {
-      s_speed_up_key = true;
+      s_speedUpKey = true;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_DOWN)
     {
-      s_speed_down_key = true;
+      s_speedDownKey = true;
     }
   }
 }
@@ -338,7 +338,7 @@ void ProcessMouseButtonEvent(SDL_Event const* const e)
 {
   if (e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_LEFT)
   {
-    s_control_button = true;
+    s_controlButton = true;
   }
 }
 

@@ -51,8 +51,8 @@
 
 struct Config
 {
-  int dice_count;
-  float shuffle_frequency;
+  int diceCount;
+  float shuffleFrequency;
 };
 
 extern struct Config g_config;

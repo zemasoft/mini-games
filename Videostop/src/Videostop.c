@@ -13,7 +13,7 @@
 #include "Input.h"
 #include "Logic.h"
 
-char* g_executable_path;
+char* g_executablePath;
 
 static bool Initialize(int argc, char** argv);
 static void Start();
@@ -43,43 +43,43 @@ bool Initialize(int argc, char** const argv)
     return false;
   }
 
-  g_config.dice_count = DEFAULT_DICE_COUNT;
-  g_config.shuffle_frequency = DEFAULT_SHUFFLE_FREQUENCY_HZ;
+  g_config.diceCount = DEFAULT_DICE_COUNT;
+  g_config.shuffleFrequency = DEFAULT_SHUFFLE_FREQUENCY_HZ;
 
   if (argc > 1)
   {
     char* end;
-    long dice_count = strtol(argv[1], &end, 10);
+    long diceCount = strtol(argv[1], &end, 10);
 
-    if (dice_count != 0 && *end == '\0')
+    if (diceCount != 0 && *end == '\0')
     {
-      if (dice_count < MIN_DICE_COUNT)
+      if (diceCount < MIN_DICE_COUNT)
       {
-        dice_count = MIN_DICE_COUNT;
+        diceCount = MIN_DICE_COUNT;
       }
-      else if (dice_count > MAX_DICE_COUNT)
+      else if (diceCount > MAX_DICE_COUNT)
       {
-        dice_count = MAX_DICE_COUNT;
+        diceCount = MAX_DICE_COUNT;
       }
 
-      g_config.dice_count = (int) dice_count;
+      g_config.diceCount = (int) diceCount;
     }
   }
 
-  if (!ZGE_CreateWindow(g_config.dice_count * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS, "Videostop"))
+  if (!ZGE_CreateWindow(g_config.diceCount * DICE_SIZE_PIXELS, DICE_SIZE_PIXELS, "Videostop"))
   {
     ZGE_Terminate();
     return false;
   }
 
-  int const buffer_length = wai_getExecutablePath(NULL, 0, NULL);
-  if (buffer_length >= 0)
+  int const bufferLength = wai_getExecutablePath(NULL, 0, NULL);
+  if (bufferLength >= 0)
   {
-    g_executable_path = (char*) ZGE_Allocate((size_t)(buffer_length + 1));
+    g_executablePath = (char*) ZGE_Allocate((size_t)(bufferLength + 1));
 
-    int path_length;
-    wai_getExecutablePath(g_executable_path, buffer_length, &path_length);
-    g_executable_path[path_length] = '\0';
+    int pathLength;
+    wai_getExecutablePath(g_executablePath, bufferLength, &pathLength);
+    g_executablePath[pathLength] = '\0';
   }
 
   return true;
@@ -128,7 +128,7 @@ void Stop()
 
 void Terminate()
 {
-  ZGE_FreeIfAllocated(g_executable_path);
+  ZGE_FreeIfAllocated(g_executablePath);
 
   ZGE_DestroyWindow();
 
