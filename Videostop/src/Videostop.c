@@ -21,7 +21,7 @@ static void Update(unsigned elapsed);
 static void Stop();
 static void Terminate();
 
-int main(int argc, char** argv)
+int main(int const argc, char** const argv)
 {
   if (!Initialize(argc, argv))
   {
@@ -36,7 +36,7 @@ int main(int argc, char** argv)
   return EXIT_SUCCESS;
 }
 
-bool Initialize(int argc, char** argv)
+bool Initialize(int argc, char** const argv)
 {
   if (!ZGE_Initialize(&argc, argv))
   {
