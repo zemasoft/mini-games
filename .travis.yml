@@ -50,7 +50,7 @@ install:
 
 script:
   - |
-    cmake -S . -Bbuild \
+    cmake -S . -B build \
           -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
           -DZGE_USE_FREEGLUT=${USE_FREEGLUT} \
           -DZGE_USE_GLFW=${USE_GLFW} \
