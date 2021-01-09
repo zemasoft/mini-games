@@ -55,10 +55,10 @@ void L_Restart()
   g_world.size.x = g_config.size.x;
   g_world.size.y = g_config.size.y;
 
-  g_world.piece_count = (size_t)(g_world.size.x * g_world.size.y);
+  g_world.pieceCount = (size_t)(g_world.size.x * g_world.size.y);
 
   ZGE_FreeIfAllocated(g_world.pieces);
-  g_world.pieces = ZGE_Allocate(g_world.piece_count * sizeof(struct Piece));
+  g_world.pieces = ZGE_Allocate(g_world.pieceCount * sizeof(struct Piece));
 
   SetPieceStates(PieceState_Setup);
   SetupPieceValues();
@@ -69,13 +69,13 @@ void L_Restart()
 
   g_world.statusBar.state = StatusBarState_Show;
 
-  g_world.single_moves = 0;
+  g_world.singleMoves = 0;
   g_world.moves = 0;
 }
 
 void L_Update()
 {
-  static float statusbar_time;
+  static float statusbarTime;
 
   if (g_world.size.x != g_config.size.x || g_world.size.y != g_config.size.y)
   {
@@ -84,7 +84,7 @@ void L_Update()
     A_Restart();
     G_Restart();
 
-    statusbar_time = 0.0f;
+    statusbarTime = 0.0f;
     return;
   }
 
@@ -95,21 +95,21 @@ void L_Update()
     A_Restart();
     G_Restart();
 
-    statusbar_time = 0.0f;
+    statusbarTime = 0.0f;
     return;
   }
 
-  bool const control_key = I_ControlKey();
-  int control_x = 0;
-  int control_y = 0;
-  bool const control_button = I_ControlButton(&control_x, &control_y);
+  bool const controlKey = I_ControlKey();
+  int controlX = 0;
+  int controlY = 0;
+  bool const controlButton = I_ControlButton(&controlX, &controlY);
 
   switch (g_world.state)
   {
     case WorldState_Setup:
-      statusbar_time += UPDATE_PERIOD_MS;
+      statusbarTime += UPDATE_PERIOD_MS;
 
-      if (control_key || control_button)
+      if (controlKey || controlButton)
       {
         A_PlaySound(Sound_Start);
         SetPieceStates(PieceState_Idle);
@@ -157,14 +157,14 @@ void L_Update()
           break;
       }
 
-      if (statusbar_time >= 1000.0f / STATUSBAR_FREQUENCY_HZ)
+      if (statusbarTime >= 1000.0f / STATUSBAR_FREQUENCY_HZ)
       {
         if (++g_world.statusBar.state >= StatusBarState_Count)
         {
           g_world.statusBar.state = 0;
         }
 
-        statusbar_time = 0.0f;
+        statusbarTime = 0.0f;
       }
       break;
 
@@ -228,55 +228,55 @@ void L_Update()
           break;
 
         default:
-          if (control_button)
+          if (controlButton)
           {
-            int const window_width = ZGE_GetWindowWidth();
-            int const window_height = ZGE_GetWindowHeight();
+            int const windowWidth = ZGE_GetWindowWidth();
+            int const windowHeight = ZGE_GetWindowHeight();
 
-            float const logical_width = (float) g_world.size.x * PIECE_SIZE + MARGIN;
-            float const logical_height =
+            float const logicalWidth = (float) g_world.size.x * PIECE_SIZE + MARGIN;
+            float const logicalHeight =
                 (float) g_world.size.y * PIECE_SIZE + MARGIN + STATUSBAR_SIZE;
 
-            float const logical_x =
-                logical_width / (float) window_width * (float) control_x - MARGIN / 2.0f;
-            float const logical_y =
-                logical_height / (float) window_height * (float) control_y - MARGIN / 2.0f;
+            float const logicalX =
+                logicalWidth / (float) windowWidth * (float) controlX - MARGIN / 2.0f;
+            float const logicalY =
+                logicalHeight / (float) windowHeight * (float) controlY - MARGIN / 2.0f;
 
-            if (logical_x >= 0.0f && logical_x < (float) g_world.size.x * PIECE_SIZE &&
-                logical_y >= 0.0f && logical_y < (float) g_world.size.y * PIECE_SIZE)
+            if (logicalX >= 0.0f && logicalX < (float) g_world.size.x * PIECE_SIZE &&
+                logicalY >= 0.0f && logicalY < (float) g_world.size.y * PIECE_SIZE)
             {
-              size_t const x = (size_t) logical_x;
-              size_t const y = (size_t) logical_y;
+              size_t const x = (size_t) logicalX;
+              size_t const y = (size_t) logicalY;
 
-              size_t const blank_x = g_world.blank % g_world.size.x;
-              size_t const blank_y = g_world.blank / g_world.size.x;
+              size_t const blankX = g_world.blank % g_world.size.x;
+              size_t const blankY = g_world.blank / g_world.size.x;
 
-              if (x == blank_x)
+              if (x == blankX)
               {
-                if (y < blank_y)
+                if (y < blankY)
                 {
                   A_PlaySound(Sound_Move);
-                  MovePiecesDown(blank_y - y);
+                  MovePiecesDown(blankY - y);
                 }
-                else if (y > blank_y)
+                else if (y > blankY)
                 {
                   A_PlaySound(Sound_Move);
-                  MovePiecesUp(y - blank_y);
+                  MovePiecesUp(y - blankY);
                 }
 
                 g_world.state = WorldState_Moving;
               }
-              else if (y == blank_y)
+              else if (y == blankY)
               {
-                if (x < blank_x)
+                if (x < blankX)
                 {
                   A_PlaySound(Sound_Move);
-                  MovePiecesRight(blank_x - x);
+                  MovePiecesRight(blankX - x);
                 }
-                else if (x > blank_x)
+                else if (x > blankX)
                 {
                   A_PlaySound(Sound_Move);
-                  MovePiecesLeft(x - blank_x);
+                  MovePiecesLeft(x - blankX);
                 }
 
                 g_world.state = WorldState_Moving;
@@ -329,13 +329,13 @@ void MovePieceLeft()
 {
   size_t const index = g_world.blank + 1;
 
-  g_world.pieces[index].pos_w.x -= 1.0f;
+  g_world.pieces[index].posW.x -= 1.0f;
 
   SwapPieces(index, g_world.blank);
 
   g_world.blank = index;
 
-  ++g_world.single_moves;
+  ++g_world.singleMoves;
   ++g_world.moves;
 }
 
@@ -343,13 +343,13 @@ void MovePieceRight()
 {
   size_t const index = g_world.blank - 1;
 
-  g_world.pieces[index].pos_w.x += 1.0f;
+  g_world.pieces[index].posW.x += 1.0f;
 
   SwapPieces(index, g_world.blank);
 
   g_world.blank = index;
 
-  ++g_world.single_moves;
+  ++g_world.singleMoves;
   ++g_world.moves;
 }
 
@@ -357,13 +357,13 @@ void MovePieceUp()
 {
   size_t const index = g_world.blank + g_world.size.x;
 
-  g_world.pieces[index].pos_w.y += 1.0f;
+  g_world.pieces[index].posW.y += 1.0f;
 
   SwapPieces(index, g_world.blank);
 
   g_world.blank = index;
 
-  ++g_world.single_moves;
+  ++g_world.singleMoves;
   ++g_world.moves;
 }
 
@@ -371,13 +371,13 @@ void MovePieceDown()
 {
   size_t const index = g_world.blank - g_world.size.x;
 
-  g_world.pieces[index].pos_w.y -= 1.0f;
+  g_world.pieces[index].posW.y -= 1.0f;
 
   SwapPieces(index, g_world.blank);
 
   g_world.blank = index;
 
-  ++g_world.single_moves;
+  ++g_world.singleMoves;
   ++g_world.moves;
 }
 
@@ -437,54 +437,54 @@ bool MovePieces()
 {
   bool moving = false;
 
-  for (size_t i = 0; i < g_world.piece_count; ++i)
+  for (size_t i = 0; i < g_world.pieceCount; ++i)
   {
     g_world.pieces[i].state = PieceState_Idle;
 
-    if (g_world.pieces[i].pos_w.x > g_world.pieces[i].pos.x)
+    if (g_world.pieces[i].posW.x > g_world.pieces[i].pos.x)
     {
       g_world.pieces[i].pos.x += MOVE_STEP;
 
-      if (g_world.pieces[i].pos.x > g_world.pieces[i].pos_w.x)
+      if (g_world.pieces[i].pos.x > g_world.pieces[i].posW.x)
       {
-        g_world.pieces[i].pos.x = g_world.pieces[i].pos_w.x;
+        g_world.pieces[i].pos.x = g_world.pieces[i].posW.x;
       }
 
       g_world.pieces[i].state = PieceState_Moving;
       moving = true;
     }
-    else if (g_world.pieces[i].pos_w.x < g_world.pieces[i].pos.x)
+    else if (g_world.pieces[i].posW.x < g_world.pieces[i].pos.x)
     {
       g_world.pieces[i].pos.x -= MOVE_STEP;
 
-      if (g_world.pieces[i].pos.x < g_world.pieces[i].pos_w.x)
+      if (g_world.pieces[i].pos.x < g_world.pieces[i].posW.x)
       {
-        g_world.pieces[i].pos.x = g_world.pieces[i].pos_w.x;
+        g_world.pieces[i].pos.x = g_world.pieces[i].posW.x;
       }
 
       g_world.pieces[i].state = PieceState_Moving;
       moving = true;
     }
 
-    if (g_world.pieces[i].pos_w.y > g_world.pieces[i].pos.y)
+    if (g_world.pieces[i].posW.y > g_world.pieces[i].pos.y)
     {
       g_world.pieces[i].pos.y += MOVE_STEP;
 
-      if (g_world.pieces[i].pos.y > g_world.pieces[i].pos_w.y)
+      if (g_world.pieces[i].pos.y > g_world.pieces[i].posW.y)
       {
-        g_world.pieces[i].pos.y = g_world.pieces[i].pos_w.y;
+        g_world.pieces[i].pos.y = g_world.pieces[i].posW.y;
       }
 
       g_world.pieces[i].state = PieceState_Moving;
       moving = true;
     }
-    else if (g_world.pieces[i].pos_w.y < g_world.pieces[i].pos.y)
+    else if (g_world.pieces[i].posW.y < g_world.pieces[i].pos.y)
     {
       g_world.pieces[i].pos.y -= MOVE_STEP;
 
-      if (g_world.pieces[i].pos.y < g_world.pieces[i].pos_w.y)
+      if (g_world.pieces[i].pos.y < g_world.pieces[i].posW.y)
       {
-        g_world.pieces[i].pos.y = g_world.pieces[i].pos_w.y;
+        g_world.pieces[i].pos.y = g_world.pieces[i].posW.y;
       }
 
       g_world.pieces[i].state = PieceState_Moving;
@@ -498,7 +498,7 @@ bool MovePieces()
 bool IsResolved()
 {
   int value = 1;
-  for (size_t i = 0; i < g_world.piece_count - 1; ++i)
+  for (size_t i = 0; i < g_world.pieceCount - 1; ++i)
   {
     if (g_world.pieces[i].value != value)
     {
@@ -514,25 +514,25 @@ bool IsResolved()
 void SetupPieceValues()
 {
   int value = 1;
-  for (size_t i = 0; i < g_world.piece_count; ++i)
+  for (size_t i = 0; i < g_world.pieceCount; ++i)
   {
     g_world.pieces[i].value = value++;
   }
 
-  g_world.pieces[g_world.piece_count - 1].value = 0;
+  g_world.pieces[g_world.pieceCount - 1].value = 0;
 }
 
 void ShufflePieces()
 {
-  for (size_t i = 0; i < g_world.piece_count; ++i)
+  for (size_t i = 0; i < g_world.pieceCount; ++i)
   {
-    SwapPieces(i, (size_t) rand() % g_world.piece_count);
+    SwapPieces(i, (size_t) rand() % g_world.pieceCount);
   }
 }
 
 void FindBlankPiece()
 {
-  for (size_t i = 0; i < g_world.piece_count; ++i)
+  for (size_t i = 0; i < g_world.pieceCount; ++i)
   {
     if (g_world.pieces[i].value == 0)
     {
@@ -551,8 +551,8 @@ void SetupPiecePositions()
     {
       g_world.pieces[i].pos.x = (float) x;
       g_world.pieces[i].pos.y = (float) (g_world.size.y - y - 1);
-      g_world.pieces[i].pos_w.x = g_world.pieces[i].pos.x;
-      g_world.pieces[i].pos_w.y = g_world.pieces[i].pos.y;
+      g_world.pieces[i].posW.x = g_world.pieces[i].pos.x;
+      g_world.pieces[i].posW.y = g_world.pieces[i].pos.y;
       ++i;
     }
   }
@@ -560,7 +560,7 @@ void SetupPiecePositions()
 
 void SetPieceStates(enum PieceState const state)
 {
-  for (size_t i = 0; i < g_world.piece_count; ++i)
+  for (size_t i = 0; i < g_world.pieceCount; ++i)
   {
     g_world.pieces[i].state = state;
   }
@@ -581,7 +581,7 @@ void MakeResolvable()
       g_world.blank = i + 1;
     }
 
-    i = (i + 1) % (g_world.piece_count - 1);
+    i = (i + 1) % (g_world.pieceCount - 1);
   }
 }
 
@@ -612,9 +612,9 @@ int CountInversions()
 {
   int invs = 0;
 
-  for (size_t i = 0; i < g_world.piece_count - 1; ++i)
+  for (size_t i = 0; i < g_world.pieceCount - 1; ++i)
   {
-    for (size_t j = i + 1; j < g_world.piece_count; ++j)
+    for (size_t j = i + 1; j < g_world.pieceCount; ++j)
     {
       if (g_world.pieces[i].value > g_world.pieces[j].value && g_world.pieces[j].value != 0)
       {

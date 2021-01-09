@@ -22,10 +22,10 @@
 extern GLFWwindow* g_window;
 #endif
 
-static bool s_reset_key;
-static bool s_pause_key;
+static bool s_resetKey;
+static bool s_pauseKey;
 
-static int s_direction_keys[DIRECTION_KEYA_SIZE];
+static int s_directionKeys[DIRECTION_KEYA_SIZE];
 static size_t s_top;
 static size_t s_bot;
 
@@ -58,8 +58,8 @@ void I_Start()
 
 void I_Restart()
 {
-  s_reset_key = false;
-  s_pause_key = false;
+  s_resetKey = false;
+  s_pauseKey = false;
 
   s_top = 0;
   s_bot = 0;
@@ -103,18 +103,18 @@ void I_Stop()
 
 bool I_ResetKey()
 {
-  bool const res = s_reset_key;
+  bool const res = s_resetKey;
 
-  s_reset_key = false;
+  s_resetKey = false;
 
   return res;
 }
 
 bool I_PauseKey()
 {
-  bool const res = s_pause_key;
+  bool const res = s_pauseKey;
 
-  s_pause_key = false;
+  s_pauseKey = false;
 
   return res;
 }
@@ -126,7 +126,7 @@ int I_GetDirectionKey()
     return -1;
   }
 
-  return s_direction_keys[s_bot];
+  return s_directionKeys[s_bot];
 }
 
 int I_PopDirectionKey()
@@ -136,7 +136,7 @@ int I_PopDirectionKey()
     return -1;
   }
 
-  int const key = s_direction_keys[s_bot++];
+  int const key = s_directionKeys[s_bot++];
 
   if (s_bot > DIRECTION_KEYA_SIZE - 1)
   {
@@ -159,10 +159,10 @@ void Keyboard(unsigned char const key, int const x, int const y)
       ZGE_LeaveGameLoop();
       break;
     case 112:  // p
-      s_pause_key = true;
+      s_pauseKey = true;
       break;
     case 114:  // r
-      s_reset_key = true;
+      s_resetKey = true;
       break;
   }
 }
@@ -175,16 +175,16 @@ void Special(int const key, int const x, int const y)
   switch (key)
   {
     case GLUT_KEY_LEFT:
-      s_direction_keys[s_top++] = KEY_LEFT;
+      s_directionKeys[s_top++] = KEY_LEFT;
       break;
     case GLUT_KEY_RIGHT:
-      s_direction_keys[s_top++] = KEY_RIGHT;
+      s_directionKeys[s_top++] = KEY_RIGHT;
       break;
     case GLUT_KEY_DOWN:
-      s_direction_keys[s_top++] = KEY_DOWN;
+      s_directionKeys[s_top++] = KEY_DOWN;
       break;
     case GLUT_KEY_UP:
-      s_direction_keys[s_top++] = KEY_UP;
+      s_directionKeys[s_top++] = KEY_UP;
       break;
   }
 
@@ -218,22 +218,22 @@ void KeyCallback(GLFWwindow* const window, int const key, int const scancode, in
         ZGE_LeaveGameLoop();
         break;
       case GLFW_KEY_P:
-        s_pause_key = true;
+        s_pauseKey = true;
         break;
       case GLFW_KEY_R:
-        s_reset_key = true;
+        s_resetKey = true;
         break;
       case GLFW_KEY_LEFT:
-        s_direction_keys[s_top++] = KEY_LEFT;
+        s_directionKeys[s_top++] = KEY_LEFT;
         break;
       case GLFW_KEY_RIGHT:
-        s_direction_keys[s_top++] = KEY_RIGHT;
+        s_directionKeys[s_top++] = KEY_RIGHT;
         break;
       case GLFW_KEY_DOWN:
-        s_direction_keys[s_top++] = KEY_DOWN;
+        s_directionKeys[s_top++] = KEY_DOWN;
         break;
       case GLFW_KEY_UP:
-        s_direction_keys[s_top++] = KEY_UP;
+        s_directionKeys[s_top++] = KEY_UP;
         break;
     }
 
@@ -258,27 +258,27 @@ void ProcessKeyEvent(SDL_Event const* const e)
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_P)
     {
-      s_pause_key = true;
+      s_pauseKey = true;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_R)
     {
-      s_reset_key = true;
+      s_resetKey = true;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_LEFT)
     {
-      s_direction_keys[s_top++] = KEY_LEFT;
+      s_directionKeys[s_top++] = KEY_LEFT;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_RIGHT)
     {
-      s_direction_keys[s_top++] = KEY_RIGHT;
+      s_directionKeys[s_top++] = KEY_RIGHT;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_DOWN)
     {
-      s_direction_keys[s_top++] = KEY_DOWN;
+      s_directionKeys[s_top++] = KEY_DOWN;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_UP)
     {
-      s_direction_keys[s_top++] = KEY_UP;
+      s_directionKeys[s_top++] = KEY_UP;
     }
 
     if (s_top > DIRECTION_KEYA_SIZE - 1)

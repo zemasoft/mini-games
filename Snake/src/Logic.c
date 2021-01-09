@@ -22,9 +22,9 @@ enum MoveSnake
   MoveSnake_NoSpace
 };
 
-static struct Field** s_empty_fields;
+static struct Field** s_emptyFields;
 
-static int s_turn_sound_index;
+static int s_turnSoundIndex;
 
 static enum MoveSnake MoveSnake();
 static void PlaceFood();
@@ -47,10 +47,10 @@ void L_Restart()
   g_world.ground.size.x = g_config.ground.size.x;
   g_world.ground.size.y = g_config.ground.size.y;
 
-  g_world.ground.field_count = (size_t)(g_world.ground.size.x * g_world.ground.size.y);
+  g_world.ground.fieldCount = (size_t)(g_world.ground.size.x * g_world.ground.size.y);
 
   ZGE_FreeIfAllocated(g_world.ground.fields);
-  g_world.ground.fields = ZGE_Allocate(g_world.ground.field_count * sizeof(struct Field));
+  g_world.ground.fields = ZGE_Allocate(g_world.ground.fieldCount * sizeof(struct Field));
 
   for (int y = 0; y < g_world.ground.size.y; ++y)
   {
@@ -66,21 +66,21 @@ void L_Restart()
 
   g_world.snake.state = SnakeState_Normal;
 
-  g_world.snake.field_count = g_world.ground.field_count;
+  g_world.snake.fieldCount = g_world.ground.fieldCount;
   ZGE_FreeIfAllocated(g_world.snake.fields);
-  g_world.snake.fields = ZGE_Allocate(g_world.snake.field_count * sizeof(struct Field*));
+  g_world.snake.fields = ZGE_Allocate(g_world.snake.fieldCount * sizeof(struct Field*));
 
-  int const init_y_pos = g_world.ground.size.y / 2;
+  int const initYPos = g_world.ground.size.y / 2;
 
-  struct Field* const head = GetField(4, init_y_pos);
-  struct Field* const body = GetField(3, init_y_pos);
-  struct Field* const tail = GetField(2, init_y_pos);
+  struct Field* const head = GetField(4, initYPos);
+  struct Field* const body = GetField(3, initYPos);
+  struct Field* const tail = GetField(2, initYPos);
 
   head->value = FieldValue_Snake;
   body->value = FieldValue_Snake;
   tail->value = FieldValue_Snake;
 
-  GetField(g_world.ground.size.x - 4, init_y_pos)->value = FieldValue_Food;
+  GetField(g_world.ground.size.x - 4, initYPos)->value = FieldValue_Food;
 
   g_world.snake.head = 0;
   g_world.snake.tail = 0;
@@ -88,24 +88,24 @@ void L_Restart()
   g_world.snake.fields[g_world.snake.head++] = body;
   g_world.snake.fields[g_world.snake.head++] = head;
 
-  g_world.snake.head_offset = 0.0f;
-  g_world.snake.tail_offset = 0.0f;
+  g_world.snake.headOffset = 0.0f;
+  g_world.snake.tailOffset = 0.0f;
 
   g_world.snake.heading = SnakeHeading_Right;
 
-  g_world.max_move_time = 250.0f;
+  g_world.maxMoveTime = 250.0f;
 
   g_world.score = 0;
 
-  ZGE_FreeIfAllocated(s_empty_fields);
-  s_empty_fields = ZGE_Allocate(g_world.ground.field_count * sizeof(struct Field*));
+  ZGE_FreeIfAllocated(s_emptyFields);
+  s_emptyFields = ZGE_Allocate(g_world.ground.fieldCount * sizeof(struct Field*));
 
-  s_turn_sound_index = 0;
+  s_turnSoundIndex = 0;
 }
 
 void L_Update()
 {
-  static float move_time;
+  static float moveTime;
 
   if (I_ResetKey())
   {
@@ -114,7 +114,7 @@ void L_Update()
     A_Restart();
     // G_Restart();
 
-    move_time = 0.0f;
+    moveTime = 0.0f;
     return;
   }
 
@@ -127,11 +127,11 @@ void L_Update()
       }
       else
       {
-        move_time += UPDATE_PERIOD_MS;
+        moveTime += UPDATE_PERIOD_MS;
 
-        if (move_time >= g_world.max_move_time)
+        if (moveTime >= g_world.maxMoveTime)
         {
-          move_time = 0.0f;
+          moveTime = 0.0f;
 
           switch (I_PopDirectionKey())
           {
@@ -261,19 +261,19 @@ void L_Update()
           switch (g_world.snake.state)
           {
             case SnakeState_Normal:
-              g_world.snake.head_offset = move_time / g_world.max_move_time;
-              g_world.snake.tail_offset = move_time / g_world.max_move_time;
+              g_world.snake.headOffset = moveTime / g_world.maxMoveTime;
+              g_world.snake.tailOffset = moveTime / g_world.maxMoveTime;
               break;
 
             case SnakeState_Growing:
-              g_world.snake.head_offset = move_time / g_world.max_move_time;
+              g_world.snake.headOffset = moveTime / g_world.maxMoveTime;
               break;
           }
         }
         else
         {
-          g_world.snake.head_offset = 1.0f;
-          g_world.snake.tail_offset = 1.0f;
+          g_world.snake.headOffset = 1.0f;
+          g_world.snake.tailOffset = 1.0f;
         }
       }
       break;
@@ -297,15 +297,15 @@ void L_Stop()
 {
   ZGE_Free(g_world.ground.fields);
   ZGE_Free(g_world.snake.fields);
-  ZGE_Free(s_empty_fields);
+  ZGE_Free(s_emptyFields);
 }
 
 enum MoveSnake MoveSnake()
 {
   struct Field const* const head = GetSnakeHead();
 
-  int new_x_pos = head->pos.x;
-  int new_y_pos = head->pos.y;
+  int newXPos = head->pos.x;
+  int newYPos = head->pos.y;
 
   switch (g_world.snake.heading)
   {
@@ -315,7 +315,7 @@ enum MoveSnake MoveSnake()
         return MoveSnake_Wall;
       }
 
-      --new_x_pos;
+      --newXPos;
       break;
 
     case SnakeHeading_Right:
@@ -324,7 +324,7 @@ enum MoveSnake MoveSnake()
         return MoveSnake_Wall;
       }
 
-      ++new_x_pos;
+      ++newXPos;
       break;
 
     case SnakeHeading_Down:
@@ -333,7 +333,7 @@ enum MoveSnake MoveSnake()
         return MoveSnake_Wall;
       }
 
-      --new_y_pos;
+      --newYPos;
       break;
 
     case SnakeHeading_Up:
@@ -342,15 +342,15 @@ enum MoveSnake MoveSnake()
         return MoveSnake_Wall;
       }
 
-      ++new_y_pos;
+      ++newYPos;
       break;
   }
 
   enum MoveSnake res = MoveSnake_Ok;
 
-  struct Field* const new_head = GetField(new_x_pos, new_y_pos);
+  struct Field* const newHead = GetField(newXPos, newYPos);
 
-  switch (new_head->value)
+  switch (newHead->value)
   {
     case FieldValue_Empty:
       break;
@@ -366,9 +366,9 @@ enum MoveSnake MoveSnake()
       return MoveSnake_Body;
   }
 
-  new_head->value = FieldValue_Snake;
+  newHead->value = FieldValue_Snake;
 
-  SetNewSnakeHead(new_head);
+  SetNewSnakeHead(newHead);
 
   if (res == MoveSnake_Food)
   {
@@ -388,15 +388,15 @@ enum MoveSnake MoveSnake()
 void PlaceFood()
 {
   size_t count = 0;
-  for (size_t i = 0; i < g_world.ground.field_count; ++i)
+  for (size_t i = 0; i < g_world.ground.fieldCount; ++i)
   {
     if (g_world.ground.fields[i].value == FieldValue_Empty)
     {
-      s_empty_fields[count++] = &g_world.ground.fields[i];
+      s_emptyFields[count++] = &g_world.ground.fields[i];
     }
   }
 
-  s_empty_fields[(size_t) rand() % count]->value = FieldValue_Food;
+  s_emptyFields[(size_t) rand() % count]->value = FieldValue_Food;
 }
 
 struct Field* GetField(int const x, int const y)
@@ -409,14 +409,14 @@ struct Field* GetField(int const x, int const y)
 
 void PlayTurnLeftSound()
 {
-  A_PlaySound(Sound_Turn1 + (enum Sound) s_turn_sound_index);
+  A_PlaySound(Sound_Turn1 + (enum Sound) s_turnSoundIndex);
 
-  s_turn_sound_index = (s_turn_sound_index + 1) % 4;
+  s_turnSoundIndex = (s_turnSoundIndex + 1) % 4;
 }
 
 void PlayTurnRightSound()
 {
-  A_PlaySound(Sound_Turn1 + (enum Sound) s_turn_sound_index);
+  A_PlaySound(Sound_Turn1 + (enum Sound) s_turnSoundIndex);
 
-  s_turn_sound_index = (s_turn_sound_index - 1 + 4) % 4;
+  s_turnSoundIndex = (s_turnSoundIndex - 1 + 4) % 4;
 }

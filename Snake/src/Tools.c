@@ -13,15 +13,15 @@ bool IsSnakeEmpty()
 
 size_t GetSnakeLength()
 {
-  return (g_world.snake.head - g_world.snake.tail + g_world.snake.field_count) %
-         g_world.snake.field_count;
+  return (g_world.snake.head - g_world.snake.tail + g_world.snake.fieldCount) %
+         g_world.snake.fieldCount;
 }
 
-void SetNewSnakeHead(struct Field* const new_head)
+void SetNewSnakeHead(struct Field* const newHead)
 {
-  ZGE_AssertDebug(new_head->value == FieldValue_Snake);
+  ZGE_AssertDebug(newHead->value == FieldValue_Snake);
 
-  g_world.snake.fields[g_world.snake.head] = new_head;
+  g_world.snake.fields[g_world.snake.head] = newHead;
   g_world.snake.head = GetNextSnakeIndex(g_world.snake.head);
 }
 
@@ -101,10 +101,10 @@ size_t GetSnakeTailIndex()
 
 size_t GetNextSnakeIndex(size_t const index)
 {
-  return (index + 1) % g_world.snake.field_count;
+  return (index + 1) % g_world.snake.fieldCount;
 }
 
 size_t GetPrevSnakeIndex(size_t const index)
 {
-  return (index - 1 + g_world.snake.field_count) % g_world.snake.field_count;
+  return (index - 1 + g_world.snake.fieldCount) % g_world.snake.fieldCount;
 }

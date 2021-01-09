@@ -22,13 +22,13 @@
 extern GLFWwindow* g_window;
 #endif
 
-static bool s_reset_key;
-static bool s_control_key;
-static bool s_control_button;
-static int s_control_x;
-static int s_control_y;
+static bool s_resetKey;
+static bool s_controlKey;
+static bool s_controlButton;
+static int s_controlX;
+static int s_controlY;
 
-static int s_direction_keys[DIRECTION_KEYA_SIZE];
+static int s_directionKeys[DIRECTION_KEYA_SIZE];
 static size_t s_top;
 static size_t s_bot;
 
@@ -69,9 +69,9 @@ void I_Start()
 
 void I_Restart()
 {
-  s_reset_key = false;
-  s_control_key = false;
-  s_control_button = false;
+  s_resetKey = false;
+  s_controlKey = false;
+  s_controlButton = false;
 
   s_top = 0;
   s_bot = 0;
@@ -125,32 +125,32 @@ void I_Stop()
 
 bool I_ResetKey()
 {
-  bool const res = s_reset_key;
+  bool const res = s_resetKey;
 
-  s_reset_key = false;
+  s_resetKey = false;
 
   return res;
 }
 
 bool I_ControlKey()
 {
-  bool const res = s_control_key;
+  bool const res = s_controlKey;
 
-  s_control_key = false;
+  s_controlKey = false;
 
   return res;
 }
 
 bool I_ControlButton(int* const x, int* const y)
 {
-  bool const res = s_control_button;
+  bool const res = s_controlButton;
 
-  s_control_button = false;
+  s_controlButton = false;
 
   if (res)
   {
-    *x = s_control_x;
-    *y = s_control_y;
+    *x = s_controlX;
+    *y = s_controlY;
   }
 
   return res;
@@ -163,7 +163,7 @@ int I_PopDirectionKey()
     return -1;
   }
 
-  int const key = s_direction_keys[s_bot++];
+  int const key = s_directionKeys[s_bot++];
 
   if (s_bot > DIRECTION_KEYA_SIZE - 1)
   {
@@ -183,16 +183,16 @@ void Keyboard(unsigned char const key, int const x, int const y)
   switch (key)
   {
     case 13:  // Enter
-      s_control_key = true;
+      s_controlKey = true;
       break;
     case 27:  // Escape
       ZGE_LeaveGameLoop();
       break;
     case 32:  // Space
-      s_control_key = true;
+      s_controlKey = true;
       break;
     case 114:  // r
-      s_reset_key = true;
+      s_resetKey = true;
       break;
   }
 }
@@ -205,16 +205,16 @@ void Special(int const key, int const x, int const y)
   switch (key)
   {
     case GLUT_KEY_LEFT:
-      s_direction_keys[s_top++] = KEY_LEFT;
+      s_directionKeys[s_top++] = KEY_LEFT;
       break;
     case GLUT_KEY_RIGHT:
-      s_direction_keys[s_top++] = KEY_RIGHT;
+      s_directionKeys[s_top++] = KEY_RIGHT;
       break;
     case GLUT_KEY_DOWN:
-      s_direction_keys[s_top++] = KEY_DOWN;
+      s_directionKeys[s_top++] = KEY_DOWN;
       break;
     case GLUT_KEY_UP:
-      s_direction_keys[s_top++] = KEY_UP;
+      s_directionKeys[s_top++] = KEY_UP;
       break;
   }
 
@@ -228,9 +228,9 @@ void Mouse(int const button, int const state, int const x, int const y)
 {
   if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
   {
-    s_control_button = true;
-    s_control_x = x;
-    s_control_y = y;
+    s_controlButton = true;
+    s_controlX = x;
+    s_controlY = y;
   }
 }
 
@@ -256,25 +256,25 @@ void KeyCallback(GLFWwindow* const window, int const key, int const scancode, in
     {
       case GLFW_KEY_ENTER:
       case GLFW_KEY_SPACE:
-        s_control_key = true;
+        s_controlKey = true;
         break;
       case GLFW_KEY_ESCAPE:
         ZGE_LeaveGameLoop();
         break;
       case GLFW_KEY_R:
-        s_reset_key = true;
+        s_resetKey = true;
         break;
       case GLFW_KEY_LEFT:
-        s_direction_keys[s_top++] = KEY_LEFT;
+        s_directionKeys[s_top++] = KEY_LEFT;
         break;
       case GLFW_KEY_RIGHT:
-        s_direction_keys[s_top++] = KEY_RIGHT;
+        s_directionKeys[s_top++] = KEY_RIGHT;
         break;
       case GLFW_KEY_DOWN:
-        s_direction_keys[s_top++] = KEY_DOWN;
+        s_directionKeys[s_top++] = KEY_DOWN;
         break;
       case GLFW_KEY_UP:
-        s_direction_keys[s_top++] = KEY_UP;
+        s_directionKeys[s_top++] = KEY_UP;
         break;
     }
 
@@ -293,7 +293,7 @@ void MouseButtonCallback(GLFWwindow* const window, int const button, int const a
 
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
   {
-    s_control_button = true;
+    s_controlButton = true;
   }
 }
 
@@ -301,8 +301,8 @@ void CursorPosCallback(GLFWwindow* const window, double const xpos, double const
 {
   (void) window;
 
-  s_control_x = (int) xpos;
-  s_control_y = (int) ypos;
+  s_controlX = (int) xpos;
+  s_controlY = (int) ypos;
 }
 
 #endif
@@ -315,11 +315,11 @@ void ProcessKeyEvent(SDL_Event const* const e)
   {
     if (e->key.keysym.scancode == SDL_SCANCODE_RETURN)
     {
-      s_control_key = true;
+      s_controlKey = true;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_SPACE)
     {
-      s_control_key = true;
+      s_controlKey = true;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_ESCAPE)
     {
@@ -327,23 +327,23 @@ void ProcessKeyEvent(SDL_Event const* const e)
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_R)
     {
-      s_reset_key = true;
+      s_resetKey = true;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_LEFT)
     {
-      s_direction_keys[s_top++] = KEY_LEFT;
+      s_directionKeys[s_top++] = KEY_LEFT;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_RIGHT)
     {
-      s_direction_keys[s_top++] = KEY_RIGHT;
+      s_directionKeys[s_top++] = KEY_RIGHT;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_DOWN)
     {
-      s_direction_keys[s_top++] = KEY_DOWN;
+      s_directionKeys[s_top++] = KEY_DOWN;
     }
     else if (e->key.keysym.scancode == SDL_SCANCODE_UP)
     {
-      s_direction_keys[s_top++] = KEY_UP;
+      s_directionKeys[s_top++] = KEY_UP;
     }
 
     if (s_top > DIRECTION_KEYA_SIZE - 1)
@@ -357,14 +357,14 @@ void ProcessMouseButtonEvent(SDL_Event const* const e)
 {
   if (e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_LEFT)
   {
-    s_control_button = true;
+    s_controlButton = true;
   }
 }
 
 void ProcessMouseMotionEvent(SDL_Event const* e)
 {
-  s_control_x = e->motion.x;
-  s_control_y = e->motion.y;
+  s_controlX = e->motion.x;
+  s_controlY = e->motion.y;
 }
 
 #endif

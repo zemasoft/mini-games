@@ -9,7 +9,7 @@ struct Field;
 bool IsSnakeEmpty();
 size_t GetSnakeLength();
 
-void SetNewSnakeHead(struct Field* new_head);
+void SetNewSnakeHead(struct Field* newHead);
 struct Field* GetSnakeHead();
 
 void RemoveSnakeTail();

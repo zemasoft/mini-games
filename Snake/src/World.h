@@ -29,7 +29,7 @@ struct Ground
   } size;
 
   struct Field* fields;
-  size_t field_count;
+  size_t fieldCount;
 };
 
 struct Snake
@@ -41,12 +41,12 @@ struct Snake
   } state;
 
   struct Field** fields;
-  size_t field_count;
+  size_t fieldCount;
   size_t head;
   size_t tail;
 
-  float head_offset;
-  float tail_offset;
+  float headOffset;
+  float tailOffset;
 
   enum SnakeHeading
   {
@@ -71,7 +71,7 @@ struct World
 
   struct Snake snake;
 
-  float max_move_time;
+  float maxMoveTime;
 
   int score;
 };

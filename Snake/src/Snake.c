@@ -13,7 +13,7 @@
 #include "Input.h"
 #include "Logic.h"
 
-char* g_executable_path;
+char* g_executablePath;
 
 static bool Initialize(int argc, char** argv);
 static void Start();
@@ -94,14 +94,14 @@ bool Initialize(int argc, char** const argv)
     return false;
   }
 
-  int const buffer_length = wai_getExecutablePath(NULL, 0, NULL);
-  if (buffer_length >= 0)
+  int const bufferLength = wai_getExecutablePath(NULL, 0, NULL);
+  if (bufferLength >= 0)
   {
-    g_executable_path = (char*) ZGE_Allocate((size_t)(buffer_length + 1));
+    g_executablePath = (char*) ZGE_Allocate((size_t)(bufferLength + 1));
 
-    int path_length;
-    wai_getExecutablePath(g_executable_path, buffer_length, &path_length);
-    g_executable_path[path_length] = '\0';
+    int pathLength;
+    wai_getExecutablePath(g_executablePath, bufferLength, &pathLength);
+    g_executablePath[pathLength] = '\0';
   }
 
   return true;
@@ -148,7 +148,7 @@ void Stop()
 
 void Terminate()
 {
-  ZGE_FreeIfAllocated(g_executable_path);
+  ZGE_FreeIfAllocated(g_executablePath);
 
   ZGE_DestroyWindow();
 

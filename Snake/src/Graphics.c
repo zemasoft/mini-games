@@ -126,7 +126,7 @@ void DrawMargin()
 
 void DrawGround()
 {
-  for (size_t i = 0; i < g_world.ground.field_count; ++i)
+  for (size_t i = 0; i < g_world.ground.fieldCount; ++i)
   {
     DrawField(&g_world.ground.fields[i]);
   }
@@ -219,19 +219,19 @@ void DrawSnakeElement(size_t const index)
 
   ZGE_AssertDebug(e != NULL);
 
-  struct Field const* const prev_e = GetPrevSnakeElement(index);
-  struct Field const* const next_e = GetNextSnakeElement(index);
+  struct Field const* const prevE = GetPrevSnakeElement(index);
+  struct Field const* const nextE = GetNextSnakeElement(index);
 
-  ZGE_AssertDebug(prev_e != NULL || next_e != NULL);
+  ZGE_AssertDebug(prevE != NULL || nextE != NULL);
 
-  if (prev_e == NULL)
+  if (prevE == NULL)
   {
-    ZGE_AssertDebug((next_e->pos.x == e->pos.x && next_e->pos.y != e->pos.y) ||
-                    (next_e->pos.x != e->pos.x && next_e->pos.y == e->pos.y));
+    ZGE_AssertDebug((nextE->pos.x == e->pos.x && nextE->pos.y != e->pos.y) ||
+                    (nextE->pos.x != e->pos.x && nextE->pos.y == e->pos.y));
 
-    if (next_e->pos.x == e->pos.x)
+    if (nextE->pos.x == e->pos.x)
     {
-      if (next_e->pos.y < e->pos.y)
+      if (nextE->pos.y < e->pos.y)
       {
         DrawSnakeTailUp(e);
       }
@@ -242,7 +242,7 @@ void DrawSnakeElement(size_t const index)
     }
     else
     {
-      if (next_e->pos.x > e->pos.x)
+      if (nextE->pos.x > e->pos.x)
       {
         DrawSnakeTailLeft(e);
       }
@@ -252,14 +252,14 @@ void DrawSnakeElement(size_t const index)
       }
     }
   }
-  else if (next_e == NULL)
+  else if (nextE == NULL)
   {
-    ZGE_AssertDebug((prev_e->pos.x == e->pos.x && prev_e->pos.y != e->pos.y) ||
-                    (prev_e->pos.x != e->pos.x && prev_e->pos.y == e->pos.y));
+    ZGE_AssertDebug((prevE->pos.x == e->pos.x && prevE->pos.y != e->pos.y) ||
+                    (prevE->pos.x != e->pos.x && prevE->pos.y == e->pos.y));
 
-    if (prev_e->pos.x == e->pos.x)
+    if (prevE->pos.x == e->pos.x)
     {
-      if (prev_e->pos.y < e->pos.y)
+      if (prevE->pos.y < e->pos.y)
       {
         DrawSnakeHeadUp(e);
       }
@@ -270,7 +270,7 @@ void DrawSnakeElement(size_t const index)
     }
     else
     {
-      if (prev_e->pos.x > e->pos.x)
+      if (prevE->pos.x > e->pos.x)
       {
         DrawSnakeHeadLeft(e);
       }
@@ -282,11 +282,11 @@ void DrawSnakeElement(size_t const index)
   }
   else
   {
-    ZGE_AssertDebug((prev_e->pos.x == e->pos.x && prev_e->pos.y != e->pos.y) ||
-                    (prev_e->pos.x != e->pos.x && prev_e->pos.y == e->pos.y));
-    ZGE_AssertDebug((next_e->pos.x == e->pos.x && next_e->pos.y != e->pos.y) ||
-                    (next_e->pos.x != e->pos.x && next_e->pos.y == e->pos.y));
-    ZGE_AssertDebug(prev_e->pos.x != next_e->pos.x || prev_e->pos.y != next_e->pos.y);
+    ZGE_AssertDebug((prevE->pos.x == e->pos.x && prevE->pos.y != e->pos.y) ||
+                    (prevE->pos.x != e->pos.x && prevE->pos.y == e->pos.y));
+    ZGE_AssertDebug((nextE->pos.x == e->pos.x && nextE->pos.y != e->pos.y) ||
+                    (nextE->pos.x != e->pos.x && nextE->pos.y == e->pos.y));
+    ZGE_AssertDebug(prevE->pos.x != nextE->pos.x || prevE->pos.y != nextE->pos.y);
 
     DrawSnakeBody(e);
   }
@@ -298,7 +298,7 @@ void DrawSnakeHeadUp(struct Field const* const head)
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
 
   float const left = 0.0f;
-  float const top = FIELD_SIZE * g_world.snake.head_offset;
+  float const top = FIELD_SIZE * g_world.snake.headOffset;
   float const right = FIELD_SIZE;
   float const bottom = 0.0f;
 
@@ -324,7 +324,7 @@ void DrawSnakeHeadDown(struct Field const* const head)
   float const left = 0.0f;
   float const top = FIELD_SIZE;
   float const right = FIELD_SIZE;
-  float const bottom = FIELD_SIZE * (1.0f - g_world.snake.head_offset);
+  float const bottom = FIELD_SIZE * (1.0f - g_world.snake.headOffset);
 
   glColor3ub(SNAKE_COLOR);
 
@@ -345,7 +345,7 @@ void DrawSnakeHeadLeft(struct Field const* const head)
   glPushMatrix();
   glTranslatef((float) head->pos.x * FIELD_SIZE, (float) head->pos.y * FIELD_SIZE, 0.0f);
 
-  float const left = FIELD_SIZE * (1.0f - g_world.snake.head_offset);
+  float const left = FIELD_SIZE * (1.0f - g_world.snake.headOffset);
   float const top = FIELD_SIZE;
   float const right = FIELD_SIZE;
   float const bottom = 0.0f;
@@ -371,7 +371,7 @@ void DrawSnakeHeadRight(struct Field const* const head)
 
   float const left = 0.0f;
   float const top = FIELD_SIZE;
-  float const right = FIELD_SIZE * g_world.snake.head_offset;
+  float const right = FIELD_SIZE * g_world.snake.headOffset;
   float const bottom = 0.0f;
 
   glColor3ub(SNAKE_COLOR);
@@ -394,7 +394,7 @@ void DrawSnakeTailUp(struct Field const* const tail)
   glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
 
   float const left = 0.0f;
-  float const top = FIELD_SIZE * (1.0f - g_world.snake.tail_offset);
+  float const top = FIELD_SIZE * (1.0f - g_world.snake.tailOffset);
   float const right = FIELD_SIZE;
   float const bottom = 0.0f;
 
@@ -420,7 +420,7 @@ void DrawSnakeTailDown(struct Field const* const tail)
   float const left = 0.0f;
   float const top = FIELD_SIZE;
   float const right = FIELD_SIZE;
-  float const bottom = FIELD_SIZE * g_world.snake.tail_offset;
+  float const bottom = FIELD_SIZE * g_world.snake.tailOffset;
 
   glColor3ub(SNAKE_COLOR);
 
@@ -441,7 +441,7 @@ void DrawSnakeTailLeft(struct Field const* const tail)
   glPushMatrix();
   glTranslatef((float) tail->pos.x * FIELD_SIZE, (float) tail->pos.y * FIELD_SIZE, 0.0f);
 
-  float const left = FIELD_SIZE * g_world.snake.tail_offset;
+  float const left = FIELD_SIZE * g_world.snake.tailOffset;
   float const top = FIELD_SIZE;
   float const right = FIELD_SIZE;
   float const bottom = 0.0f;
@@ -467,7 +467,7 @@ void DrawSnakeTailRight(struct Field const* const tail)
 
   float const left = 0.0f;
   float const top = FIELD_SIZE;
-  float const right = FIELD_SIZE * (1.0f - g_world.snake.tail_offset);
+  float const right = FIELD_SIZE * (1.0f - g_world.snake.tailOffset);
   float const bottom = 0.0f;
 
   glColor3ub(SNAKE_COLOR);

@@ -30,10 +30,10 @@ extern GLFWwindow* g_window;
 extern SDL_Window* g_window;
 #endif
 
-static int s_init_window_width;
-static int s_init_window_height;
-static float s_init_width;
-static float s_init_height;
+static int s_initWindowWidth;
+static int s_initWindowHeight;
+static float s_initWidth;
+static float s_initHeight;
 
 static struct
 {
@@ -46,7 +46,7 @@ static struct
 {
   float x;
   float y;
-} s_string_scale;
+} s_stringScale;
 
 static struct
 {
@@ -77,14 +77,14 @@ void G_Start()
   s_scale.x = 1.0f;
   s_scale.y = 1.0f;
 
-  s_init_window_width = ZGE_GetWindowWidth();
-  s_init_window_height = ZGE_GetWindowHeight();
-  s_init_width = GetRight() - GetLeft();
-  s_init_height = GetTop() - GetBottom();
+  s_initWindowWidth = ZGE_GetWindowWidth();
+  s_initWindowHeight = ZGE_GetWindowHeight();
+  s_initWidth = GetRight() - GetLeft();
+  s_initHeight = GetTop() - GetBottom();
 
 #if defined(USE_FREEGLUT_FOR_TEXT)
-  s_string_scale.x = s_init_width / (float) s_init_window_width;
-  s_string_scale.y = s_init_height / (float) s_init_window_height;
+  s_stringScale.x = s_initWidth / (float) s_initWindowWidth;
+  s_stringScale.y = s_initHeight / (float) s_initWindowHeight;
 #endif
 
   glEnable(GL_MULTISAMPLE);
@@ -95,10 +95,10 @@ void G_Start()
 
 void G_Restart()
 {
-  s_scale.x = (float) s_init_window_width / (float) ZGE_GetWindowWidth() *
-              (GetRight() - GetLeft()) / s_init_width;
-  s_scale.y = (float) s_init_window_height / (float) ZGE_GetWindowHeight() *
-              (GetTop() - GetBottom()) / s_init_height;
+  s_scale.x = (float) s_initWindowWidth / (float) ZGE_GetWindowWidth() * (GetRight() - GetLeft()) /
+              s_initWidth;
+  s_scale.y = (float) s_initWindowHeight / (float) ZGE_GetWindowHeight() *
+              (GetTop() - GetBottom()) / s_initHeight;
 
   RecountPieceStrings();
   RecountStatusBarString();
@@ -134,7 +134,7 @@ void G_Resize(int const width, int const height)
 
 void RecountPieceStrings()
 {
-  for (size_t i = 0; i < g_world.piece_count; ++i)
+  for (size_t i = 0; i < g_world.pieceCount; ++i)
   {
     RecountPieceString(&g_world.pieces[i]);
   }
@@ -143,13 +143,13 @@ void RecountPieceStrings()
 void RecountStatusBarString()
 {
 #if defined(USE_FREEGLUT_FOR_TEXT)
-  s_statusBar.string.height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * s_string_scale.y;
+  s_statusBar.string.height = (float) glutStrokeHeight(TEXT_FONT) * TEXT_SIZE * s_stringScale.y;
 #endif
 }
 
 void DrawPieces()
 {
-  for (size_t i = 0; i < g_world.piece_count; ++i)
+  for (size_t i = 0; i < g_world.pieceCount; ++i)
   {
     DrawPiece(&g_world.pieces[i]);
   }
@@ -214,7 +214,7 @@ void DrawStatusBar()
   else
   {
     char buf[30];
-    snprintf(buf, sizeof(buf), "Moves: %d / %d", g_world.moves, g_world.single_moves);
+    snprintf(buf, sizeof(buf), "Moves: %d / %d", g_world.moves, g_world.singleMoves);
 
     glColor3f(STATUSBAR_TEXT_COLOR);
     glutStrokeString(TEXT_FONT, (unsigned char*) &buf[0]);
@@ -230,8 +230,8 @@ void RecountPieceString(struct Piece* const piece)
   snprintf(piece->string.value, sizeof(piece->string.value), "%d", piece->value);
 
   piece->string.width = glutStrokeLengthf(TEXT_FONT, (unsigned char*) &piece->string.value[0]) *
-                        VALUE_SIZE * s_string_scale.x;
-  piece->string.height = (float) glutStrokeHeight(TEXT_FONT) * VALUE_SIZE * s_string_scale.y;
+                        VALUE_SIZE * s_stringScale.x;
+  piece->string.height = (float) glutStrokeHeight(TEXT_FONT) * VALUE_SIZE * s_stringScale.y;
 #endif
 
 #if !defined(USE_FREEGLUT_FOR_TEXT)

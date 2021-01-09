@@ -4,7 +4,7 @@
 
 #include "zge/audio.h"
 
-extern char* g_executable_path;
+extern char* g_executablePath;
 
 static char const* const s_soundFileNames[Sound_Count] = {"start.wav", "move.wav",
                                                           "cannot-move.wav", "success.wav"};
@@ -15,7 +15,7 @@ void A_Start()
   for (int sound = 0; sound < Sound_Count; ++sound)
   {
     char fileName[256];
-    strcpy(fileName, g_executable_path);
+    strcpy(fileName, g_executablePath);
 #if defined(_WIN32)
     strcat(fileName, "\\assets\\");
 #elif defined(__linux__)

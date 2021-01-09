@@ -27,7 +27,7 @@ struct Piece
   {
     float x;
     float y;
-  } pos_w;
+  } posW;
 
 #if defined(USE_FREEGLUT) || defined(USE_FREEGLUT_FOR_TEXT)
   struct
@@ -67,12 +67,12 @@ struct World
   } size;
 
   struct Piece* pieces;
-  size_t piece_count;
+  size_t pieceCount;
   size_t blank;
 
   struct StatusBar statusBar;
 
-  int single_moves;
+  int singleMoves;
   int moves;
 };
 
